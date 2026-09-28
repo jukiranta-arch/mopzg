@@ -168,8 +168,7 @@
   }
   function say(msg) { box.textContent = 'KDP Capture: ' + msg; }
 
-  function save(capture) {
-    if (TEST) { window.__KDP_RESULT__ = capture; return; }
+  function download(capture) {
     var json = JSON.stringify(capture, null, 1);
     var slug = (capture.keyword || (capture.list && capture.list.name) || capture.product && capture.product.asin || 'page')
       .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
@@ -181,6 +180,26 @@
     document.body.appendChild(a);
     a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+  }
+
+  function button(label, onClick) {
+    var b = document.createElement('button');
+    b.textContent = label;
+    b.style.cssText = 'margin:8px 8px 0 0;padding:4px 10px;border:0;border-radius:4px;' +
+      'background:#ff9900;color:#111;font:600 12px system-ui,sans-serif;cursor:pointer';
+    b.onclick = onClick;
+    box.appendChild(b);
+  }
+
+  /* Downloads the file, then leaves a button to save it again: some browsers
+   * (Firefox with "always ask") only allow a download from a direct click. */
+  function save(capture, message) {
+    if (TEST) { window.__KDP_RESULT__ = capture; return; }
+    download(capture);
+    say(message + ' A kdp_capture_...json file should be in your Downloads.');
+    box.appendChild(document.createElement('br'));
+    button('Save file again', function () { download(capture); });
+    button('Close', function () { box.remove(); });
   }
 
   async function run() {
@@ -202,7 +221,6 @@
           var resp = await fetch('/dp/' + it.asin, { credentials: 'include' });
           var doc = new DOMParser().parseFromString(await resp.text(), 'text/html');
           if (isBlocked(doc)) {
-            say('Amazon asked for a captcha. Saved the ' + n + ' books read so far. Try again later.');
             capture.partial = true;
             break;
           }
@@ -212,27 +230,29 @@
         }
         await sleep(DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN));
       }
-      save(capture);
-      if (!capture.partial) { say('saved "' + capture.keyword + '" (' + organic.length + ' books). Run: kdp import'); }
+      var done = organic.filter(function (i) { return i.product; }).length;
+      save(capture, capture.partial
+        ? 'Amazon asked for a captcha, so it stopped. Saved the ' + done + ' books read so far; try again later.'
+        : 'Done: "' + capture.keyword + '" (' + done + ' books).');
       return;
     }
 
     if (asinFromUrl(location.href) || document.querySelector('#productTitle')) {
       var product = parseProduct(document, asinFromUrl(location.href));
-      save(Object.assign({}, base, { type: 'product', product: product }));
-      say('saved ' + (product.title || product.asin).slice(0, 60));
+      save(Object.assign({}, base, { type: 'product', product: product }),
+        'Saved ' + (product.title || product.asin).slice(0, 60) + '.');
       return;
     }
 
     if (/bestsellers|movers-and-shakers|new-releases|most-wished-for|most-gifted|zgbs/.test(path)) {
       var list = parseList(document);
       var name = clean((document.querySelector('h1') || {}).textContent || document.title);
-      save(Object.assign({}, base, { type: 'list', list: { kind: listKind(path), name: name }, items: list }));
-      say('saved list "' + name.slice(0, 60) + '" (' + list.length + ' books)');
+      save(Object.assign({}, base, { type: 'list', list: { kind: listKind(path), name: name }, items: list }),
+        'Saved list "' + name.slice(0, 60) + '" (' + list.length + ' books).');
       return;
     }
 
-    say('open an Amazon search, product, Best Sellers or Movers & Shakers page first.');
+    say('Open an Amazon Books search, a book page, or a Best Sellers / Movers & Shakers page first.');
   }
 
   run().catch(function (e) { say('error: ' + e); });

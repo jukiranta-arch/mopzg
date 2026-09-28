@@ -190,7 +190,10 @@ def import_paths(conn, paths):
     files = []
     for p in paths:
         p = os.path.expanduser(p)
-        files.extend(sorted(glob.glob(p)) if any(c in p for c in "*?[") else [p])
+        if os.path.isdir(p):
+            files.extend(sorted(glob.glob(os.path.join(p, "*.json"))))
+        else:
+            files.extend(sorted(glob.glob(p)) if any(c in p for c in "*?[") else [p])
     for path in files:
         with open(path, "rb") as fh:
             raw = fh.read()
