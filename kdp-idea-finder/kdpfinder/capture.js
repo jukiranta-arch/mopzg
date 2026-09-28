@@ -204,7 +204,9 @@
   function slugOf(s) { return String(s || 'page').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50); }
 
   function fileName(kind, slug, iso, store) {
-    return 'kdp_capture_' + kind + '_' + slug + '_' + iso.slice(0, 10) + '_' + store.replace(/\./g, '-') + '.json';
+    /* Date and time (UTC) in the name, so files from different runs never share a name. */
+    return 'kdp_capture_' + kind + '_' + slug + '_' + iso.slice(0, 10) + '_' + iso.slice(11, 16).replace(':', '') + '_' +
+      store.replace(/\./g, '-') + '.json';
   }
 
   function download(capture) {

@@ -231,6 +231,8 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual([c["keyword"] for d in second["downloads"] for c in d["data"]["captures"]],
                          ["gift for women"])
         self.assertIn("part-2", second["downloads"][0]["name"])
+        # Names carry the time, so a later run can't overwrite an earlier upload.
+        self.assertRegex(second["downloads"][0]["name"], r"_\d{4}-\d\d-\d\d_\d{4}_amazon-com\.json$")
         self.assertIsNone(second["state"])
         ctx = Ctx()
         for d in first["downloads"] + second["downloads"]:
