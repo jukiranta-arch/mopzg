@@ -37,8 +37,8 @@ Capture the same searches again on different days. A score's confidence goes fro
 
 Click **KDP Capture** on any other Amazon page, such as the front page, to open the Autopilot panel:
 
-1. **Find what people search.** It asks Amazon autocomplete what follows each starting phrase (`gift for`, `gift for a`, …, `gift for z`, and so on for each phrase). Suggestions listed higher are searched more, so each appearance scores `1 / (1 + position)`. It saves a `kdp_capture_suggestions_*.json` file.
-2. **Capture ticked searches.** It captures the top searches one by one (3 result pages and the top 16 books each), pausing a few seconds between pages. It saves a `kdp_capture_batch_*.json` file every 5 searches and stops on a captcha.
+1. **Find what people search.** It asks Amazon autocomplete what follows each starting phrase (`gift for`, `gift for a`, …, `gift for z`, and so on for each phrase). Suggestions listed higher are searched more, so each appearance scores `1 / (1 + position)`.
+2. **Capture ticked searches.** It captures the top searches one by one (3 result pages and the top 16 books each), pausing a few seconds between pages. It stops on a captcha. Everything is kept in the tab (browser storage) and saved as one `kdp_capture_batch_autopilot_*.json` file at the end, on a captcha, or on Stop. The autocomplete list goes into the same file. **Save file** downloads it again, and **Clear** empties it after uploading.
 
 It rests 15–30 seconds between searches. If a captcha stops it, the panel remembers the searches left and shows a countdown (60 minutes; `window.KDP_COOLDOWN_MIN` changes it). Then **Continue where it left off** picks up from the interrupted search. **Capture the phrases in the box directly** skips discovery and captures the lines typed into the box.
 
