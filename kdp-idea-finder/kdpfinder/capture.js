@@ -26,6 +26,26 @@
   function saveState(st) { try { localStorage.setItem(STATE_KEY, JSON.stringify(st)); } catch (e) { /* private window */ } }
   function clearState() { try { localStorage.removeItem(STATE_KEY); } catch (e) { /* private window */ } }
 
+  /* Everything captured is kept here until you press Clear, so a download that
+   * the browser blocked or dropped never loses data: press Save file again. */
+  var DATA_KEY = 'kdp-autopilot-data';
+  function emptyData() { return { captures: [], suggestions: [], startedAt: Date.now() }; }
+  function loadData() {
+    try {
+      var d = JSON.parse(localStorage.getItem(DATA_KEY) || 'null');
+      if (d) { return d; }
+    } catch (e) { /* private window or blocked storage */ }
+    return window.__KDP_DATA__ || emptyData();
+  }
+  function saveData(d) {
+    window.__KDP_DATA__ = d;
+    try { localStorage.setItem(DATA_KEY, JSON.stringify(d)); } catch (e) { /* full: kept in this tab only */ }
+  }
+  function clearData() {
+    window.__KDP_DATA__ = null;
+    try { localStorage.removeItem(DATA_KEY); } catch (e) { /* private window */ }
+  }
+
   function clean(s) { return (s || '').replace(/[‎‏]/g, '').replace(/\s+/g, ' ').trim(); }
   /* Text of an element without the inline <script>/<style> Amazon mixes into some rows. */
   function text(el) {
@@ -357,7 +377,7 @@
     box.appendChild(el('div', 'font-weight:700;font-size:15px;margin-bottom:6px', 'KDP Autopilot'));
     box.appendChild(el('div', 'opacity:.8;margin-bottom:8px',
       'Finds what people search for with Amazon autocomplete, then captures the top searches one by one. ' +
-      'Leave this tab open; it saves a file every 5 searches.'));
+      'Leave this tab open. Everything is kept in the tab and saved as one file at the end.'));
     box.appendChild(el('label', 'display:block;margin-top:4px', 'Starting phrases (one per line):'));
     var roots = el('textarea', 'width:100%;box-sizing:border-box;height:110px;font:12px monospace;color:#111');
     roots.id = 'kdp-roots';
@@ -412,11 +432,12 @@
         if (want > 0 && !NOT_A_NICHE.test(c.value)) { c.checked = true; want--; }
       });
       if (found.rows.length) {
-        downloadNamed({ tool: 'kdp-capture', version: 1, type: 'suggestions', store: store,
-          captured_at: new Date().toISOString(), rows: found.rows },
-          fileName('suggestions', 'autocomplete', new Date().toISOString(), store));
+        var data = loadData();
+        data.suggestions = found.rows;
+        saveData(data);
+        updateSaveBox();
       }
-      progress(ranked.length + ' searches found (most searched first; saved as a file). ' +
+      progress(ranked.length + ' searches found, most searched first. ' +
         'The top ones are ticked. Change the ticks if you like, then press 2.');
     }, controls);
 
@@ -425,57 +446,80 @@
         .map(function (c) { return c.value; });
     }
 
-    /* Captures terms one by one. State is saved before each search, so after a
-     * captcha, a Stop or a closed tab the next click on KDP Capture can continue. */
-    async function runQueue(terms, books, partNo) {
+    /* Captures terms one by one. Each finished search is kept in the tab at once;
+     * the queue is saved before each search, so after a captcha, a Stop or a
+     * closed tab the next click on KDP Capture can continue. */
+    async function runQueue(terms, books) {
       stopped = false;
       clearInterval(timer);
       resumeBox.hidden = true;
-      var part = [], when = new Date().toISOString();
-      function flush() {
-        if (!part.length) { return; }
-        downloadNamed({ tool: 'kdp-capture', version: 1, type: 'batch', store: store, captured_at: when, captures: part },
-          fileName('batch', 'autopilot-part-' + partNo, when, store));
-        part = [];
-        partNo++;
-      }
-      var pendingFrom = 0;               /* first search not yet in a saved file */
       function remember(from, extra) {
-        saveState(Object.assign({ remaining: terms.slice(from), books: books, partNo: partNo, savedAt: Date.now() }, extra || {}));
+        saveState(Object.assign({ remaining: terms.slice(from), books: books, savedAt: Date.now() }, extra || {}));
+      }
+      function keep(cap) {
+        var data = loadData();
+        data.captures = data.captures.filter(function (c) { return c.keyword !== cap.keyword; });
+        data.captures.push(cap);
+        saveData(data);
+        updateSaveBox();
       }
       var i = 0;
       for (; i < terms.length && !stopped; i++) {
-        remember(part.length ? pendingFrom : i);
+        remember(i);
         var cap = await captureSearch(terms[i], null, searchUrl(terms[i]), books, function (m) {
           progress('Search ' + (i + 1) + ' of ' + terms.length + ' "' + terms[i] + '": ' + m);
         });
         if (cap.blocked) {
-          if (cap.items.length) { part.push(cap); }
-          flush();
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */
-          progress('Amazon asked for a captcha after ' + i + ' searches. Everything so far is saved.');
+          downloadAll();
+          progress('Amazon asked for a captcha after ' + i + ' searches. Those are saved in one file ' +
+            '(press Save file if it is not in your Downloads).');
           showResume(loadState());
           window.__KDP_DONE__ = true;
           return;
         }
-        if (!part.length) { pendingFrom = i; }
-        part.push(cap);
-        if (part.length >= 5) { flush(); }
+        keep(cap);
         if (i < terms.length - 1 && !stopped) {
           progress('Resting between searches (slow on purpose)...');
           await sleep(BETWEEN_MIN + Math.random() * (BETWEEN_MAX - BETWEEN_MIN));
         }
       }
-      flush();
+      downloadAll();
       if (i < terms.length) {
         remember(i);
-        progress('Stopped. What was captured is saved. Click KDP Capture again later to continue.');
+        progress('Stopped. What was captured is saved in one file. Click KDP Capture again later to continue.');
       } else {
         clearState();
-        progress('Done. Upload the kdp_capture_batch files from your Downloads folder.');
+        progress('Done. Everything is saved in one kdp_capture_batch file. ' +
+          'If it is not in your Downloads, press Save file.');
       }
       window.__KDP_DONE__ = true;
     }
+
+    function downloadAll() {
+      var data = loadData();
+      if (!data.captures.length && !data.suggestions.length) { return; }
+      var now = new Date().toISOString();
+      downloadNamed({ tool: 'kdp-capture', version: 1, type: 'batch', store: store, captured_at: now,
+        captures: data.captures, suggestions: data.suggestions }, fileName('batch', 'autopilot', now, store));
+    }
+
+    var saveBox = el('div', 'margin:8px 0;padding:8px;border:1px solid #6fcf97;border-radius:6px');
+    saveBox.id = 'kdp-saved';
+    box.insertBefore(saveBox, box.children[2]);
+    function updateSaveBox() {
+      var data = loadData();
+      saveBox.textContent = '';
+      saveBox.hidden = !data.captures.length && !data.suggestions.length;
+      if (saveBox.hidden) { return; }
+      saveBox.appendChild(el('div', '', 'Kept in this tab: ' + data.captures.length + ' searches' +
+        (data.suggestions.length ? ' and the autocomplete list' : '') + '. Everything goes into one file.'));
+      button('Save file', downloadAll, saveBox).id = 'kdp-save';
+      button('Clear (after uploading)', function () { clearData(); updateSaveBox(); }, saveBox);
+    }
+    var old = loadData();
+    if (old.startedAt && Date.now() - old.startedAt > 3 * 86400000) { clearData(); }   /* stale after 3 days */
+    updateSaveBox();
 
     var resumeBox = el('div', 'margin:8px 0;padding:8px;border:1px solid #ff9900;border-radius:6px');
     resumeBox.id = 'kdp-resume';
@@ -492,12 +536,12 @@
       resumeBox.appendChild(info);
       var go = button('Continue where it left off', function () {
         clearInterval(timer);
-        runQueue(st.remaining, st.books || 16, st.partNo || 1);
+        runQueue(st.remaining, st.books || 16);
       }, resumeBox);
       go.id = 'kdp-continue';
       var early = button('I solved the captcha, continue now', function () {
         clearInterval(timer);
-        runQueue(st.remaining, st.books || 16, st.partNo || 1);
+        runQueue(st.remaining, st.books || 16);
       }, resumeBox);
       button('Forget them', function () { clearInterval(timer); clearState(); resumeBox.hidden = true; }, resumeBox);
       var readyAt = (st.blockedAt || 0) + COOLDOWN_MIN * 60000;
@@ -526,12 +570,12 @@
     button('2. Capture ticked searches', function () {
       var terms = ticked();
       if (!terms.length) { progress('Tick at least one search first (or press 1).'); return; }
-      runQueue(terms, parseInt(perSearch.value, 10) || 16, 1);
+      runQueue(terms, parseInt(perSearch.value, 10) || 16);
     }, controls);
 
     button('Capture the phrases in the box directly', function () {
       var terms = roots.value.split('\n').map(function (x) { return clean(x).toLowerCase(); }).filter(Boolean);
-      runQueue(terms, parseInt(perSearch.value, 10) || 16, 1);
+      runQueue(terms, parseInt(perSearch.value, 10) || 16);
     }, controls);
 
     button('Stop', function () { stopped = true; progress('Stopping after the current search...'); }, controls);

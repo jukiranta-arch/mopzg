@@ -136,7 +136,11 @@ def import_capture(conn, capture):
 
     if kind == "batch":
         results = [import_capture(conn, c) for c in capture.get("captures", [])]
-        return "batch of %d searches:\n    " % len(results) + "\n    ".join(results)
+        if capture.get("suggestions"):
+            results.append(import_capture(conn, {"tool": "kdp-capture", "type": "suggestions", "store": store,
+                                                 "captured_at": capture.get("captured_at"),
+                                                 "rows": capture["suggestions"]}))
+        return "batch of %d searches:\n    " % len(capture.get("captures", [])) + "\n    ".join(results)
 
     if kind == "suggestions":
         rows = capture.get("rows", [])

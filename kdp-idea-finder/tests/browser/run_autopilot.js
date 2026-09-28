@@ -36,9 +36,11 @@ const fs = require('fs');
   await page.click('#kdp-continue');
   await page.waitForFunction(() => window.__KDP_DONE__, null, { timeout: 30000 });
   const second = await page.evaluate(() => ({
-    downloads: window.__KDP_DOWNLOADS__,
+    downloads: window.__KDP_DOWNLOADS__.splice(0),
     state: localStorage.getItem('kdp-autopilot-state'),
   }));
-  process.stdout.write(JSON.stringify({ ticked, first, resumeText, second }));
+  await page.click('#kdp-save');
+  const saveAgain = await page.evaluate(() => window.__KDP_DOWNLOADS__.length);
+  process.stdout.write(JSON.stringify({ ticked, first, resumeText, second, saveAgain }));
   await browser.close();
 })().catch((e) => { console.error(e); process.exit(1); });

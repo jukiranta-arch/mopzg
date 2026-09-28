@@ -40,7 +40,7 @@ Click **KDP Capture** on any other Amazon page, such as the front page, to open 
 1. **Find what people search.** It asks Amazon autocomplete what follows each starting phrase (`gift for`, `gift for a`, …, `gift for z`, and so on for each phrase). Suggestions listed higher are searched more, so each appearance scores `1 / (1 + position)`. It saves a `kdp_capture_suggestions_*.json` file.
 2. **Capture ticked searches.** It captures the top searches one by one (3 result pages and the top 16 books each), pausing a few seconds between pages. It saves a `kdp_capture_batch_*.json` file every 5 searches and stops on a captcha.
 
-It rests 15–30 seconds between searches. If a captcha stops it, the panel remembers the searches left and shows a countdown (60 minutes; `window.KDP_COOLDOWN_MIN` changes it). Then **Continue where it left off** picks up from the first search that isn't in a saved file yet. **Capture the phrases in the box directly** skips discovery and captures the lines typed into the box.
+It rests 15–30 seconds between searches. If a captcha stops it, the panel remembers the searches left and shows a countdown (60 minutes; `window.KDP_COOLDOWN_MIN` changes it). Then **Continue where it left off** picks up from the interrupted search. **Capture the phrases in the box directly** skips discovery and captures the lines typed into the box.
 
 Books on pages 2–3 aren't opened. Amazon's "N+ bought in past month" label, where shown, is used as their sales estimate (a lower bound).
 
