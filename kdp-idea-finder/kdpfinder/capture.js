@@ -9,7 +9,8 @@
  * Only block comments in this file: it is turned into a javascript: URL.
  */
 (function () {
-  var MAX_RESULTS = window.KDP_MAX_RESULTS || 16;
+  var PAGES = window.KDP_PAGES || 3;              /* search result pages to read */
+  var MAX_RESULTS = window.KDP_MAX_RESULTS || 60;  /* books to open, across all pages */
   var TEST = window.__KDP_CAPTURE_TEST__ || null;
   var DELAY_MIN = TEST ? 0 : 2500, DELAY_MAX = TEST ? 10 : 5000;
 
@@ -212,8 +213,28 @@
 
     if ((params.get('k') && /^\/s\/?$/.test(path)) || document.querySelector('[data-component-type="s-search-result"]')) {
       var items = parseSearch(document);
+      var seen = {};
+      items.forEach(function (i) { seen[i.asin] = true; });
+      var startPage = parseInt(params.get('page') || '1', 10);
+      var pagesRead = 1, blocked = false;
+      for (var pg = startPage + 1; pg < startPage + PAGES; pg++) {
+        say('reading results page ' + pg + '...');
+        await sleep(DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN));
+        var url = new URL(location.href);
+        url.searchParams.set('page', String(pg));
+        try {
+          var pdoc = new DOMParser().parseFromString(await (await fetch(url.toString(), { credentials: 'include' })).text(), 'text/html');
+          if (isBlocked(pdoc)) { blocked = true; break; }
+          var more = parseSearch(pdoc).filter(function (i) { return !seen[i.asin]; });
+          if (!more.length) { break; }
+          more.forEach(function (i) { seen[i.asin] = true; i.page = pg; items.push(i); });
+          pagesRead++;
+        } catch (e) { break; }
+      }
+      items.forEach(function (i, idx) { i.position = idx + 1; });
       var organic = items.filter(function (i) { return !i.sponsored; }).slice(0, MAX_RESULTS);
-      var capture = Object.assign({}, base, { type: 'search', keyword: params.get('k') || '', items: items });
+      var capture = Object.assign({}, base, { type: 'search', keyword: params.get('k') || '', pages: pagesRead, items: items });
+      if (blocked) { capture.partial = true; organic = []; }
       for (var n = 0; n < organic.length; n++) {
         var it = organic[n];
         say('reading book ' + (n + 1) + ' of ' + organic.length + ' (slow on purpose)...');
@@ -233,7 +254,7 @@
       var done = organic.filter(function (i) { return i.product; }).length;
       save(capture, capture.partial
         ? 'Amazon asked for a captcha, so it stopped. Saved the ' + done + ' books read so far; try again later.'
-        : 'Done: "' + capture.keyword + '" (' + done + ' books).');
+        : 'Done: "' + capture.keyword + '" (' + done + ' books from ' + pagesRead + ' pages).');
       return;
     }
 

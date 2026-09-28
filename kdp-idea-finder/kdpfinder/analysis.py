@@ -156,6 +156,19 @@ def analyze(conn, cfg, keyword, store, lib, extra_layers=None):
     return rep
 
 
+def search_books(conn, cfg, keyword, store):
+    """Every organic book of the latest capture of a search, all pages (not just the field)."""
+    search = db.latest_search(conn, normalize(keyword), store)
+    if not search:
+        return []
+    books = []
+    for asin in db.search_asins(conn, search["id"], 10000):
+        b = load_book(conn, cfg, asin, store)
+        b.selling = b.daily >= cfg["selling_daily"]
+        books.append(b)
+    return books
+
+
 def score_niche(rep, cfg):
     w = cfg["score_weights"]
     books = rep.books

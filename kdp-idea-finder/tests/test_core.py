@@ -212,6 +212,18 @@ class SeedAndAutocompleteTests(unittest.TestCase):
         self.assertIn("bird watching journal", found)
         self.assertIn("dragon coloring", found)
 
+    def test_seeds_from_broad_search_sellers(self):
+        ctx = Ctx()
+        ctx.load(search("gift for women", [
+            book(1, "Tell Me Your Story Mom: A Guided Journal", 3000, prefix="B0W"),
+            book(2, "Tell Me Your Story Grandma", 9000, prefix="B0W"),
+            book(3, "Wine Tasting Journal", 400000, prefix="B0W"),
+            book(4, "Wine Tasting Log Book", 500000, prefix="B0W"),
+        ]))
+        found = [g for g, _, _ in seeds.discover(ctx.conn, "amazon.com", cfg=ctx.cfg)]
+        self.assertIn("tell me your story", found)
+        self.assertNotIn("wine tasting", found)          # those books don't sell
+
     def test_expand_with_fake_fetcher(self):
         ctx = Ctx()
         fake = {"grief journal for": ["grief journal for men", "grief journal for loss of mother"]}

@@ -14,7 +14,7 @@ analysis of that search replaces the estimate ("verified").
 from dataclasses import dataclass, field
 
 from . import db, layers as layers_mod
-from .analysis import analyze, combined_strength, demand_factor
+from .analysis import analyze, combined_strength, demand_factor, search_books
 from .text import normalize, token_coverage, tokens
 
 # Words that name a format, not a topic. A niche whose keyword is only a layer
@@ -58,12 +58,13 @@ def _is_modifier(pattern, niche_keyword):
     return any(t not in GENERIC for t in tokens(layers_mod.strip(pattern, niche_keyword)))
 
 
-def _layer_sellers(reports, lib):
-    """layer -> [(asin, title, bsr, daily, niche)] for selling books that carry the layer as a modifier."""
+def _layer_sellers(conn, cfg, reports, lib, store):
+    """layer -> [(asin, title, bsr, daily, niche)] for selling books that carry the layer as a modifier.
+    Uses every captured result page, so broad market searches count as evidence too."""
     out = {}
     seen = set()
     for rep in reports.values():
-        for b in rep.books:
+        for b in search_books(conn, cfg, rep.keyword, store):
             if not b.selling or b.asin in seen:
                 continue
             seen.add(b.asin)
@@ -83,7 +84,7 @@ def _find_verified(reports, base, pattern):
 def generate(conn, cfg, lib, store, min_demand=0.35, include_unproven=False):
     reports = {r["keyword"]: analyze(conn, cfg, r["keyword"], store, lib)
                for r in db.niches(conn, store)}
-    sellers_by_layer = _layer_sellers(reports, lib)
+    sellers_by_layer = _layer_sellers(conn, cfg, reports, lib, store)
     suggestions = db.suggestions(conn, store)
 
     ideas = []

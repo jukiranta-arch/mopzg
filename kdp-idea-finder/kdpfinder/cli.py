@@ -65,10 +65,11 @@ def cmd_ideas(args):
 
 
 def cmd_seeds(args):
-    conn, _, _ = _ctx(args)
-    found = seeds.discover(conn, args.store, days=args.days, limit=args.top)
+    conn, cfg, _ = _ctx(args)
+    found = seeds.discover(conn, args.store, days=args.days, limit=args.top, cfg=cfg)
     if not found:
-        print("No seeds yet: capture some Best Sellers / Movers & Shakers / New Releases pages first.")
+        print("No seeds yet: capture some broad searches (e.g. 'gift for women') or "
+              "Best Sellers / Movers & Shakers pages first.")
         return
     for g, s, examples in found:
         print("%-35s %5.1f   e.g. %s" % (g, s, examples[0] if examples else ""))

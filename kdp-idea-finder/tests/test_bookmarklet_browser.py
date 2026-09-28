@@ -13,7 +13,7 @@ import subprocess
 import threading
 import unittest
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 from helpers import Ctx
 
@@ -60,6 +60,12 @@ PRODUCT = """<!doctype html><html><body>
 </ul></div>
 </body></html>"""
 
+PAGE2 = {
+    "B0AAAAAAA4": ("Grief Journal for Men: Prompts After Losing Dad", "#88,000 in Books", 14, "$10.99",
+                   "Independently published (June 1, 2026)", 110),
+}
+BOOKS.update(PAGE2)
+
 CARD = """<div data-component-type="s-search-result" data-asin="{asin}" class="s-result-item">
 {sponsored}<h2 aria-label="{title}" class="a-size-medium"><a href="/dp/{asin}"><span>{title}</span></a></h2>
 <a href="/dp/{asin}#customerReviews"><span aria-label="{reviews:,} ratings">{reviews:,}</span></a></div>"""
@@ -67,10 +73,13 @@ CARD = """<div data-component-type="s-search-result" data-asin="{asin}" class="s
 SPONSORED = '<span class="puis-sponsored-label-text">Sponsored</span>'
 
 
-def search_page():
+def search_page(page=1):
+    if page >= 3:
+        return "<!doctype html><html><body><div class='s-main-slot'>No results</div></body></html>"
     cards = [CARD.format(asin="B0SPONSOR1", title="Sponsored Grief Book", reviews=5, sponsored=SPONSORED)]
     for asin, (title, _, reviews, _, _, _) in BOOKS.items():
-        cards.append(CARD.format(asin=asin, title=title, reviews=reviews, sponsored=""))
+        if (asin in PAGE2) == (page == 2):
+            cards.append(CARD.format(asin=asin, title=title, reviews=reviews, sponsored=""))
     return "<!doctype html><html><body><div class='s-main-slot'>%s</div></body></html>" % "".join(cards)
 
 
@@ -80,15 +89,17 @@ def list_page():
         '<a href="/Some-Title/dp/%s/ref=zg_bs"><img alt="%s" src="x.jpg"></a>'
         '<a href="/Some-Title/dp/%s/ref=zg_bs"><span><div>%s</div></span></a>'
         '<a href="/product-reviews/%s"><span>%d</span></a></div>'
-        % (i, asin, t[0], asin, t[0], asin, t[2]) for i, (asin, t) in enumerate(BOOKS.items(), 1))
+        % (i, asin, t[0], asin, t[0], asin, t[2]) for i, (asin, t) in enumerate(
+            ((a, b) for a, b in BOOKS.items() if a not in PAGE2), 1))
     return "<!doctype html><html><body><h1>Best Sellers in Grief &amp; Bereavement</h1>%s</body></html>" % items
 
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        path = urlparse(self.path).path
+        url = urlparse(self.path)
+        path = url.path
         if path == "/s":
-            body = search_page()
+            body = search_page(int(parse_qs(url.query).get("page", ["1"])[0]))
         elif path.startswith("/dp/"):
             b = BOOKS.get(path.split("/")[2])
             if not b:
@@ -143,7 +154,10 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertTrue(cap["items"][0]["sponsored"])
         self.assertNotIn("product", cap["items"][0])           # sponsored books are not opened
         organic = [i for i in cap["items"] if not i["sponsored"]]
-        self.assertEqual(len(organic), 3)
+        self.assertEqual(cap["pages"], 2)                      # page 3 was empty
+        self.assertEqual(len(organic), 4)                      # sponsored repeat on page 2 is deduped
+        self.assertEqual([i["position"] for i in cap["items"]], list(range(1, 6)))
+        self.assertEqual(importer.parse_product(organic[3]["product"])["bsr"], 88000)
         p = importer.parse_product(organic[0]["product"])
         self.assertEqual(p["title"], BOOKS["B0AAAAAAA1"][0])
         self.assertEqual(p["bsr"], 6012)
@@ -159,7 +173,7 @@ class BookmarkletBrowserTest(unittest.TestCase):
         ctx = Ctx()
         ctx.load(cap)
         rep = analyze(ctx.conn, ctx.cfg, "grief journal", "amazon.com", ctx.lib)
-        self.assertEqual(rep.metrics["field"], 3)
+        self.assertEqual(rep.metrics["field"], 4)
         self.assertEqual(rep.books[0].bsr, 6012)
 
     def test_product_capture(self):
@@ -172,7 +186,7 @@ class BookmarkletBrowserTest(unittest.TestCase):
         cap = self.capture("/gp/bestsellers/books/1234")
         self.assertEqual(cap["type"], "list")
         self.assertEqual(cap["list"]["kind"], "bestsellers")
-        self.assertEqual([i["asin"] for i in cap["items"]], list(BOOKS))
+        self.assertEqual([i["asin"] for i in cap["items"]], [a for a in BOOKS if a not in PAGE2])
         self.assertEqual(cap["items"][0]["title"], BOOKS["B0AAAAAAA1"][0])
 
 

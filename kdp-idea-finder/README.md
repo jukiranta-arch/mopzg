@@ -27,7 +27,7 @@ Open `~/kdp-data/install_bookmarklet.html` and drag **KDP Capture** to your book
 ## The loop (10–20 minutes a day)
 
 1. **`kdp next`** tells you what to do, most valuable first.
-2. Do what it says in your normal browser. Open the Amazon page (a Books search, Best Sellers, Movers & Shakers or New Releases) and click **KDP Capture**. On a search page it opens the top 16 organic results one at a time, slowly on purpose (about a minute). Then it downloads `kdp_capture_*.json`.
+2. Do what it says in your normal browser. Open the Amazon page (a Books search, Best Sellers, Movers & Shakers or New Releases) and click **KDP Capture**. On a search page it reads result pages 1–3 and opens up to 60 organic books one at a time, slowly on purpose (about 4 minutes). Then it downloads `kdp_capture_*.json`. Niche scores use the top 16. All pages feed `kdp seeds` and the layer evidence behind `kdp ideas`, so broad searches like `gift for women` work as market scans.
 3. **`kdp import`** loads everything in `~/Downloads/kdp_capture_*.json`. Files it has already imported are skipped.
 4. **`kdp ideas`** ranks layered concepts. **`kdp report`** writes a markdown shortlist to `~/kdp-data/reports/`.
 

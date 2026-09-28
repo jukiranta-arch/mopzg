@@ -86,8 +86,8 @@ def next_actions(conn, cfg, lib, store, limit=12):
                             % (kw, rep.confidence, rep.score)))
         if rep.verdict == "good" and rep.confidence == "high":
             actions.append((rep.score + 20, "Write a brief for '%s' (score %d, high confidence)" % (kw, rep.score)))
-    for g, s, _ in seeds_mod.discover(conn, store, limit=5):
-        actions.append((35, "Search '%s' on %s and click KDP Capture (trending in your captured lists)" % (g, store)))
+    for g, s, _ in seeds_mod.discover(conn, store, limit=5, cfg=cfg):
+        actions.append((35, "Search '%s' on %s and click KDP Capture (shared by several selling books you captured)" % (g, store)))
     for rep in reports.values():
         if rep.metrics.get("sellers", 0) >= 3 and not conn.execute(
                 "SELECT 1 FROM suggestions WHERE seed = ? AND store = ?", (rep.keyword, store)).fetchone():
