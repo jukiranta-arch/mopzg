@@ -511,7 +511,7 @@
         if (cap.blocked) {
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */
           progress('Amazon asked for a captcha after ' + i + ' searches. Those are kept: press Copy data ' +
-            'and paste into your Capture Inbox.');
+            'and paste into your Capture Inbox. To go on, use Show the captcha above.');
           showResume(loadState());
           window.__KDP_DONE__ = true;
           return;
@@ -589,6 +589,8 @@
         runQueue(st.remaining, st.books || 16);
       }, resumeBox);
       go.id = 'kdp-continue';
+      /* The captcha only shows on a normal Amazon page, not inside the panel. */
+      var show = button('Show the captcha', function () { window.open(searchUrl('books'), '_blank'); }, resumeBox);
       var early = button('I solved the captcha, continue now', function () {
         clearInterval(timer);
         runQueue(st.remaining, st.books || 16);
@@ -602,6 +604,7 @@
           go.disabled = false;
           go.style.opacity = '1';
           early.hidden = true;
+          show.hidden = true;
           info.textContent = st.blockedAt ? 'The wait is over. Amazon should let you continue now.' : 'Stopped or closed before it finished.';
           return;
         }
@@ -609,7 +612,7 @@
         go.disabled = true;
         go.style.opacity = '.5';
         info.textContent = 'Amazon asked for a captcha. You can continue in ' + m + ':' + (sec < 10 ? '0' : '') + sec +
-          '. Keep this tab open, or come back later and click KDP Capture again.';
+          ', or press Show the captcha, solve it in the tab that opens, then press I solved the captcha.';
       }
       clearInterval(timer);
       tick();
