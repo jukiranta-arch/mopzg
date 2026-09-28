@@ -129,6 +129,13 @@ class Handler(BaseHTTPRequestHandler):
                 body = CAPTCHA
             else:
                 body = search_page(int(parse_qs(url.query).get("page", ["1"])[0]))
+        elif path.startswith("/spa/dp/"):
+            # A page that intercepts every link click, as single-page-app routers do.
+            b = BOOKS[path.split("/")[3]]
+            body = PRODUCT.format(title=b[0], rank=b[1], reviews=b[2], price=b[3], publisher=b[4], pages=b[5])
+            body = body.replace("<body>", "<body><script>document.addEventListener('click', function (e) {"
+                                "var a = e.target.closest && e.target.closest('a'); if (a) { e.preventDefault(); }"
+                                "}, true);</script>")
         elif path.startswith("/dp/"):
             b = BOOKS.get(path.split("/")[2])
             if not b:
@@ -248,6 +255,17 @@ class BookmarkletBrowserTest(unittest.TestCase):
         rep = analyze(ctx.conn, ctx.cfg, "gift for nurses", "amazon.com", ctx.lib)
         self.assertEqual(rep.metrics["field"], 4)
         self.assertEqual(len(ctx.conn.execute("SELECT * FROM suggestions").fetchall()), 3)
+
+    def test_download_survives_pages_that_intercept_link_clicks(self):
+        env = dict(os.environ, NODE_PATH=NODE_MODULES)
+        out = subprocess.run(["node", os.path.join(HERE, "browser", "run_download.js"),
+                              self.base + "/spa/dp/B0AAAAAAA1", CAPTURE_JS],
+                             capture_output=True, text=True, env=env, timeout=90)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        result = json.loads(out.stdout)
+        self.assertTrue(result["auto"].startswith("kdp_capture_product_"), result)
+        self.assertTrue(result["again"].startswith("kdp_capture_product_"), result)
+        self.assertEqual(result["copied"]["type"], "product")
 
     def test_product_capture(self):
         cap = self.capture("/dp/B0AAAAAAA3")

@@ -213,13 +213,45 @@
 
   function downloadNamed(obj, name) {
     if (TEST) { (window.__KDP_DOWNLOADS__ = window.__KDP_DOWNLOADS__ || []).push({ name: name, data: obj }); return; }
+    var url = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1)], { type: 'application/json' }));
+    /* Some Amazon pages cancel every link click they see (their own page routing),
+     * which silently kills a download. So the link sits in a closed shadow root
+     * and its click event neither bubbles nor leaves the shadow root. */
+    var host = document.createElement('span');
+    host.style.display = 'none';
+    document.documentElement.appendChild(host);
+    var root = host.attachShadow({ mode: 'closed' });
     var a = document.createElement('a');
-    a.href = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 1)], { type: 'application/json' }));
+    a.href = url;
     a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    root.appendChild(a);
+    a.dispatchEvent(new MouseEvent('click', { bubbles: false, cancelable: true, composed: false }));
+    setTimeout(function () { URL.revokeObjectURL(url); host.remove(); }, 60000);
   }
+
+  /* Fallback when downloads don't work at all: put the file's text on the clipboard. */
+  function copyText(obj, done) {
+    var text = JSON.stringify(obj);
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0';
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+      ta.remove();
+      done(ok);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  var COPY_HELP = 'Copied. On GitHub open your repository, choose Add file > Create new file, name it ' +
+    'kdp_capture.json, paste (Ctrl+V) and click Commit changes.';
 
   function slugOf(s) { return String(s || 'page').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50); }
 
@@ -252,6 +284,9 @@
     say(message + ' A kdp_capture_...json file should be in your Downloads.');
     box.appendChild(document.createElement('br'));
     button('Save file again', function () { download(capture); });
+    button('Copy data', function () {
+      copyText(capture, function (ok) { say(ok ? COPY_HELP : 'Copying failed too. Tell Claude.'); });
+    });
     button('Close', function () { box.remove(); });
   }
 
@@ -496,12 +531,21 @@
       window.__KDP_DONE__ = true;
     }
 
-    function downloadAll() {
+    function bundle() {
       var data = loadData();
-      if (!data.captures.length && !data.suggestions.length) { return; }
       var now = new Date().toISOString();
-      downloadNamed({ tool: 'kdp-capture', version: 1, type: 'batch', store: store, captured_at: now,
-        captures: data.captures, suggestions: data.suggestions }, fileName('batch', 'autopilot', now, store));
+      return { tool: 'kdp-capture', version: 1, type: 'batch', store: store, captured_at: now,
+        captures: data.captures, suggestions: data.suggestions };
+    }
+
+    function downloadAll() {
+      var b = bundle();
+      if (!b.captures.length && !b.suggestions.length) { return; }
+      try {
+        downloadNamed(b, fileName('batch', 'autopilot', b.captured_at, store));
+      } catch (e) {
+        progress('Saving the file failed (' + e + '). Use Copy data instead.');
+      }
     }
 
     var saveBox = el('div', 'margin:8px 0;padding:8px;border:1px solid #6fcf97;border-radius:6px');
@@ -515,6 +559,9 @@
       saveBox.appendChild(el('div', '', 'Kept in this tab: ' + data.captures.length + ' searches' +
         (data.suggestions.length ? ' and the autocomplete list' : '') + '. Everything goes into one file.'));
       button('Save file', downloadAll, saveBox).id = 'kdp-save';
+      button('Copy data', function () {
+        copyText(bundle(), function (ok) { progress(ok ? COPY_HELP : 'Copying failed too. Tell Claude what happened.'); });
+      }, saveBox).id = 'kdp-copy';
       button('Clear (after uploading)', function () { clearData(); updateSaveBox(); }, saveBox);
     }
     var old = loadData();
