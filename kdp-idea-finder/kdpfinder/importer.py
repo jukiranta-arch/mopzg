@@ -80,7 +80,7 @@ def parse_product(p):
     fmt = (p.get("format_text") or "").split("–")[0].split(" - ")[0].strip() or None
     return {
         "asin": p["asin"],
-        "title": (p.get("title") or "").strip() or None,
+        "title": re.sub(r"^Sponsored Ad\s*[-\u2013\u2014]\s*", "", (p.get("title") or "").strip()) or None,
         "author": (p.get("author") or "").strip() or None,
         "format": fmt,
         "pages": pages,
@@ -150,7 +150,7 @@ def import_capture(conn, capture):
         return "product %s  BSR %s" % (b["asin"], b["bsr"])
 
     if kind == "search":
-        keyword = (capture.get("keyword") or "").strip().lower()
+        keyword = normalize(capture.get("keyword") or "")
         if not keyword:
             raise CaptureError("search capture has no keyword")
         old = conn.execute("SELECT id FROM searches WHERE keyword=? AND store=? AND taken_at=?",
@@ -163,9 +163,9 @@ def import_capture(conn, capture):
                                      (keyword, store, day, capture.get("url"))).lastrowid
         with_bsr = 0
         for item in capture.get("items", []):
+            sponsored = item.get("sponsored") or re.match(r"Sponsored\b", item.get("title") or "")
             conn.execute("INSERT OR REPLACE INTO search_results (search_id, position, asin, sponsored) "
-                         "VALUES (?,?,?,?)", (search_id, item["position"], item["asin"],
-                                             1 if item.get("sponsored") else 0))
+                         "VALUES (?,?,?,?)", (search_id, item["position"], item["asin"], 1 if sponsored else 0))
             product = item.get("product") or {"asin": item["asin"], "title": item.get("title"),
                                               "reviews_text": item.get("reviews")}
             product.setdefault("asin", item["asin"])

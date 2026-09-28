@@ -20,6 +20,23 @@ from .text import normalize, token_coverage, tokens
 # Words that name a format, not a topic. A niche whose keyword is only a layer
 # plus these words ("grief journal") is that layer's own home turf, so its
 # sellers don't prove the layer works as a modifier on something else.
+# Pairs that make no sense as a book, whatever the data says.
+KIDS_BASE = r"kids?|children|childrens|toddlers?|boys?|girls?|baby|preschool|ages? \d"
+ADULT_SITUATIONS = {"after divorce", "after a breakup", "after miscarriage", "for pregnancy", "for retirement",
+                    "for empty nesters", "for sobriety", "for menopause", "for ivf", "for newlyweds",
+                    "for weddings", "for a new job", "for military spouses", "for cancer patients", "for dementia",
+                    "for chronic illness", "for special needs parents", "for adoption"}
+YOUNG_BUYERS = {"for toddlers": {"activity", "coloring", "story", "baby"},
+                "for kids": {"activity", "coloring", "story", "puzzle", "journal"}}
+
+
+def _nonsense(base, base_families, label):
+    if label in ADULT_SITUATIONS and layers_mod.matches(KIDS_BASE, base):
+        return True
+    allowed = YOUNG_BUYERS.get(label)
+    return bool(allowed and base_families and not (base_families & allowed))
+
+
 GENERIC = {"journal", "notebook", "book", "log", "logbook", "planner", "diary", "workbook",
            "coloring", "colouring", "activity", "puzzle", "word", "search", "prompt", "guided",
            "daily", "gift", "kid", "adult", "guide"}
@@ -81,7 +98,7 @@ def _find_verified(reports, base, pattern):
     return None
 
 
-def generate(conn, cfg, lib, store, min_demand=0.35, include_unproven=False):
+def generate(conn, cfg, lib, store, min_demand=0.35, include_unproven=False, max_per_base=3):
     reports = {r["keyword"]: analyze(conn, cfg, r["keyword"], store, lib)
                for r in db.niches(conn, store)}
     sellers_by_layer = _layer_sellers(conn, cfg, reports, lib, store)
@@ -94,26 +111,33 @@ def generate(conn, cfg, lib, store, min_demand=0.35, include_unproven=False):
         if dfrac < min_demand:
             continue
         base_cats = {cat for cat, _, _ in rep.layers}
+        base_families = layers_mod.families(base)
+        names_audience = " for " in " %s " % base      # "activity book for kids" already has its buyer
         field_asins = {b.asin for b in rep.books}
+        per_base = []
         for cat, items in lib.items():
             if cat in base_cats:
                 continue
             for label, pattern in items.items():
-                if layers_mod.matches(pattern, base):
+                if layers_mod.matches(pattern, base) or _nonsense(base, base_families, label):
                     continue
                 served = [b for b in rep.books if layers_mod.matches(pattern, b.title)]
                 strength = combined_strength(served, cfg)
                 if strength >= 0.5:
                     continue
                 books = [e for e in sellers_by_layer.get((cat, label), [])
-                         if e[4] != base and e[0] not in field_asins]
+                         if e[4] != base and e[0] not in field_asins
+                         and (not base_families or base_families & layers_mod.families(e[1]))]
                 books.sort(key=lambda e: e[3], reverse=True)
                 searches = [s["suggestion"] for s in suggestions
                             if token_coverage(base, s["suggestion"]) == 1.0
                             and layers_mod.matches(pattern, s["suggestion"])]
-                if not books and not searches and not include_unproven:
-                    continue
                 sold = sum(demand_factor(e[3]) for e in books)
+                if not searches and not include_unproven:
+                    if sold < 0.5:                      # needs at least one real seller of the same kind
+                        continue
+                    if names_audience and cat in ("buyer", "situation"):
+                        continue
                 evidence = 0.6 * min(1.0, sold / 1.5) + 0.4 * min(len(searches), 2) / 2
                 concept = layers_mod.search_phrase(base, label)
                 weight = cfg["layer_weight"].get(cat, 0.8)
@@ -128,7 +152,9 @@ def generate(conn, cfg, lib, store, min_demand=0.35, include_unproven=False):
                 if verified:
                     idea.status, idea.verified_report = "verified", verified
                     idea.concept, idea.score = verified.keyword, verified.score
-                ideas.append(idea)
+                per_base.append(idea)
+        per_base.sort(key=lambda i: i.score, reverse=True)
+        ideas.extend(per_base[:max_per_base])
 
     ideas.sort(key=lambda i: (i.status == "verified", i.score), reverse=True)
     best = {}

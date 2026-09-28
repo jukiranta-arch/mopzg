@@ -126,6 +126,25 @@ LIBRARY = {
     },
 }
 
+# Product families. A layer proven in one family (e.g. "for toddlers" on activity
+# books) is no evidence for another (murder mystery puzzle books).
+FAMILIES = {
+    "puzzle": r"word search|word find|crosswords?|sudoku|puzzles?|cryptograms?|logic|brain games?|mystery|find the killer",
+    "activity": r"activity|activities|dot markers?|i spy|mazes?|tracing|cut and paste|scissor|sticker|workbook",
+    "coloring": r"colou?ring",
+    "journal": r"journals?|diary|diaries|notebooks?|prompts|guided|gratitude|devotional",
+    "log": r"log ?books?|logbook|logs|tracker|record book|inspection|checklist|maintenance",
+    "planner": r"planners?|organizers?|calendar",
+    "baby": r"baby book|baby memory|baby shower|newborn|babys first|baby s first",
+    "story": r"stories|story book|storybook|picture book|bedtime|read aloud",
+}
+
+
+def families(text):
+    norm = normalize(text)
+    return {name for name, pattern in FAMILIES.items() if _regex(pattern).search(norm)}
+
+
 _COMPILED = {}
 TEMPLATES = {}
 

@@ -41,7 +41,8 @@ def discover(conn, store, days=30, limit=30, cfg=None):
             if b.selling and b.asin not in seen:
                 seen.add(b.asin)
                 entries.append((b.title, demand_factor(b.daily),
-                                "BSR %s %s (in '%s')" % (format(b.bsr, ","), (b.title or "")[:70], kw)))
+                                "%s %s (in '%s')" % ("BSR " + format(b.bsr, ",") if b.bsr else "~%.0f/day" % b.daily,
+                                                     (b.title or "")[:70], kw)))
 
     score = defaultdict(float)
     examples = defaultdict(list)

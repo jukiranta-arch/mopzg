@@ -16,6 +16,15 @@
   var TEST = window.__KDP_CAPTURE_TEST__ || null;
   var DELAY_MIN = TEST ? 0 : 2500, DELAY_MAX = TEST ? 10 : 5000;
   var AC_MIN = TEST ? 0 : 600, AC_MAX = TEST ? 5 : 1100;          /* autocomplete is light */
+  var BETWEEN_MIN = TEST ? 0 : 15000, BETWEEN_MAX = TEST ? 5 : 30000;  /* rest between searches */
+  var COOLDOWN_MIN = TEST ? 0 : (window.KDP_COOLDOWN_MIN || 60);     /* wait after a captcha */
+  var STATE_KEY = 'kdp-autopilot-state';
+  /* Suggestions that are rarely a book you could publish: not ticked by default. */
+  var NOT_A_NICHE = /gift ?cards?|new books?|new releases?|kindle|audible|amazon|prime|\b20\d\d\b|\bby [a-z]+ [a-z]+$/;
+
+  function loadState() { try { return JSON.parse(localStorage.getItem(STATE_KEY) || 'null'); } catch (e) { return null; } }
+  function saveState(st) { try { localStorage.setItem(STATE_KEY, JSON.stringify(st)); } catch (e) { /* private window */ } }
+  function clearState() { try { localStorage.removeItem(STATE_KEY); } catch (e) { /* private window */ } }
 
   function clean(s) { return (s || '').replace(/[‎‏]/g, '').replace(/\s+/g, ' ').trim(); }
   /* Text of an element without the inline <script>/<style> Amazon mixes into some rows. */
@@ -123,6 +132,7 @@
         '[aria-label="Sponsored"], a[href*="/sspa/"]') ||
         /(^|\s)Sponsored(\s|$)/.test(txt(card, '.puis-label-popover, .s-label-popover-default'));
       var h2 = card.querySelector('h2');
+      if (h2 && /^Sponsored\b/i.test(clean(h2.getAttribute('aria-label') || h2.textContent))) { sponsored = true; }
       var reviews = card.querySelector('[aria-label$="ratings"], a[href*="#customerReviews"] span');
       var bought = text(card).match(/([\d.,]+[KkMm]?\+?)\s+bought in past month/);
       items.push({
@@ -390,10 +400,14 @@
       ranked.slice(0, 150).forEach(function (term, i) {
         var row = el('label', 'display:flex;gap:6px;align-items:center');
         var cb = el('input', '');
-        cb.type = 'checkbox'; cb.value = term; cb.checked = i < parseInt(howMany.value, 10);
+        cb.type = 'checkbox'; cb.value = term;
         row.appendChild(cb);
         row.appendChild(el('span', '', term));
         list.appendChild(row);
+      });
+      var want = parseInt(howMany.value, 10);
+      Array.prototype.forEach.call(list.querySelectorAll('input[type=checkbox]'), function (c) {
+        if (want > 0 && !NOT_A_NICHE.test(c.value)) { c.checked = true; want--; }
       });
       if (found.rows.length) {
         downloadNamed({ tool: 'kdp-capture', version: 1, type: 'suggestions', store: store,
@@ -404,13 +418,18 @@
         'The top ones are ticked. Change the ticks if you like, then press 2.');
     }, controls);
 
-    button('2. Capture ticked searches', async function () {
-      stopped = false;
-      var terms = Array.prototype.filter.call(list.querySelectorAll('input[type=checkbox]'), function (c) { return c.checked; })
+    function ticked() {
+      return Array.prototype.filter.call(list.querySelectorAll('input[type=checkbox]'), function (c) { return c.checked; })
         .map(function (c) { return c.value; });
-      if (!terms.length) { progress('Tick at least one search first (or press 1).'); return; }
-      var books = parseInt(perSearch.value, 10) || 16;
-      var part = [], partNo = 1, when = new Date().toISOString();
+    }
+
+    /* Captures terms one by one. State is saved before each search, so after a
+     * captcha, a Stop or a closed tab the next click on KDP Capture can continue. */
+    async function runQueue(terms, books, partNo) {
+      stopped = false;
+      clearInterval(timer);
+      resumeBox.hidden = true;
+      var part = [], when = new Date().toISOString();
       function flush() {
         if (!part.length) { return; }
         downloadNamed({ tool: 'kdp-capture', version: 1, type: 'batch', store: store, captured_at: when, captures: part },
@@ -418,26 +437,102 @@
         part = [];
         partNo++;
       }
-      for (var i = 0; i < terms.length && !stopped; i++) {
+      var pendingFrom = 0;               /* first search not yet in a saved file */
+      function remember(from, extra) {
+        saveState(Object.assign({ remaining: terms.slice(from), books: books, partNo: partNo, savedAt: Date.now() }, extra || {}));
+      }
+      var i = 0;
+      for (; i < terms.length && !stopped; i++) {
+        remember(part.length ? pendingFrom : i);
         var cap = await captureSearch(terms[i], null, searchUrl(terms[i]), books, function (m) {
           progress('Search ' + (i + 1) + ' of ' + terms.length + ' "' + terms[i] + '": ' + m);
         });
-        part.push(cap);
         if (cap.blocked) {
+          if (cap.items.length) { part.push(cap); }
           flush();
-          progress('Amazon asked for a captcha after ' + (i + 1) + ' searches, so Autopilot stopped. ' +
-            'Everything so far is saved. Try the rest in a few hours.');
+          remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */
+          progress('Amazon asked for a captcha after ' + i + ' searches. Everything so far is saved.');
+          showResume(loadState());
           window.__KDP_DONE__ = true;
           return;
         }
+        if (!part.length) { pendingFrom = i; }
+        part.push(cap);
         if (part.length >= 5) { flush(); }
+        if (i < terms.length - 1 && !stopped) {
+          progress('Resting between searches (slow on purpose)...');
+          await sleep(BETWEEN_MIN + Math.random() * (BETWEEN_MAX - BETWEEN_MIN));
+        }
       }
       flush();
-      progress((stopped ? 'Stopped. ' : 'Done. ') + 'Upload the kdp_capture_batch files from Downloads.');
+      if (i < terms.length) {
+        remember(i);
+        progress('Stopped. What was captured is saved. Click KDP Capture again later to continue.');
+      } else {
+        clearState();
+        progress('Done. Upload the kdp_capture_batch files from your Downloads folder.');
+      }
       window.__KDP_DONE__ = true;
+    }
+
+    var resumeBox = el('div', 'margin:8px 0;padding:8px;border:1px solid #ff9900;border-radius:6px');
+    resumeBox.id = 'kdp-resume';
+    resumeBox.hidden = true;
+    box.insertBefore(resumeBox, box.children[2]);
+    var timer = null;
+
+    function showResume(st) {
+      if (!st || !st.remaining || !st.remaining.length) { resumeBox.hidden = true; return; }
+      resumeBox.hidden = false;
+      resumeBox.textContent = '';
+      resumeBox.appendChild(el('div', 'font-weight:700', st.remaining.length + ' searches left from your last run'));
+      var info = el('div', 'margin-top:4px');
+      resumeBox.appendChild(info);
+      var go = button('Continue where it left off', function () {
+        clearInterval(timer);
+        runQueue(st.remaining, st.books || 16, st.partNo || 1);
+      }, resumeBox);
+      go.id = 'kdp-continue';
+      var early = button('I solved the captcha, continue now', function () {
+        clearInterval(timer);
+        runQueue(st.remaining, st.books || 16, st.partNo || 1);
+      }, resumeBox);
+      button('Forget them', function () { clearInterval(timer); clearState(); resumeBox.hidden = true; }, resumeBox);
+      var readyAt = (st.blockedAt || 0) + COOLDOWN_MIN * 60000;
+      function tick() {
+        var left = readyAt - Date.now();
+        if (left <= 0) {
+          clearInterval(timer);
+          go.disabled = false;
+          go.style.opacity = '1';
+          early.hidden = true;
+          info.textContent = st.blockedAt ? 'The wait is over. Amazon should let you continue now.' : 'Stopped or closed before it finished.';
+          return;
+        }
+        var m = Math.floor(left / 60000), sec = Math.floor(left / 1000) % 60;
+        go.disabled = true;
+        go.style.opacity = '.5';
+        info.textContent = 'Amazon asked for a captcha. You can continue in ' + m + ':' + (sec < 10 ? '0' : '') + sec +
+          '. Keep this tab open, or come back later and click KDP Capture again.';
+      }
+      clearInterval(timer);
+      tick();
+      timer = setInterval(tick, 1000);
+    }
+    showResume(loadState());
+
+    button('2. Capture ticked searches', function () {
+      var terms = ticked();
+      if (!terms.length) { progress('Tick at least one search first (or press 1).'); return; }
+      runQueue(terms, parseInt(perSearch.value, 10) || 16, 1);
     }, controls);
 
-    button('Stop', function () { stopped = true; progress('Stopping after the current step...'); }, controls);
+    button('Capture the phrases in the box directly', function () {
+      var terms = roots.value.split('\n').map(function (x) { return clean(x).toLowerCase(); }).filter(Boolean);
+      runQueue(terms, parseInt(perSearch.value, 10) || 16, 1);
+    }, controls);
+
+    button('Stop', function () { stopped = true; progress('Stopping after the current search...'); }, controls);
     button('Close', function () { stopped = true; box.remove(); }, controls);
   }
 

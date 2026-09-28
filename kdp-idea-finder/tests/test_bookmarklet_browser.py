@@ -101,7 +101,13 @@ SUGGESTIONS = {
 }
 
 
+CAPTCHA = ("<!doctype html><html><body><form action='/errors/validateCaptcha'>"
+           "Enter the characters you see below</form></body></html>")
+
+
 class Handler(BaseHTTPRequestHandler):
+    block_once = set()          # search terms that answer with a captcha the first time
+
     def do_GET(self):
         url = urlparse(self.path)
         path = url.path
@@ -117,7 +123,12 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/":
             body = "<!doctype html><html><body><h1>Amazon front page</h1></body></html>"
         elif path == "/s":
-            body = search_page(int(parse_qs(url.query).get("page", ["1"])[0]))
+            term = parse_qs(url.query).get("k", [""])[0]
+            if term in Handler.block_once:
+                Handler.block_once.discard(term)
+                body = CAPTCHA
+            else:
+                body = search_page(int(parse_qs(url.query).get("page", ["1"])[0]))
         elif path.startswith("/dp/"):
             b = BOOKS.get(path.split("/")[2])
             if not b:
@@ -195,7 +206,8 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(rep.metrics["field"], 4)
         self.assertEqual(rep.books[0].bsr, 6012)
 
-    def test_autopilot_discovers_and_captures(self):
+    def test_autopilot_discovers_captures_and_resumes(self):
+        Handler.block_once = {"gift for women"}
         env = dict(os.environ, NODE_PATH=NODE_MODULES)
         out = subprocess.run(["node", os.path.join(HERE, "browser", "run_autopilot.js"), self.base, CAPTURE_JS],
                              capture_output=True, text=True, env=env, timeout=90)
@@ -204,13 +216,24 @@ class BookmarkletBrowserTest(unittest.TestCase):
         # "gift for nurses" shows up twice, high in the list: it ranks first.
         self.assertEqual(result["ticked"][0], "gift for nurses")
         self.assertEqual(len(result["ticked"]), 2)
-        kinds = [d["data"]["type"] for d in result["downloads"]]
-        self.assertEqual(kinds, ["suggestions", "batch"])
-        batch = result["downloads"][1]["data"]
-        self.assertEqual([c["keyword"] for c in batch["captures"]], result["ticked"])
+        self.assertEqual(result["ticked"][1], "gift for women")
+        first = result["first"]
+        # The captcha on the second search stops the run; the first search is saved.
+        self.assertEqual([d["data"]["type"] for d in first["downloads"]], ["suggestions", "batch"])
+        batch = first["downloads"][1]["data"]
+        self.assertEqual([c["keyword"] for c in batch["captures"]], ["gift for nurses"])
         self.assertEqual(batch["captures"][0]["books_read"], 4)
+        self.assertIn("captcha", first["status"])
+        self.assertEqual(first["state"]["remaining"], ["gift for women"])
+        # Clicking KDP Capture again offers to continue, and continuing finishes the job.
+        self.assertIn("1 searches left", result["resumeText"])
+        second = result["second"]
+        self.assertEqual([c["keyword"] for d in second["downloads"] for c in d["data"]["captures"]],
+                         ["gift for women"])
+        self.assertIn("part-2", second["downloads"][0]["name"])
+        self.assertIsNone(second["state"])
         ctx = Ctx()
-        for d in result["downloads"]:
+        for d in first["downloads"] + second["downloads"]:
             d["data"]["store"] = "amazon.com"
             for c in d["data"].get("captures", []):
                 c["store"] = "amazon.com"

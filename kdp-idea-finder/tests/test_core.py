@@ -99,6 +99,12 @@ class ImportTests(unittest.TestCase):
         self.assertIn("1 with BSR", first[0][1])
         self.assertEqual(second[0][1], "already imported")
 
+    def test_keyword_with_punctuation_is_found(self):
+        ctx = Ctx()
+        ctx.load(search("Dot Marker Activity Book ages 3-5", [book(1, "Dot Marker Book", 5000)]))
+        rep = analyze(ctx.conn, ctx.cfg, "dot marker activity book ages 3-5", "amazon.com", ctx.lib)
+        self.assertEqual(rep.metrics["field"], 1)
+
     def test_same_day_empty_snapshot_does_not_replace(self):
         ctx = Ctx()
         ctx.load(search("grief journal", [book(1, "Grief Journal", 5000)]))
