@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS snapshots (
     bsr_category TEXT,
     category_ranks TEXT,
     price REAL,
+    price_currency TEXT,
     reviews INTEGER,
     rating REAL,
     source TEXT,
@@ -90,6 +91,9 @@ def connect(data_dir):
     conn = sqlite3.connect(os.path.join(data_dir, "kdp.sqlite"))
     conn.row_factory = sqlite3.Row
     conn.executescript(SCHEMA)
+    cols = {r["name"] for r in conn.execute("PRAGMA table_info(snapshots)")}
+    if "price_currency" not in cols:            # databases made before currency support
+        conn.execute("ALTER TABLE snapshots ADD COLUMN price_currency TEXT")
     return conn
 
 

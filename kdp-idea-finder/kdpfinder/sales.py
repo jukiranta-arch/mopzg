@@ -39,3 +39,14 @@ def royalty_per_copy(price, pages, store, cfg):
 
 def min_price_for_high_rate(store, cfg):
     return cfg["royalty"]["low_rate_below"].get(store)
+
+
+def to_store_currency(price, currency, store, cfg):
+    """Convert a price shown in another currency to the store's own currency."""
+    if price is None or not currency:
+        return price
+    target = cfg["store_currency_code"].get(store)
+    rates = cfg["fx_usd"]
+    if not target or currency == target or currency not in rates or target not in rates:
+        return price
+    return round(price * rates[currency] / rates[target], 2)

@@ -59,6 +59,20 @@ def parse_int(value):
     return int(digits) if digits else None
 
 
+_CURRENCIES = [("CDN$", "CAD"), ("CA$", "CAD"), ("C$", "CAD"), ("AU$", "AUD"), ("A$", "AUD"),
+               ("US$", "USD"), ("USD", "USD"), ("EUR", "EUR"), ("\u20ac", "EUR"), ("GBP", "GBP"),
+               ("\u00a3", "GBP"), ("CAD", "CAD"), ("AUD", "AUD")]
+
+
+def parse_currency(value):
+    """'EUR 12.79' -> 'EUR', '\u00a37.99' -> 'GBP'; a bare '$' returns None (the store's own currency)."""
+    text = str(value or "")
+    for mark, code in _CURRENCIES:
+        if mark in text:
+            return code
+    return None
+
+
 def parse_float(value):
     """'$8.99' / '8,99 €' / '4.6 out of 5 stars' -> 8.99 / 8.99 / 4.6."""
     if value is None:

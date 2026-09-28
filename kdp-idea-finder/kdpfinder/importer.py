@@ -7,7 +7,7 @@ import os
 import re
 from datetime import date
 
-from .text import parse_date, parse_float, parse_int
+from .text import parse_currency, parse_date, parse_float, parse_int
 
 OVERALL_CATEGORIES = ("books", "bucher", "bücher", "livres", "libros", "libri",
                       "kindle store", "kindle-shop", "boutique kindle", "tienda kindle")
@@ -91,6 +91,7 @@ def parse_product(p):
         "bsr_category": bsr_cat,
         "category_ranks": json.dumps(ranks),
         "price": parse_float(p.get("price_text")),
+        "price_currency": parse_currency(p.get("price_text")),
         "reviews": parse_int(p.get("reviews_text")) or 0,
         "rating": parse_float(p.get("rating_text")),
     }
@@ -118,9 +119,9 @@ def _save_product(conn, store, day, raw, source):
             return b    # don't replace a real snapshot with an empty one
     conn.execute(
         "INSERT OR REPLACE INTO snapshots (asin, store, taken_at, bsr, bsr_category, category_ranks, "
-        "price, reviews, rating, source) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        "price, price_currency, reviews, rating, source) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
         (b["asin"], store, day, b["bsr"], b["bsr_category"], b["category_ranks"], b["price"],
-         b["reviews"], b["rating"], source))
+         b["price_currency"], b["reviews"], b["rating"], source))
     return b
 
 

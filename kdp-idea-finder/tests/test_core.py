@@ -23,6 +23,16 @@ class TextTests(unittest.TestCase):
         self.assertAlmostEqual(parse_float("4.6 out of 5 stars"), 4.6)
         self.assertAlmostEqual(parse_float("4,6 von 5 Sternen"), 4.6)
 
+    def test_currency(self):
+        from kdpfinder.sales import to_store_currency
+        from kdpfinder.text import parse_currency
+        self.assertEqual(parse_currency("EUR 12.79"), "EUR")
+        self.assertEqual(parse_currency("\u00a37.99"), "GBP")
+        self.assertIsNone(parse_currency("$9.99"))
+        cfg = config.load("/nonexistent")
+        self.assertAlmostEqual(to_store_currency(10.0, "EUR", "amazon.com", cfg), 11.0)
+        self.assertEqual(to_store_currency(9.99, None, "amazon.com", cfg), 9.99)
+
     def test_dates(self):
         self.assertEqual(parse_date("March 3, 2024"), "2024-03-03")
         self.assertEqual(parse_date("3 March 2024"), "2024-03-03")

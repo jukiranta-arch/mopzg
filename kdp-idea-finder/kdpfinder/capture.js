@@ -15,7 +15,13 @@
   var DELAY_MIN = TEST ? 0 : 2500, DELAY_MAX = TEST ? 10 : 5000;
 
   function clean(s) { return (s || '').replace(/[‎‏]/g, '').replace(/\s+/g, ' ').trim(); }
-  function txt(root, sel) { var el = root.querySelector(sel); return el ? clean(el.textContent) : ''; }
+  /* Text of an element without the inline <script>/<style> Amazon mixes into some rows. */
+  function text(el) {
+    var copy = el.cloneNode(true);
+    Array.prototype.forEach.call(copy.querySelectorAll('script, style'), function (x) { x.remove(); });
+    return clean(copy.textContent);
+  }
+  function txt(root, sel) { var el = root.querySelector(sel); return el ? text(el) : ''; }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
 
   function storeOf(host) {
@@ -46,13 +52,13 @@
       var th = row.querySelector('th');
       var td = row.querySelector('td');
       if (th && td) {
-        label = clean(th.textContent); value = clean(td.textContent);
+        label = text(th); value = text(td);
       } else {
         var bold = row.querySelector('.a-text-bold');
-        var full = clean(row.textContent);
+        var full = text(row);
         if (bold) {
-          label = clean(bold.textContent).replace(/[:\s]+$/, '');
-          value = clean(full.slice(full.indexOf(clean(bold.textContent)) + clean(bold.textContent).length));
+          label = text(bold).replace(/[:\s]+$/, '');
+          value = clean(full.slice(full.indexOf(text(bold)) + text(bold).length));
         } else {
           var i = full.indexOf(':');
           if (i < 0) { return; }
@@ -75,11 +81,11 @@
     Object.keys(details).forEach(function (k) {
       if (/best ?sellers? rank|bestseller|classement|clasificaci|classifica/i.test(k)) { ranksText = details[k]; }
     });
-    if (!ranksText && rankEl) { ranksText = clean(rankEl.textContent); }
+    if (!ranksText && rankEl) { ranksText = text(rankEl); }
     if (!ranksText) {
       var all = doc.querySelectorAll('#detailBulletsWrapper_feature_div li, #prodDetails tr');
       Array.prototype.forEach.call(all, function (el) {
-        var t = clean(el.textContent);
+        var t = text(el);
         if (!ranksText && /Best Sellers Rank|Amazon Bestseller-Rang/i.test(t)) { ranksText = t; }
       });
     }

@@ -29,6 +29,15 @@ DEFAULTS = {
         "amazon.com.au": "A$", "amazon.fr": "€", "amazon.es": "€", "amazon.it": "€",
     },
 
+    "store_currency_code": {
+        "amazon.com": "USD", "amazon.co.uk": "GBP", "amazon.de": "EUR", "amazon.ca": "CAD",
+        "amazon.com.au": "AUD", "amazon.fr": "EUR", "amazon.es": "EUR", "amazon.it": "EUR",
+    },
+    # Approximate value of one unit in US dollars. Amazon shows prices in your
+    # home currency when you browse a foreign store (e.g. EUR on amazon.com from
+    # Finland); they are converted back to the store's currency with these rates.
+    "fx_usd": {"USD": 1.0, "EUR": 1.10, "GBP": 1.30, "CAD": 0.73, "AUD": 0.66},
+
     # Paperback royalty rules. Check the current KDP pricing pages; these change.
     "royalty": {
         "rate_high": 0.60,

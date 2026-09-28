@@ -56,7 +56,8 @@ PRODUCT = """<!doctype html><html><body>
 <li><span class="a-list-item">#12 in <a href="#">Grief &amp; Bereavement</a></span></li>
 <li><span class="a-list-item">#40 in <a href="#">Journal Writing Self-Help</a></span></li>
 </ul></span></li>
-<li><span class="a-list-item"><span class="a-text-bold">Customer Reviews:</span> 4.7 out of 5 stars</span></li>
+<li><span class="a-list-item"><span class="a-text-bold">Customer Reviews:</span> 4.7 out of 5 stars
+<script>P.when('A', 'ready').execute(function(A) {{ }});</script></span></li>
 </ul></div>
 </body></html>"""
 
@@ -158,6 +159,7 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(len(organic), 4)                      # sponsored repeat on page 2 is deduped
         self.assertEqual([i["position"] for i in cap["items"]], list(range(1, 6)))
         self.assertEqual(importer.parse_product(organic[3]["product"])["bsr"], 88000)
+        self.assertNotIn("P.when", json.dumps(organic[0]["product"]["details"]))   # inline scripts stripped
         p = importer.parse_product(organic[0]["product"])
         self.assertEqual(p["title"], BOOKS["B0AAAAAAA1"][0])
         self.assertEqual(p["bsr"], 6012)

@@ -15,7 +15,7 @@ from datetime import date
 from statistics import median
 
 from . import db, layers as layers_mod
-from .sales import daily_sales, royalty_per_copy
+from .sales import daily_sales, royalty_per_copy, to_store_currency
 from .text import days_between, normalize, token_coverage
 
 
@@ -108,7 +108,9 @@ def load_book(conn, cfg, asin, store):
         b.last_seen = last["taken_at"]
         b.reviews = next((s["reviews"] for s in reversed(snaps) if s["reviews"] is not None), 0) or 0
         b.rating = next((s["rating"] for s in reversed(snaps) if s["rating"]), None)
-        b.price = next((s["price"] for s in reversed(snaps) if s["price"]), None)
+        priced = next((s for s in reversed(snaps) if s["price"]), None)
+        if priced:
+            b.price = to_store_currency(priced["price"], priced["price_currency"], store, cfg)
     b.snapshot_days = len({s["taken_at"] for s in with_bsr})
     b.age_days = days_between(b.pub_date, b.last_seen or date.today().isoformat())
     return b
