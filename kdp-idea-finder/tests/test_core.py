@@ -105,6 +105,14 @@ class ImportTests(unittest.TestCase):
         rep = analyze(ctx.conn, ctx.cfg, "dot marker activity book ages 3-5", "amazon.com", ctx.lib)
         self.assertEqual(rep.metrics["field"], 1)
 
+    def test_pasted_file_with_trailing_junk(self):
+        ctx = Ctx()
+        path = os.path.join(ctx.dir, "kdp_capture.json")
+        with open(path, "w") as fh:
+            fh.write("\ufeff" + json.dumps(search("grief journal", [book(1, "Grief Journal", 5000)])) + "'\n")
+        result = importer.import_paths(ctx.conn, [path])
+        self.assertIn("1 with BSR", result[0][1])
+
     def test_same_day_empty_snapshot_does_not_replace(self):
         ctx = Ctx()
         ctx.load(search("grief journal", [book(1, "Grief Journal", 5000)]))
@@ -166,6 +174,15 @@ class AnalysisTests(unittest.TestCase):
         self.assertEqual(rep.parts["gap"], 35)
         self.assertGreaterEqual(rep.metrics["sellers"], 3)
         self.assertEqual(rep.metrics["new_books"], 1)
+
+    def test_many_direct_books_that_dont_sell_are_not_a_gap(self):
+        failed = [book(20 + i, "Grief Journal for Men %d" % i, 900000 + i * 1000, 2, prefix="B0F") for i in range(5)]
+        self.ctx.load(search("grief journal for men", GRIEF[:3] + failed, day="2026-09-02"))
+        rep = analyze(self.ctx.conn, self.ctx.cfg, "grief journal for men", "amazon.com", self.ctx.lib)
+        self.assertEqual(rep.metrics["failed_direct"], 5)
+        self.assertLessEqual(rep.parts["gap"], 35 * 0.2 + 0.01)
+        self.assertTrue(any("TRIED AND FAILED" in f for f in rep.flags))
+        self.assertNotEqual(rep.verdict, "good")
 
     def test_unknown_layer(self):
         with self.assertRaises(ValueError):

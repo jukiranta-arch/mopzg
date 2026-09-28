@@ -202,6 +202,12 @@ def import_capture(conn, capture):
     raise CaptureError("unknown capture type %r" % kind)
 
 
+def _first_json(text):
+    """The first JSON document in text. Hand-pasted files (Copy data -> GitHub
+    editor) sometimes pick up a stray character after the data; ignore it."""
+    return json.JSONDecoder().raw_decode(text.lstrip())[0]
+
+
 def import_paths(conn, paths):
     """Import capture files (globs allowed). Already-imported files are skipped."""
     results = []
@@ -220,7 +226,7 @@ def import_paths(conn, paths):
             results.append((path, "already imported"))
             continue
         try:
-            summary = import_capture(conn, json.loads(raw.decode("utf-8")))
+            summary = import_capture(conn, _first_json(raw.decode("utf-8-sig")))
         except (CaptureError, KeyError, json.JSONDecodeError) as exc:
             results.append((path, "skipped: %s" % exc))
             continue

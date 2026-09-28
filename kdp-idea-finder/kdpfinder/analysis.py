@@ -207,7 +207,13 @@ def score_niche(rep, cfg):
 
     parts = {}
     parts["demand"] = w["demand"] * demand_factor(top5_median) * min(1.0, len(sellers) / 3)
-    parts["gap"] = w["gap"] * (1 - strength)
+    # Several direct books that all fail to sell is not a gap: the concept has
+    # been tried and buyers didn't come. Each failed direct book beyond the
+    # first takes 20% off the gap, down to 20% of it.
+    failed_direct = [b for b in direct if b.bsr and b.daily < 0.3 * sell_min]
+    tried_and_failed = len(failed_direct) >= 3 and not direct_sellers
+    failure_factor = max(0.2, 1 - 0.2 * (len(failed_direct) - 1)) if tried_and_failed else 1.0
+    parts["gap"] = w["gap"] * (1 - strength) * failure_factor
     if sellers:
         parts["beatability"] = w["beatability"] * (
             len(low_review_sellers) / len(sellers) + len(indie_sellers) / len(sellers)
@@ -228,6 +234,10 @@ def score_niche(rep, cfg):
     if wave:
         rep.flags.append("copycat wave: %d of %d books are under %d days old"
                          % (len(new), len(books), cfg["new_book_days"]))
+    if tried_and_failed:
+        rep.flags.append("TRIED AND FAILED: %d direct books exist and none sells (best BSR %s); "
+                         "the demand may be for the base, not this concept"
+                         % (len(failed_direct), format(min(b.bsr for b in failed_direct), ",")))
     if not rep.layers:
         rep.flags.append("no layers: every relevant book is a direct competitor; try `kdp ideas`")
     if books and not sellers:
@@ -252,6 +262,7 @@ def score_niche(rep, cfg):
         "median_seller_monthly_royalty": int(median_seller_daily * 30 * royalty),
         "direct": len(direct),
         "direct_sellers": len(direct_sellers),
+        "failed_direct": len(failed_direct),
         "direct_strength": round(strength, 2),
         "best_direct_bsr": min((b.bsr for b in direct if b.bsr), default=None),
         "new_books": len(new),
