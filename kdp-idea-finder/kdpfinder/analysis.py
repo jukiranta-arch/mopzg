@@ -103,6 +103,9 @@ def load_book(conn, cfg, asin, store):
         recent = [s["bsr"] for s in with_bsr[-3:]]      # median of last 3 days smooths spikes
         b.bsr = int(median(recent))
         b.daily = daily_sales(b.bsr, store, cfg)
+    elif snaps and snaps[-1]["bought_month"]:
+        # Not opened (results pages 2-3): Amazon's "N+ bought in past month" is a lower bound.
+        b.daily = snaps[-1]["bought_month"] / 30.0
     if snaps:
         last = snaps[-1]
         b.last_seen = last["taken_at"]

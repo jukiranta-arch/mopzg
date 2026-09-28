@@ -7,7 +7,7 @@ import os
 import re
 from datetime import date
 
-from .text import parse_currency, parse_date, parse_float, parse_int
+from .text import normalize, parse_bought, parse_currency, parse_date, parse_float, parse_int
 
 OVERALL_CATEGORIES = ("books", "bucher", "bücher", "livres", "libros", "libri",
                       "kindle store", "kindle-shop", "boutique kindle", "tienda kindle")
@@ -92,6 +92,7 @@ def parse_product(p):
         "category_ranks": json.dumps(ranks),
         "price": parse_float(p.get("price_text")),
         "price_currency": parse_currency(p.get("price_text")),
+        "bought_month": parse_bought(p.get("bought_text")),
         "reviews": parse_int(p.get("reviews_text")) or 0,
         "rating": parse_float(p.get("rating_text")),
     }
@@ -115,13 +116,13 @@ def _save_product(conn, store, day, raw, source):
     if b["bsr"] is None:
         same_day = conn.execute("SELECT bsr FROM snapshots WHERE asin=? AND store=? AND taken_at=?",
                                 (b["asin"], store, day)).fetchone()
-        if (same_day and same_day["bsr"]) or (not b["reviews"] and b["price"] is None):
+        if (same_day and same_day["bsr"]) or (not b["reviews"] and b["price"] is None and not b["bought_month"]):
             return b    # don't replace a real snapshot with an empty one
     conn.execute(
         "INSERT OR REPLACE INTO snapshots (asin, store, taken_at, bsr, bsr_category, category_ranks, "
-        "price, price_currency, reviews, rating, source) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        "price, price_currency, reviews, rating, bought_month, source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
         (b["asin"], store, day, b["bsr"], b["bsr_category"], b["category_ranks"], b["price"],
-         b["price_currency"], b["reviews"], b["rating"], source))
+         b["price_currency"], b["reviews"], b["rating"], b["bought_month"], source))
     return b
 
 
@@ -132,6 +133,17 @@ def import_capture(conn, capture):
     store = capture.get("store") or "amazon.com"
     day = (capture.get("captured_at") or date.today().isoformat())[:10]
     kind = capture.get("type")
+
+    if kind == "batch":
+        results = [import_capture(conn, c) for c in capture.get("captures", [])]
+        return "batch of %d searches:\n    " % len(results) + "\n    ".join(results)
+
+    if kind == "suggestions":
+        rows = capture.get("rows", [])
+        for r in rows:
+            conn.execute("INSERT OR REPLACE INTO suggestions (seed, store, suggestion, taken_at) VALUES (?,?,?,?)",
+                         (normalize(r["seed"]), store, normalize(r["suggestion"]), day))
+        return "%d autocomplete suggestions" % len(rows)
 
     if kind == "product":
         b = _save_product(conn, store, day, capture["product"], "product")
@@ -157,6 +169,7 @@ def import_capture(conn, capture):
             product = item.get("product") or {"asin": item["asin"], "title": item.get("title"),
                                               "reviews_text": item.get("reviews")}
             product.setdefault("asin", item["asin"])
+            product.setdefault("bought_text", item.get("bought_text"))
             if not product.get("title"):
                 product["title"] = item.get("title")
             b = _save_product(conn, store, day, product, "search")

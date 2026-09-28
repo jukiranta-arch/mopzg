@@ -59,6 +59,15 @@ def parse_int(value):
     return int(digits) if digits else None
 
 
+def parse_bought(value):
+    """'1K+ bought in past month' -> 1000, '50+ bought in past month' -> 50."""
+    m = re.search(r"(\d+(?:[.,]\d+)?)\s*([KkMm]?)\+?", str(value or ""))
+    if not m:
+        return None
+    n = float(m.group(1).replace(",", "."))
+    return int(n * {"k": 1000, "m": 1000000}.get(m.group(2).lower(), 1))
+
+
 _CURRENCIES = [("CDN$", "CAD"), ("CA$", "CAD"), ("C$", "CAD"), ("AU$", "AUD"), ("A$", "AUD"),
                ("US$", "USD"), ("USD", "USD"), ("EUR", "EUR"), ("\u20ac", "EUR"), ("GBP", "GBP"),
                ("\u00a3", "GBP"), ("CAD", "CAD"), ("AUD", "AUD")]

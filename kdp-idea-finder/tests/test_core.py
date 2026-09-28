@@ -33,6 +33,12 @@ class TextTests(unittest.TestCase):
         self.assertAlmostEqual(to_store_currency(10.0, "EUR", "amazon.com", cfg), 11.0)
         self.assertEqual(to_store_currency(9.99, None, "amazon.com", cfg), 9.99)
 
+    def test_bought(self):
+        from kdpfinder.text import parse_bought
+        self.assertEqual(parse_bought("1K+ bought in past month"), 1000)
+        self.assertEqual(parse_bought("50+ bought in past month"), 50)
+        self.assertIsNone(parse_bought(""))
+
     def test_dates(self):
         self.assertEqual(parse_date("March 3, 2024"), "2024-03-03")
         self.assertEqual(parse_date("3 March 2024"), "2024-03-03")
@@ -233,6 +239,23 @@ class SeedAndAutocompleteTests(unittest.TestCase):
         found = [g for g, _, _ in seeds.discover(ctx.conn, "amazon.com", cfg=ctx.cfg)]
         self.assertIn("tell me your story", found)
         self.assertNotIn("wine tasting", found)          # those books don't sell
+
+    def test_batch_and_suggestion_files(self):
+        ctx = Ctx()
+        cap = search("gift for nurses", [book(1, "Nurse Journal", 20000, prefix="B0N")])
+        # A page-2 book that was not opened, only "bought in past month" is known.
+        cap["items"].append({"position": 2, "asin": "B0N0000009", "sponsored": False,
+                             "title": "Funny Nurse Coloring Book", "reviews": "12 ratings",
+                             "bought_text": "300+ bought in past month"})
+        ctx.load({"tool": "kdp-capture", "type": "batch", "store": "amazon.com",
+                  "captured_at": "2026-09-01T00:00:00Z", "captures": [cap]},
+                 {"tool": "kdp-capture", "type": "suggestions", "store": "amazon.com",
+                  "captured_at": "2026-09-01T00:00:00Z",
+                  "rows": [{"seed": "gift for", "suggestion": "gift for nurses", "position": 3}]})
+        from kdpfinder.analysis import search_books
+        books = {b.asin: b for b in search_books(ctx.conn, ctx.cfg, "gift for nurses", "amazon.com")}
+        self.assertAlmostEqual(books["B0N0000009"].daily, 10.0)
+        self.assertEqual(len(ctx.conn.execute("SELECT * FROM suggestions").fetchall()), 1)
 
     def test_expand_with_fake_fetcher(self):
         ctx = Ctx()

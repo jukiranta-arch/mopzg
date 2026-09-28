@@ -33,6 +33,15 @@ Open `~/kdp-data/install_bookmarklet.html` and drag **KDP Capture** to your book
 
 Capture the same searches again on different days. A score's confidence goes from low (1 day of BSR data) to medium (2) to high (3 or more), because one BSR reading can be a spike.
 
+## Autopilot
+
+Click **KDP Capture** on any other Amazon page, such as the front page, to open the Autopilot panel:
+
+1. **Find what people search.** It asks Amazon autocomplete what follows each starting phrase (`gift for`, `gift for a`, …, `gift for z`, and so on for each phrase). Suggestions listed higher are searched more, so each appearance scores `1 / (1 + position)`. It saves a `kdp_capture_suggestions_*.json` file.
+2. **Capture ticked searches.** It captures the top searches one by one (3 result pages and the top 16 books each), pausing a few seconds between pages. It saves a `kdp_capture_batch_*.json` file every 5 searches and stops on a captcha.
+
+Books on pages 2–3 aren't opened. Amazon's "N+ bought in past month" label, where shown, is used as their sales estimate (a lower bound).
+
 ## Commands
 
 | command | what it does |

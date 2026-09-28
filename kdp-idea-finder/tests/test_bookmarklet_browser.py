@@ -95,11 +95,28 @@ def list_page():
     return "<!doctype html><html><body><h1>Best Sellers in Grief &amp; Bereavement</h1>%s</body></html>" % items
 
 
+SUGGESTIONS = {
+    "gift for": ["gift for", "gift for women", "gift for nurses"],
+    "gift for n": ["gift for nurses", "gift for new moms"],
+}
+
+
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         url = urlparse(self.path)
         path = url.path
-        if path == "/s":
+        if path == "/api/2017/suggestions":
+            prefix = parse_qs(url.query)["prefix"][0]
+            data = json.dumps({"suggestions": [{"value": v} for v in SUGGESTIONS.get(prefix, [])]}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+            return
+        if path == "/":
+            body = "<!doctype html><html><body><h1>Amazon front page</h1></body></html>"
+        elif path == "/s":
             body = search_page(int(parse_qs(url.query).get("page", ["1"])[0]))
         elif path.startswith("/dp/"):
             b = BOOKS.get(path.split("/")[2])
@@ -177,6 +194,30 @@ class BookmarkletBrowserTest(unittest.TestCase):
         rep = analyze(ctx.conn, ctx.cfg, "grief journal", "amazon.com", ctx.lib)
         self.assertEqual(rep.metrics["field"], 4)
         self.assertEqual(rep.books[0].bsr, 6012)
+
+    def test_autopilot_discovers_and_captures(self):
+        env = dict(os.environ, NODE_PATH=NODE_MODULES)
+        out = subprocess.run(["node", os.path.join(HERE, "browser", "run_autopilot.js"), self.base, CAPTURE_JS],
+                             capture_output=True, text=True, env=env, timeout=90)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        result = json.loads(out.stdout)
+        # "gift for nurses" shows up twice, high in the list: it ranks first.
+        self.assertEqual(result["ticked"][0], "gift for nurses")
+        self.assertEqual(len(result["ticked"]), 2)
+        kinds = [d["data"]["type"] for d in result["downloads"]]
+        self.assertEqual(kinds, ["suggestions", "batch"])
+        batch = result["downloads"][1]["data"]
+        self.assertEqual([c["keyword"] for c in batch["captures"]], result["ticked"])
+        self.assertEqual(batch["captures"][0]["books_read"], 4)
+        ctx = Ctx()
+        for d in result["downloads"]:
+            d["data"]["store"] = "amazon.com"
+            for c in d["data"].get("captures", []):
+                c["store"] = "amazon.com"
+            importer.import_capture(ctx.conn, d["data"])
+        rep = analyze(ctx.conn, ctx.cfg, "gift for nurses", "amazon.com", ctx.lib)
+        self.assertEqual(rep.metrics["field"], 4)
+        self.assertEqual(len(ctx.conn.execute("SELECT * FROM suggestions").fetchall()), 3)
 
     def test_product_capture(self):
         cap = self.capture("/dp/B0AAAAAAA3")
