@@ -113,6 +113,16 @@ class ImportTests(unittest.TestCase):
         result = importer.import_paths(ctx.conn, [path])
         self.assertIn("1 with BSR", result[0][1])
 
+    def test_inbox_document(self):
+        ctx = Ctx()
+        cap = search("grief journal", [book(1, "Grief Journal", 5000)])
+        os.makedirs(os.path.join(ctx.dir, "inbox", "captures"))
+        path = os.path.join(ctx.dir, "inbox", "captures", "search-grief-journal-2026-09-01.json")
+        with open(path, "w") as fh:
+            json.dump({"kind": "search", "label": "grief journal", "json": json.dumps(cap)}, fh)
+        result = importer.import_paths(ctx.conn, [os.path.join(ctx.dir, "inbox")])
+        self.assertIn("1 with BSR", result[0][1])
+
     def test_same_day_empty_snapshot_does_not_replace(self):
         ctx = Ctx()
         ctx.load(search("grief journal", [book(1, "Grief Journal", 5000)]))

@@ -24,7 +24,8 @@ const fs = require('fs');
   await page.click('text=2. Capture ticked searches');
   await page.waitForFunction(() => window.__KDP_DONE__, null, { timeout: 30000 });
   const first = await page.evaluate(() => ({
-    downloads: window.__KDP_DOWNLOADS__.splice(0),
+    downloads: (window.__KDP_DOWNLOADS__ || []).splice(0),
+    kept: JSON.parse(localStorage.getItem('kdp-autopilot-data')),
     state: JSON.parse(localStorage.getItem('kdp-autopilot-state')),
     status: document.getElementById('kdp-status').textContent,
   }));
@@ -36,7 +37,8 @@ const fs = require('fs');
   await page.click('#kdp-continue');
   await page.waitForFunction(() => window.__KDP_DONE__, null, { timeout: 30000 });
   const second = await page.evaluate(() => ({
-    downloads: window.__KDP_DOWNLOADS__.splice(0),
+    downloads: (window.__KDP_DOWNLOADS__ || []).splice(0),
+    kept: JSON.parse(localStorage.getItem('kdp-autopilot-data')),
     state: localStorage.getItem('kdp-autopilot-state'),
   }));
   await page.click('#kdp-save');

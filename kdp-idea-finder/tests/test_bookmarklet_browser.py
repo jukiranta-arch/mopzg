@@ -225,33 +225,29 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(len(result["ticked"]), 2)
         self.assertEqual(result["ticked"][1], "gift for women")
         first = result["first"]
-        # The captcha on the second search stops the run; one file holds the
-        # autocomplete list and the first search.
-        self.assertEqual(len(first["downloads"]), 1)
-        batch = first["downloads"][0]["data"]
-        self.assertEqual(batch["type"], "batch")
-        self.assertEqual([c["keyword"] for c in batch["captures"]], ["gift for nurses"])
-        self.assertEqual(batch["captures"][0]["books_read"], 4)
-        self.assertEqual(len({r["suggestion"] for r in batch["suggestions"]}), 3)
+        # The captcha on the second search stops the run. Nothing downloads by
+        # itself; the first search and the autocomplete list are kept in the tab.
+        self.assertEqual(first["downloads"], [])
+        self.assertEqual([c["keyword"] for c in first["kept"]["captures"]], ["gift for nurses"])
+        self.assertEqual(first["kept"]["captures"][0]["books_read"], 4)
+        self.assertEqual(len({r["suggestion"] for r in first["kept"]["suggestions"]}), 3)
         self.assertIn("captcha", first["status"])
         self.assertEqual(first["state"]["remaining"], ["gift for women"])
-        # Clicking KDP Capture again offers to continue; the next file holds everything kept so far.
+        # Clicking KDP Capture again offers to continue; continuing adds the rest.
         self.assertIn("1 searches left", result["resumeText"])
         second = result["second"]
-        self.assertEqual(len(second["downloads"]), 1)
-        self.assertEqual([c["keyword"] for c in second["downloads"][0]["data"]["captures"]],
-                         ["gift for nurses", "gift for women"])
-        # Names carry the time, so a later run can't overwrite an earlier upload.
-        self.assertRegex(second["downloads"][0]["name"], r"_\d{4}-\d\d-\d\d_\d{4}_[a-z0-9-]+\.json$")
+        self.assertEqual(second["downloads"], [])
+        self.assertEqual([c["keyword"] for c in second["kept"]["captures"]], ["gift for nurses", "gift for women"])
         self.assertIsNone(second["state"])
-        # "Save file" is always there to download again with a click.
+        # "Save file" downloads everything kept, as one batch file named with the time.
         self.assertEqual(result["saveAgain"], 1)
         ctx = Ctx()
-        for d in first["downloads"] + second["downloads"]:
-            d["data"]["store"] = "amazon.com"
-            for c in d["data"].get("captures", []):
-                c["store"] = "amazon.com"
-            importer.import_capture(ctx.conn, d["data"])
+        batch = {"tool": "kdp-capture", "version": 1, "type": "batch", "store": "amazon.com",
+                 "captured_at": "2026-09-28T00:00:00Z", "captures": second["kept"]["captures"],
+                 "suggestions": second["kept"]["suggestions"]}
+        for c in batch["captures"]:
+            c["store"] = "amazon.com"
+        importer.import_capture(ctx.conn, batch)
         rep = analyze(ctx.conn, ctx.cfg, "gift for nurses", "amazon.com", ctx.lib)
         self.assertEqual(rep.metrics["field"], 4)
         self.assertEqual(len(ctx.conn.execute("SELECT * FROM suggestions").fetchall()), 3)
@@ -263,7 +259,7 @@ class BookmarkletBrowserTest(unittest.TestCase):
                              capture_output=True, text=True, env=env, timeout=90)
         self.assertEqual(out.returncode, 0, out.stderr)
         result = json.loads(out.stdout)
-        self.assertTrue(result["auto"].startswith("kdp_capture_product_"), result)
+        self.assertIsNone(result["auto"])                 # nothing downloads by itself
         self.assertTrue(result["again"].startswith("kdp_capture_product_"), result)
         self.assertEqual(result["copied"]["type"], "product")
 

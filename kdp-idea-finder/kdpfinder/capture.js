@@ -6,7 +6,8 @@
  *   - Best Sellers / Movers & Shakers / New Releases -> saves the list
  *   - any other Amazon page (e.g. the front page) -> Autopilot: finds popular
  *                        searches with autocomplete and captures them one by one
- * The result downloads as kdp_capture_*.json. Import it with `kdp import`.
+ * Copy data puts the result on the clipboard for the Capture Inbox page;
+ * Save file downloads it as kdp_capture_*.json for `kdp import`.
  * Runs in your own browser at human pace; never touches your KDP account.
  * Only block comments in this file: it is turned into a javascript: URL.
  */
@@ -27,7 +28,7 @@
   function clearState() { try { localStorage.removeItem(STATE_KEY); } catch (e) { /* private window */ } }
 
   /* Everything captured is kept here until you press Clear, so a download that
-   * the browser blocked or dropped never loses data: press Save file again. */
+   * the browser blocked or dropped never loses data: Copy data works any time. */
   var DATA_KEY = 'kdp-autopilot-data';
   function emptyData() { return { captures: [], suggestions: [], startedAt: Date.now() }; }
   function loadData() {
@@ -250,8 +251,11 @@
     }
   }
 
-  var COPY_HELP = 'Copied. On GitHub open your repository, choose Add file > Create new file, name it ' +
-    'kdp_capture.json, paste (Ctrl+V) and click Commit changes.';
+  /* Your Capture Inbox page: paste copied data there and Claude reads it directly. */
+  var INBOX_URL = window.KDP_INBOX_URL || 'https://claude.ai/artifact/R1ACbV9sgirgWCx32XhL3V';
+  var COPY_HELP = 'Copied. Open your Capture Inbox and press Ctrl+V there.';
+
+  function openInbox() { window.open(INBOX_URL, '_blank', 'noopener'); }
 
   function slugOf(s) { return String(s || 'page').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 50); }
 
@@ -276,17 +280,17 @@
     return b;
   }
 
-  /* Downloads the file, then leaves a button to save it again: some browsers
-   * (Firefox with "always ask") only allow a download from a direct click. */
+  /* Nothing downloads by itself: some browsers (Firefox) block downloads that
+   * a page starts on its own. Copy data + the Capture Inbox is the main route. */
   function save(capture, message) {
     if (TEST && !window.__KDP_AUTOPILOT__) { window.__KDP_RESULT__ = capture; return; }
-    download(capture);
-    say(message + ' A kdp_capture_...json file should be in your Downloads.');
+    say(message + ' Press Copy data, then paste it into your Capture Inbox.');
     box.appendChild(document.createElement('br'));
-    button('Save file again', function () { download(capture); });
     button('Copy data', function () {
-      copyText(capture, function (ok) { say(ok ? COPY_HELP : 'Copying failed too. Tell Claude.'); });
+      copyText(capture, function (ok) { say(ok ? COPY_HELP : 'Copying failed. Tell Claude what happened.'); });
     });
+    button('Open inbox', openInbox);
+    button('Save file', function () { download(capture); });
     button('Close', function () { box.remove(); });
   }
 
@@ -412,7 +416,7 @@
     box.appendChild(el('div', 'font-weight:700;font-size:15px;margin-bottom:6px', 'KDP Autopilot'));
     box.appendChild(el('div', 'opacity:.8;margin-bottom:8px',
       'Finds what people search for with Amazon autocomplete, then captures the top searches one by one. ' +
-      'Leave this tab open. Everything is kept in the tab and saved as one file at the end.'));
+      'Leave this tab open. Everything is kept in the tab until you copy it to your Capture Inbox.'));
     box.appendChild(el('label', 'display:block;margin-top:4px', 'Starting phrases (one per line):'));
     var roots = el('textarea', 'width:100%;box-sizing:border-box;height:110px;font:12px monospace;color:#111');
     roots.id = 'kdp-roots';
@@ -506,9 +510,8 @@
         });
         if (cap.blocked) {
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */
-          downloadAll();
-          progress('Amazon asked for a captcha after ' + i + ' searches. Those are saved in one file ' +
-            '(press Save file if it is not in your Downloads).');
+          progress('Amazon asked for a captcha after ' + i + ' searches. Those are kept: press Copy data ' +
+            'and paste into your Capture Inbox.');
           showResume(loadState());
           window.__KDP_DONE__ = true;
           return;
@@ -519,14 +522,13 @@
           await sleep(BETWEEN_MIN + Math.random() * (BETWEEN_MAX - BETWEEN_MIN));
         }
       }
-      downloadAll();
       if (i < terms.length) {
         remember(i);
-        progress('Stopped. What was captured is saved in one file. Click KDP Capture again later to continue.');
+        progress('Stopped. What was captured is kept: press Copy data and paste into your Capture Inbox. ' +
+          'Click KDP Capture again later to continue.');
       } else {
         clearState();
-        progress('Done. Everything is saved in one kdp_capture_batch file. ' +
-          'If it is not in your Downloads, press Save file.');
+        progress('Done. Press Copy data, then paste into your Capture Inbox (Open inbox).');
       }
       window.__KDP_DONE__ = true;
     }
@@ -557,12 +559,13 @@
       saveBox.hidden = !data.captures.length && !data.suggestions.length;
       if (saveBox.hidden) { return; }
       saveBox.appendChild(el('div', '', 'Kept in this tab: ' + data.captures.length + ' searches' +
-        (data.suggestions.length ? ' and the autocomplete list' : '') + '. Everything goes into one file.'));
-      button('Save file', downloadAll, saveBox).id = 'kdp-save';
+        (data.suggestions.length ? ' and the autocomplete list' : '') + '. Copy data, then paste into your Capture Inbox.'));
       button('Copy data', function () {
-        copyText(bundle(), function (ok) { progress(ok ? COPY_HELP : 'Copying failed too. Tell Claude what happened.'); });
+        copyText(bundle(), function (ok) { progress(ok ? COPY_HELP : 'Copying failed. Tell Claude what happened.'); });
       }, saveBox).id = 'kdp-copy';
-      button('Clear (after uploading)', function () { clearData(); updateSaveBox(); }, saveBox);
+      button('Open inbox', openInbox, saveBox);
+      button('Save file', downloadAll, saveBox).id = 'kdp-save';
+      button('Clear (after pasting)', function () { clearData(); updateSaveBox(); }, saveBox);
     }
     var old = loadData();
     if (old.startedAt && Date.now() - old.startedAt > 3 * 86400000) { clearData(); }   /* stale after 3 days */

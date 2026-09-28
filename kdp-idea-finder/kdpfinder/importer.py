@@ -204,8 +204,12 @@ def import_capture(conn, capture):
 
 def _first_json(text):
     """The first JSON document in text. Hand-pasted files (Copy data -> GitHub
-    editor) sometimes pick up a stray character after the data; ignore it."""
-    return json.JSONDecoder().raw_decode(text.lstrip())[0]
+    editor) sometimes pick up a stray character after the data; ignore it.
+    Capture Inbox documents carry the capture as a string in their `json` field."""
+    data = json.JSONDecoder().raw_decode(text.lstrip())[0]
+    if isinstance(data, dict) and "tool" not in data and isinstance(data.get("json"), str):
+        data = json.loads(data["json"])
+    return data
 
 
 def import_paths(conn, paths):
@@ -215,7 +219,7 @@ def import_paths(conn, paths):
     for p in paths:
         p = os.path.expanduser(p)
         if os.path.isdir(p):
-            files.extend(sorted(glob.glob(os.path.join(p, "*.json"))))
+            files.extend(sorted(glob.glob(os.path.join(p, "**", "*.json"), recursive=True)))
         else:
             files.extend(sorted(glob.glob(p)) if any(c in p for c in "*?[") else [p])
     for path in files:
