@@ -130,6 +130,93 @@ The browser test runs the real bookmarklet in headless Chromium against mock Ama
 
 ## Whodunit puzzle generator
 
+`whodunit/` builds "find the killer" puzzle books like *Who Killed Prince Charming?*, following what the best sellers do (`briefs/2026-09-29_winners-samples.md`):
+- **The register:** single first names in justified lines, with fairy-tale characters in italics.
+- **Chapters:** each is a place in the palace, opened by a short scene.
+- **Clue cards:** a witness line, then a plain Rule, an example and a tick box, with checkpoints between the clue groups.
+- **The back of the book:** two-level hints, then the solution upside down behind a warning page.
+
+It needs reportlab (`pip install reportlab`).
+
+```bash
+python -m whodunit sample sample.pdf   # 30 register pages, 9 clues
+python -m whodunit book book.pdf       # 140 register pages, about 39,000 names, 12 clues
+python -m whodunit.check_pdf book.pdf  # solve the finished PDF independently (needs pymupdf)
+```
+
+Every puzzle is solved under the printed rules and under common misreadings (Y as a vowel, counting one name too many, and so on), and is accepted only if every reading leaves the same two suspects. The book preset also enforces balance:
+- no page-level clue removes more than 70% of names on its own;
+- 1–8% of names are left for the letter clues.
+
+Fonts are embedded, as KDP requires.
+
+## Book reviews
+
+To learn what readers of competing books complain about, run KDP Capture on amazon.co.uk (it works in a private tab, no sign-in) and paste Amazon links or ASINs into the **Book reviews** box. For each book it reads the reviews shown on the book page (usually 8–13), the star breakdown and Amazon's "Customers say" summary. Amazon's full review lists need a sign-in, so they're skipped when signed out. Books usually have the same ASIN on every Amazon site; one that isn't sold on the site you're using is skipped. Then read them with:
+
+```bash
+python -m kdpfinder reviews --max-stars 3          # complaints first, all books, every Amazon site
+python -m kdpfinder reviews B0GQ2VXKY7             # one book
+```
+
+## How a niche is scored (0–100)
+
+**Field:** the first 16 organic results of the niche's search. Sponsored results are ignored.
+
+**Selling:** a book sells when its estimated sales are at least 1 copy a day. On amazon.com that's roughly BSR 100k or better. Estimates come from a BSR-to-sales curve in `config.py`.
+
+**Direct competitor:** the title covers the concept's keyword *and* every layer the concept adds. It has the same buyer, problem and format. Everything else in the field is non-direct: it proves demand, but it's not the same book.
+
+| part | max | what earns points |
+|---|---|---|
+| demand | 35 | median daily sales of the top 5 books (0.3/day scores 0, 20/day scores full), and at least 3 sellers |
+| gap | 35 | no direct competitor scores full. Direct books that sell well and have many reviews take points away |
+| beatability | 15 | sellers with under 100 reviews, indie-published sellers, and sellers under 6 months old (newcomers can rank) |
+| durability | 15 | minus 7 for a copycat wave (many books under 60 days old), minus 5 for a trademark word (score capped at 30), minus 3 for a health topic |
+
+A score of 70 or more is **good**, 50–69 is **average**, and below 50 is **skip**.
+
+**Idea score:** base demand × layer evidence × (1 − how well the base field already serves the layer). A new *buyer* or *situation* counts in full. A *format* tweak on a crowded base is a thin layer and is discounted. Once you capture the layered search itself, the idea shows as **verified** and uses that search's real score.
+
+## Tuning and calibrating
+
+Every number is an estimate until you check it against real sales. Put overrides in `~/kdp-data/config.json`. Keys you don't set keep their defaults:
+
+```json
+{
+  "bsr_anchors": [[1000, 60], [10000, 10], [100000, 1.0], [1000000, 0.05]],
+  "store_multiplier": {"amazon.co.uk": 0.3},
+  "selling_daily": 0.5
+}
+```
+
+Once a month, compare the predictions with your KDP royalty report and adjust `bsr_anchors`. The KDP royalty rules (the 60%/50% price threshold and print costs) are in `config.py`. **Check them against KDP's current pricing page.** They change.
+
+Add your own layers in `~/kdp-data/layers.json`. `kdp expand` lists the autocomplete phrases that no existing layer matches, which makes it a good source of new layers:
+
+```json
+{"buyer": {"for widows": "widows?|widowed"},
+ "format": {"pocket size": ["pocket|travel size", "pocket {}"]}}
+```
+
+## Honest limits
+
+- **Sales are estimates.** BSR is a snapshot ranking, not a sales count. Treat sales as a range until your own royalty reports calibrate them.
+- **Direct vs non-direct is matched on titles.** Titles with synonyms or unusual wording can be misclassified. Check the book list in `kdp analyze` and fix mistakes with `kdp mark`.
+- **Amazon changes its page markup.** If a capture comes back with no BSRs, save that Amazon page (Ctrl+S). Its structure can then be added to `tests/test_bookmarklet_browser.py` and the parser fixed.
+- **Human pace, your own browser.** The bookmarklet reads pages you could open yourself, with a 2.5–5 second gap between pages, and stops if Amazon shows a captcha. It never touches your KDP account. Don't run it in loops.
+- **Trademarks, health claims, KDP content rules:** the tool flags common trademark and health words. Clearing a title is still your job.
+
+## Tests
+
+```bash
+python -m unittest discover -s tests
+```
+
+The browser test runs the real bookmarklet in headless Chromium against mock Amazon pages. It needs Node with Playwright and is skipped otherwise.
+
+## Whodunit puzzle generator
+
 `whodunit/` builds "find the killer" puzzle books like *Who Killed Prince Charming?*: a register of thousands of names, a set of clues that leaves exactly two suspects, and a final deduction that picks the killer. It needs reportlab (`pip install reportlab`).
 
 ```bash

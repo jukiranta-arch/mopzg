@@ -1,36 +1,38 @@
 import os
+import random
 import tempfile
 import unittest
 
-from whodunit.generate import build_register, generate_any, random_name
-from whodunit.model import PERSON_TITLES, READINGS, Register, catalogue, letters, solve, words
-from whodunit.names import FEMALE, FEMALE_TITLES, MALE, MALE_TITLES
+from whodunit.generate import (BOOK_BALANCE, BOOK_CLUES, CAST, PAGE_LEVEL, SAMPLE_CLUES, build_register,
+                               generate_any)
+from whodunit.model import READINGS, Register, catalogue, letters, solve
+from whodunit.names import CHARACTERS, FIRST, PLACES_INDOOR, PLACES_OUTDOOR, ROYALS
 
-import random
+SAMPLE = dict(n_pages=30, per_page=(270, 300), n_chapters=4, n_indoor=2, clue_keys=SAMPLE_CLUES,
+              balance=dict(BOOK_BALANCE, page_level_keep=(0.02, 0.2)))
 
 
-def reg_of(*pages, chapters=None):
-    return Register([list(p) for p in pages], chapters or [("", 0)]).index()
+def reg_of(*pages, chapters=None, indoor=None, cast=()):
+    return Register([list(p) for p in pages], chapters or [("The Ballroom", 0)],
+                    indoor={0} if indoor is None else indoor, cast=set(cast)).index()
 
 
 class ClueTests(unittest.TestCase):
     def setUp(self):
-        self.cat = catalogue(queen_window=2)
+        self.cat = catalogue(cast_window=2)
 
     def check(self, key, name, expected):
         self.assertEqual(self.cat[key].test(reg_of([name]), 0), expected, (key, name))
 
     def test_word_clues(self):
         self.check("odd_consonants", "Lucy", True)          # L, C, Y: Y is a consonant
-        self.check("odd_consonants", "Ada", True)
-        self.check("odd_consonants", "Mrs Ada", True)       # titles don't count: checked as Ada
-        self.check("first_half", "Lady Nell", False)        # begins with N once the title is dropped
-        self.check("even_vowels", "Tim", False)
+        self.check("odd_consonants", "Anna", False)
         self.check("even_vowels", "Lynn", True)             # no vowels counts as even
-        self.check("ends_consonant", "Mrs O'Neil", True)    # apostrophe ignored
+        self.check("even_vowels", "Tim", False)
+        self.check("ends_consonant", "Lucy", True)
+        self.check("ends_consonant", "Anna", False)
         self.check("double_letter", "Bella", True)
-        self.check("double_letter", "Jess Smith", True)
-        self.check("double_letter", "Tom Mason", False)     # letters split by a space don't count
+        self.check("double_letter", "Tom", False)
         self.check("first_half", "Mabel", True)
         self.check("first_half", "Nora", False)
         self.check("last_two_rising", "Lucy", True)
@@ -38,46 +40,56 @@ class ClueTests(unittest.TestCase):
 
     def test_place_clues(self):
         cat = self.cat
-        r = reg_of(["Ada", "Queen Ivy", "Bo"], ["Cy", "Dee", "Eve", "Fay"])
-        near = cat["near_queen"]
+        r = reg_of(["Ada", "Snow White", "Bo"], ["Cy", "Dee", "Eve", "Fay"], cast={"Snow White"})
+        near = cat["near_character"]
         self.assertTrue(near.test(r, 0))                    # within 2 names
         self.assertTrue(near.test(r, 3))                    # counts across a page break
         self.assertFalse(near.test(r, 4))
-        self.assertFalse(near.test(r, 1))                   # a Queen isn't near herself
-        self.assertFalse(cat["even_page"].test(r, 0))
-        self.assertTrue(cat["even_page"].test(r, 3))
+        self.assertFalse(near.test(r, 1))                   # a character isn't near itself
         r = reg_of(["Ann"], ["Hansel"], ["Bo"], ["Cy"], ["Gretel"], ["Di"])
         between = cat["between_hansel_gretel"]
         self.assertEqual([between.test(r, i) for i in range(6)], [False, False, True, True, False, False])
-        r = reg_of(["Ann", "Robin King", "Evil Queen"], ["Bo", "Cy"])
-        self.assertTrue(cat["king_and_queen"].test(r, 0))   # any name with the word King / Queen in it
-        self.assertFalse(cat["king_and_queen"].test(r, 3))
-        r.set_reading({"titled_only": True})
-        self.assertFalse(cat["king_and_queen"].test(r, 0))  # the misreading the generator also checks
-        r.set_reading({})
-        r = reg_of(["Ann"], ["Bo"], ["Cy"])
-        self.assertEqual([cat["odd_page"].test(r, i) for i in range(3)], [True, False, True])
-        r = reg_of(["Mr Kite", "Zoe Kane", "Zoe"])
-        self.assertTrue(cat["key_letter"].test(r, 1))       # key letter K: the title Mr is skipped
+        r = reg_of(["Ann", "Snow Queen"], ["Bo", "Cy"])
+        self.assertTrue(cat["royal_on_page"].test(r, 0))    # any name with the word Queen in it
+        self.assertFalse(cat["royal_on_page"].test(r, 2))
+        r.set_reading({"royal_first_word": True})
+        self.assertFalse(cat["royal_on_page"].test(r, 0))   # the misreading the generator also checks
+        r = reg_of(["Kit", "Zoe Kane", "Zoe"])
+        self.assertTrue(cat["key_letter"].test(r, 1))       # key letter K
         self.assertFalse(cat["key_letter"].test(r, 2))
+        r = reg_of(["Ann", "Papa Bear", "Mama Bear", "Baby Bear"], ["Bo"], ["Cy", "Papa Bear", "Mama Bear"],
+                   chapters=[("The Ballroom", 0), ("The Orchard", 2)])
+        self.assertTrue(cat["three_bears"].test(r, 0))
+        self.assertFalse(cat["three_bears"].test(r, 5))     # two bears only
+        r = reg_of(["Ann"], ["Bo"], chapters=[("The Ballroom", 0), ("The Orchard", 1)], indoor={0})
+        self.assertEqual([cat["chapter_indoors"].test(r, i) for i in range(2)], [True, False])
 
     def test_page_start_with_duplicate_names(self):
         r = reg_of(["Ann", "Bo"], ["Ann", "Cy", "Di"])
         self.assertEqual(r.page_start, [0, 2])
-        self.assertEqual(r.first_index_on_page(1), 2)
+
+
+class NameTests(unittest.TestCase):
+    def test_no_titles_and_no_clashes(self):
+        self.assertFalse({"Mr", "Mrs", "Miss", "Dr", "Sir", "Lady"} & set(FIRST))
+        self.assertTrue(all(len(n.split()) == 1 for n in FIRST))            # guests are single first names
+        self.assertFalse(set(FIRST) & set(CHARACTERS + ROYALS))
+        self.assertFalse(set(PLACES_INDOOR) & set(PLACES_OUTDOOR))
 
 
 class GeneratorTests(unittest.TestCase):
-    def test_puzzle_has_exactly_two_suspects(self):
-        reg, clues, sol = generate_any(range(1, 200), n_pages=10, per_page=(200, 225), n_chapters=3)
+    @classmethod
+    def setUpClass(cls):
+        cls.reg, cls.clues, cls.sol = generate_any(range(1, 60), **SAMPLE)
+
+    def test_puzzle_has_exactly_two_suspects_under_every_reading(self):
+        reg, clues, sol = self.reg, self.clues, self.sol
         for reading in READINGS:                             # the same answer whatever slip a solver makes
             self.assertEqual(len(solve(reg, clues, reading)[0]), 2, reading)
         alive, counts = solve(reg, clues)
-        self.assertEqual(len(alive), 2)
-        for s in sol["suspects"]:
-            self.assertNotIn(words(s["name"])[0], PERSON_TITLES)
         self.assertEqual(sorted(reg.flat[i] for i in alive), sorted(s["name"] for s in sol["suspects"]))
-        self.assertEqual({s["chapter"] for s in sol["suspects"]}.__len__(), 2)
+        for s in sol["suspects"]:
+            self.assertIn(s["name"], FIRST)                  # a plain first name, never a character
         a, b = (len(letters(s["name"])) for s in sol["suspects"])
         self.assertNotEqual(a, b)
         self.assertEqual(len(letters(sol["killer"])), max(a, b))
@@ -86,42 +98,31 @@ class GeneratorTests(unittest.TestCase):
             self.assertLessEqual(after, before * 0.97)
             before = after
 
-    def test_checkpoints_and_verdict_hints(self):
-        reg, clues, sol = generate_any(range(1, 200), n_pages=10, per_page=(200, 225), n_chapters=3)
-        self.assertEqual([cp["names"] for cp in sol["checkpoints"]], sol["counts"])
-        self.assertEqual(sol["checkpoints"][-1]["pages"], len({s["page"] for s in sol["suspects"]}))
-        suspect_pages = {reg.page_of[i] for i in sol["pair"]}
-        self.assertEqual(set(sol["page_hints"]), set(range(len(reg.pages))) - suspect_pages)
-        for p, (kind, k) in sol["page_hints"].items():
-            span = range(reg.page_start[p], reg.page_start[p] + len(reg.pages[p]))
-            if kind == "single":                                   # that clue alone clears the page
-                self.assertFalse(any(clues[k - 1].test(reg, i) for i in span))
-            else:                                                  # in order, the page is empty after clue k
-                self.assertFalse(set(span) & set(solve(reg, clues[:k])[0]))
-                self.assertTrue(set(span) & set(solve(reg, clues[:k - 1])[0]))
-
-    def test_book_balance(self):
-        from whodunit.generate import BOOK_BALANCE, BOOK_CLUES, PAGE_LEVEL
-        reg, clues, sol = generate_any(range(1, 40), n_pages=60, per_page=(200, 225), n_chapters=5,
-                                       clue_keys=BOOK_CLUES, balance=dict(BOOK_BALANCE, page_level_keep=(0.01, 0.2)))
-        for c in clues:
+    def test_balance_no_knockout_page_clue(self):
+        for c in self.clues:
             if c.key in PAGE_LEVEL:
-                self.assertGreaterEqual(sol["standalone"][c.key], 0.30, c.key)   # no knockout clue
+                self.assertGreaterEqual(self.sol["standalone"][c.key], 0.30, c.key)
+        self.assertEqual([cp["names"] for cp in self.sol["checkpoints"]], self.sol["counts"])
+
+    def test_suspects_in_indoor_chapters_with_the_bears_optional(self):
+        reg = self.reg
+        for i in self.sol["pair"]:
+            self.assertIn(reg.chapter_of_page[reg.page_of[i]], reg.indoor)
 
     def test_landmarks_survive_placement(self):
-        reg = build_register(random.Random(5), n_pages=12, per_page=(200, 225), n_chapters=3)
+        from whodunit.generate import GenerationError
+        for seed in range(1, 50):                            # some seeds can't place the suspect pages
+            try:
+                reg = build_register(random.Random(seed), n_pages=30, per_page=(270, 300), n_chapters=4,
+                                     n_indoor=2)
+                break
+            except GenerationError:
+                continue
         self.assertEqual(reg.flat.count("Hansel"), 1)
         self.assertEqual(reg.flat.count("Gretel"), 1)
         self.assertGreaterEqual(reg.flat.count("Big Bad Wolf"), 2)
-
-    def test_titles_match_first_names(self):
-        rng = random.Random(1)
-        for _ in range(5000):
-            w = words(random_name(rng))
-            if len(w) == 3 and w[0] in MALE_TITLES:
-                self.assertNotIn(w[1], FEMALE)
-            if len(w) == 3 and w[0] in FEMALE_TITLES:
-                self.assertNotIn(w[1], MALE)
+        self.assertTrue(set(reg.flat) & set(ROYALS))
+        self.assertTrue(all(n in FIRST or n in CAST for n in reg.flat))
 
 
 try:
@@ -135,11 +136,10 @@ except ImportError:
 class RenderTests(unittest.TestCase):
     def test_renders_sample(self):
         from whodunit.render import render
-        reg, clues, sol = generate_any(range(1, 200), n_pages=10, per_page=(200, 225), n_chapters=3)
+        reg, clues, sol = generate_any(range(1, 60), **SAMPLE)
         with tempfile.TemporaryDirectory() as d:
             path = os.path.join(d, "s.pdf")
             n = render(reg, clues, sol, path)
-            self.assertTrue(os.path.getsize(path) > 10000)
             with open(path, "rb") as fh:
                 pdf = fh.read()
             self.assertIn(b"/FontFile2", pdf)                    # fonts embedded, as KDP requires
@@ -153,15 +153,21 @@ class RenderTests(unittest.TestCase):
             doc = pymupdf.open(path)
             self.assertEqual(doc.page_count, n)
             text = [pg.get_text() for pg in doc]
-            self.assertTrue(any("Checkpoints" in t for t in text))
-            self.assertTrue(any("CLUE CARD" in t for t in text))
-            self.assertTrue(any("The Verdict" in t for t in text))
+            for section in ("The Palace", "Who’s Who", "The Clues", "CHECKPOINT A", "CLUE CARD",
+                            "The Final Deduction", "Hints"):
+                self.assertTrue(any(section in t for t in text), section)
+            self.assertFalse(any("Mr " in t or "Mrs " in t for t in text))   # no titles anywhere
             killer = sol["killer"]
             stop = next(i for i, t in enumerate(text) if t.strip().startswith("Stop!"))
             self.assertEqual(stop % 2, 0)                          # a right-hand page (0-based even)
-            self.assertIn("It was %s." % killer, text[stop + 1])   # the ending is on its back
-            self.assertFalse(any(killer in t for t in text[:stop] if "·" not in t))   # named nowhere else
-            self.assertGreater(n, 10)
+            self.assertIn("It was %s." % killer, text[stop + 1])   # the solution is on its back
+            clue_pages = [t for t in text[:stop] if "Rule:" in t or "Example:" in t or "Hints" in t]
+            self.assertFalse(any(killer in t for t in clue_pages))  # examples and hints never name a suspect
+            import subprocess
+            import sys
+            out = subprocess.run([sys.executable, "-m", "whodunit.check_pdf", path], capture_output=True,
+                                 text=True, cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            self.assertEqual(out.returncode, 0, out.stdout + out.stderr)   # solved from the PDF alone
 
 
 if __name__ == "__main__":

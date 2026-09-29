@@ -42,18 +42,11 @@ Thorne Todd Tower Tucker Turner Vance Vale Wade Walker Ward Warren Waters Webb W
 White Wilde Winter Wolfe Wood Woods Wren Wright Yates York Young""".split()
 
 # Titles that may start an ordinary entry ("Dr Ada Finch", "Mrs Lark").
-TITLES = ["Mr", "Mrs", "Miss", "Dr", "Sir", "Lady", "Dame", "Lord", "Captain", "Old", "Little"]
+TITLES = []   # no titles: guests are single first names, as in the best-selling books of this kind
 
 # Public-domain fairy-tale and nursery-rhyme characters used as colour.
 # (Grimm, Perrault, Andersen, Mother Goose. Nothing from later film versions.)
-CHARACTERS = """Cinderella|Snow White|Rose Red|Rapunzel|Rumpelstiltskin|Little Red Riding Hood|Goldilocks|
-Tom Thumb|Thumbelina|Puss in Boots|Bluebeard|Briar Rose|Fairy Godmother|Evil Queen|Old King Cole|
-Little Bo Peep|Little Boy Blue|Jack Sprat|Mother Hubbard|Mother Goose|Humpty Dumpty|Georgie Porgie|
-Simple Simon|Wee Willie Winkie|Jack Horner|Mistress Mary|Tom Tom|Peter Piper|Lucy Locket|Kitty Fisher|
-Jack Frost|Mother Holle|Faithful John|Iron John|Ali Baba|Aladdin|Sinbad|Scheherazade|
-Snow Queen|Ugly Duckling|Steadfast Tin Soldier|Emperor|Little Match Girl|Twelve Huntsmen|Goose Girl|
-Brave Tailor|Pied Piper|Beauty|Beast|Huntsman|Woodcutter|Miller|Miller's Daughter|Frog King|
-Golden Goose|Hans in Luck|Lazy Jack|Jack the Giant Killer|Giant|Ogre|Troll|Tooth Fairy|Sandman""".replace("\n", "").split("|")
+CHARACTERS = """Cinderella|Snow White|Rose Red|Rapunzel|Rumpelstiltskin|Little Red Riding Hood|Goldilocks|Tom Thumb|Thumbelina|Puss in Boots|Bluebeard|Briar Rose|Fairy Godmother|Little Bo Peep|Little Boy Blue|Jack Sprat|Mother Hubbard|Mother Goose|Humpty Dumpty|Georgie Porgie|Simple Simon|Wee Willie Winkie|Jack Horner|Mistress Mary|Tom Tom|Peter Piper|Lucy Locket|Kitty Fisher|Jack Frost|Mother Holle|Faithful John|Iron John|Ali Baba|Aladdin|Sinbad|Scheherazade|Ugly Duckling|Steadfast Tin Soldier|Little Match Girl|Twelve Huntsmen|Goose Girl|Brave Tailor|Pied Piper|Beauty|Beast|Huntsman|Woodcutter|Miller's Daughter|Golden Goose|Hans in Luck|Lazy Jack|Jack the Giant Killer|Tooth Fairy|Sandman""".replace("\n", "").split("|")
 
 # Chapter titles: public-domain lines from the tales.
 CHAPTER_QUOTES = [
@@ -71,72 +64,82 @@ CHAPTER_QUOTES = [
     "And they all lived happily ever after",
 ]
 
-# Gendered titles only go with matching first names ("Queen Mabel", never "Queen Bruno").
-MALE = set("""Aaron Adam Adrian Aiden Alan Albert Alec Alfie Amir Amos Andre Anton Archie Arlo Arthur Austin
-Barney Basil Ben Benedict Bernard Boris Brian Bruno Caleb Calvin Carl Cecil Chad Clarence Claude Clive
-Cody Colin Connor Craig Cyril Damian Daniel Darius Dean Derek Dominic Donald Duncan Dylan Edgar Edmund
-Edwin Eli Elmer Emil Eric Ernest Ethan Evan Fabian Felix Floyd Frank Freddie Gareth Gavin George Gerald
-Gilbert Glenn Gordon Graham Gus Hal Harold Harvey Heath Hector Henry Horace Howard Hugh Hugo Ian Isaac
-Ivan Jack Jacob Jake James Jason Jeff Jerome Joel John Jonah Julian Karl Keith Kenneth Kevin Kirk Lance
-Leo Leon Leroy Lewis Liam Lionel Lloyd Louis Luke Malcolm Marcus Mark Martin Max Miles Monty Nate Neil
-Nick Noah Norman Oliver Omar Oscar Owen Patrick Paul Percy Peter Phil Quentin Ralph Ray Reggie Rhys
-Roger Rolf Ross Roy Rufus Rupert Ryan Saul Scott Seth Shane Sid Silas Simon Stan Stuart Ted Theo Tim
-Toby Todd Tom Trevor Vic Wade Wally Walter Wes Wilbur Will Xavier Zach""".split())
-UNISEX = set("""Ariel Blake Carter Casey Charlie Dale Dana Ellis Jean Jess Jude Kelly Kim Kit Mel Quinn Robin
-Sam Val Vivian""".split())
-FEMALE = set(FIRST) - MALE - UNISEX
-MALE_TITLES = {"Mr", "Sir", "Lord", "King"}
-FEMALE_TITLES = {"Mrs", "Miss", "Lady", "Dame", "Queen"}
+# Royal guests: every name with King, Queen, Prince or Princess in it. All public-domain tales.
+ROYALS = ["Snow Queen", "Frog King", "Frog Prince", "Old King Cole", "Evil Queen", "Queen of Hearts",
+          "King of Hearts", "King Thrushbeard", "Mouse King", "Swan Princess", "Pea Princess", "Goose Princess"]
+ROYAL_WORDS = {"King", "Queen", "Prince", "Princess"}
 
-# A short scene opens each chapter of the register. The first and last are fixed; the book uses
-# as many of the middle ones as it has chapters. Scenes are story only: no clue depends on them.
-SCENE_FIRST = (
-    "The guards began at the palace gates. The gatekeeper swore that nobody had left since the first "
-    "stroke of midnight. “Every guest who came in is still inside,” he said, “and every one of them "
-    "is in your book.” The Captain of the Guard opened the register and sighed.")
-SCENE_LAST = (
-    "The last guests were questioned at dawn. The candles had burned down, the orchestra was asleep on "
-    "its instruments, and the Fairy Godmother was waiting in the hall. “I saw them,” she said. "
-    "“Bring me your last two names.”")
-SCENES_MIDDLE = [
-    "Little Red Riding Hood had watched the Big Bad Wolf by the punch bowl all evening. “He was far too "
-    "polite,” she said. “Wolves are never polite.” The Wolf claimed he had only come for the canapés.",
-    "The Three Bears had arrived late. Mama Bear noticed that somebody had tasted all three bowls of "
-    "porridge on the buffet. Papa Bear noticed that the Prince had not. Baby Bear noticed everything, "
-    "but nobody asked him.",
-    "Hansel and Gretel were found in the palace kitchen, surrounded by gingerbread. They insisted they had "
-    "followed a trail of crumbs from the ballroom, laid by someone who did not want to be followed.",
-    "The Queen’s mirror hung in the east gallery. When the guards asked it who was fairest, it answered "
-    "at once. When they asked it who had killed the Prince, it went quiet, and then very politely cracked.",
-    "Rumpelstiltskin refused to give his name, which was odd, since it was already in the register. He "
-    "spent the interview spinning straw into gold and muttering that the Prince had owed him a favour.",
-    "The glass slipper was found on the palace stairs at five past twelve. It fitted nobody the guards "
-    "tried it on, which was a relief to Cinderella, who had been wearing both of hers all night.",
-    "Puss in Boots had a perfect alibi, a signed menu, and three witnesses who would swear to anything "
-    "for a sardine. The guards thanked him politely and crossed nothing off at all.",
-    "In the orangery the Frog King sulked in the fountain. Someone had kissed him at a quarter to "
-    "midnight and he had stayed a frog. “That,” he said darkly, “was not a princess.”",
-    "The Snow Queen had kept one corner of the ballroom frozen all night. The ice showed footprints "
-    "leading to the servants’ stair: small, quick and, the guards agreed, in a great hurry.",
-    "The Pied Piper had played until his fingers ached. He remembered every dancer who passed the "
-    "bandstand, he said, except for two, who had slipped away just before the clock began to strike.",
-]
+# Chapters are places in the palace: rooms inside, or places in the grounds. Each has its own scene.
+PLACES_INDOOR = {
+    "The Ballroom": "The orchestra had stopped mid-waltz. Six hundred pairs of dancing shoes had scuffed the floor, "
+                    "and every guest swore they had been dancing with somebody else at midnight.",
+    "The Grand Staircase": "The glass slipper was found on the eleventh step at five past twelve. It fitted nobody "
+                           "the guards tried it on, which was a relief to Cinderella, who was wearing both of hers.",
+    "The Kitchens": "Hansel and Gretel were found here, surrounded by gingerbread. They insisted they had followed a "
+                    "trail of crumbs from the ballroom, laid by someone who did not want to be followed.",
+    "The Library": "The Mirror had been moved to the library for safekeeping. Asked who was fairest, it answered at "
+                   "once. Asked who had killed the Prince, it went quiet, and then very politely cracked.",
+    "The Long Gallery": "Rumpelstiltskin refused to give his name, which was odd, since it was already in the "
+                        "register. He spent the interview spinning straw into gold and muttering about a favour.",
+    "The Throne Room": "The King and Queen held court until dawn. The Queen wanted to know who had touched the cake. "
+                       "The King wanted to know who had eaten the rest of it.",
+    "The Banqueting Hall": "The wedding cake stood seven tiers high. Mama Bear noticed that somebody had tasted all "
+                           "three icings. Papa Bear noticed the Prince had not. Baby Bear noticed everything.",
+    "The Wine Cellar": "Puss in Boots had a perfect alibi, a signed menu, and three witnesses who would swear to "
+                       "anything for a sardine. The guards thanked him and crossed nothing off at all.",
+    "The Tower Stair": "Rapunzel had watched the whole ball from the top of the tower. “Two guests went down the "
+                       "servants’ stair at a quarter to twelve,” she said. “I could only see their hats.”",
+    "The Mirror Hall": "A hundred mirrors lined the walls, and every one of them showed a different guest leaving at "
+                       "midnight. The guards decided that mirrors do not make reliable witnesses.",
+}
+PLACES_OUTDOOR = {
+    "The Palace Gates": "The gatekeeper swore that nobody had left since the first stroke of midnight. “Every guest "
+                        "who came in is still here,” he said, “and every one of them is in your book.”",
+    "The Rose Garden": "Little Red Riding Hood had watched the Big Bad Wolf by the rose bushes all evening. “He was "
+                       "far too polite,” she said. “Wolves are never polite.”",
+    "The Hedge Maze": "Three guests got lost in the maze at eleven and were found at dawn, still arguing about which "
+                      "way was left. They were, at least, not suspects.",
+    "The Carriage Yard": "Every pumpkin in the yard had been a carriage at some point that evening. The coachmen had "
+                         "seen nothing, having been mice for most of the night.",
+    "The Moat Bridge": "The Frog King sulked under the bridge. Someone had kissed him at a quarter to midnight and he "
+                       "had stayed a frog. “That,” he said darkly, “was not a princess.”",
+    "The Orchard": "The Snow Queen had frozen one corner of the orchard. The ice showed footprints heading back to "
+                   "the palace: small, quick and, the guards agreed, in a great hurry.",
+}
 
+# The story layer of each clue card: what a witness says. The rule under it is what counts.
+WITNESS = {
+    "chapter_indoors": "“From my tower I could see the whole of the grounds,” says Rapunzel. “Nobody slipped out "
+                       "into the gardens. Whoever it was stayed inside the palace.”",
+    "three_bears": "“I saw them!” says Baby Bear, and for once somebody listens. The Three Bears were never far from "
+                   "the killer all night.",
+    "between_hansel_gretel": "“We came in separately,” says Gretel. “Hansel with the first guests, me with the last. "
+                             "The killer arrived somewhere in between.”",
+    "near_wolf": "“The Wolf was never far away,” says Little Red Riding Hood. “Wherever that guest went, he went too.”",
+    "royal_on_page": "“A crown was reflected right beside them,” says the Mirror. It will not say whose.",
+    "odd_page": "“I kept time all night,” says the Pied Piper. “They were always on the odd beat.”",
+    "near_character": "“They stood close to someone out of a story,” says the Tooth Fairy. “Ten guests away, "
+                      "no more. I counted teeth.”",
+    "odd_consonants": "“Names are my business,” says Rumpelstiltskin. “That one had an odd number of consonants. "
+                      "I counted them twice.”",
+    "even_vowels": "“It was a name you could sing,” says the Pied Piper. “An even number of vowels in it.”",
+    "ends_consonant": "“It ended hard,” says the Town Crier, who announced every guest. “On a consonant.”",
+    "double_letter": "“There was a double letter in it,” says the Brave Tailor, who stitched every place card. "
+                     "“Two of the same, side by side.”",
+    "first_half": "“Early in the alphabet,” says Mother Goose, who wrote the invitations. “A to M, I’m certain.”",
+    "last_two_rising": "“The last two letters were in order,” says the Fairy Godmother. “Like A then B. "
+                       "I notice these things.”",
+    "key_letter": "“They shared a letter with the first guest on their page,” says the Captain of the Guard, "
+                  "who wrote the register.",
+}
 
-def chapter_scenes(n):
-    """Scenes for n chapters: the gatekeeper first, the Fairy Godmother last."""
-    if n <= 1:
-        return [SCENE_FIRST][:n]
-    return [SCENE_FIRST] + SCENES_MIDDLE[:max(0, n - 2)] + [SCENE_LAST]
-
-
-# The ending, printed upside down on the second-to-last page. The killer is always "they".
+# The ending, printed upside down at the very back. The killer is always "they".
 MOTIVES = [
     "Years ago the Prince had promised {killer} the last dance at his wedding, and tonight he had given it "
     "to somebody else.",
     "The Prince had borrowed {killer}’s best horse for a quest three summers ago and never brought it back.",
-    "The Prince had once won a singing contest that {killer} was certain they should have won, and they "
-    "had been practising their revenge ever since.",
+    "The Prince had once won a singing contest that {killer} was certain they should have won, and they had "
+    "been practising their revenge ever since.",
     "The Prince had promised to marry {killer} in a letter, and then again in another letter, and then "
     "married someone else.",
 ]
@@ -151,3 +154,33 @@ ENDING = [
     "The guards led {killer} away at dawn. The wedding cake was thrown in the moat, and the Big Bad Wolf, "
     "who had been blamed for everything all night, received a formal apology and a slice of something else.",
 ]
+
+# More first names, for variety (the best sellers use thousands of different names) and so that
+# enough names pass every letter clue.
+FIRST += """Abbie Abel Addison Adele Adrienne Agatha Ainsley Alana Alastair Alba Alden Aldo Alexis Alfred
+Alistair Allegra Alvin Amanda Ambrose Anders Angus Annabel Annika Ansel Antonia April Arabella Archer
+Ardith Arnold Artie Ashley Astrid Aubrey Audra Augusta Aurelia Autumn Avery Axel Barnaby Barrett Beatrix
+Beck Benny Bertram Bettina Beverly Billie Bjorn Blair Blanche Bobbie Bonita Bradley Bram Brandon Brenna
+Brett Brooke Bryce Buddy Byron Callum Calvin Cameron Candace Carina Carlton Carrie Caspar Cassius Cecilia
+Cedric Celeste Chandler Charity Chester Christa Ciara Clair Clancy Clement Cliff Cole Collette Conrad
+Constance Cooper Corinne Cornelia Crispin Curtis Cynthia Dallas Damon Danielle Darby Darcy Darren Davina
+Della Delphine Denise Dennis Desmond Dexter Dianne Dobbin Dolores Donna Dorian Douglas Drew Dudley Dustin
+Earl Easton Eddie Edgar Edna Eleanor Elliott Eloise Elton Emery Emmett Enoch Esther Etta Eugene Eunice
+Everett Ezra Fanny Felicity Fergus Finley Finn Fletcher Florence Forrest Francis Frederick Gabriel
+Garrett Gemma Geneva Georgia Gideon Gillian Ginny Giles Gordon Greer Gregory Griffin Gustav Gwendolyn
+Hamish Hank Hattie Hayden Heather Henrietta Herbert Hilary Hollis Hope Hubert Humphrey Ingram Irene
+Isadora Isobel Jacqueline Jarrett Jasper Jemima Jennifer Jessamy Jethro Joanna Jocelyn Jolene Jordan
+Josephine Judd Juliet Justin Kasper Katrina Keegan Kellan Kendall Kerry Kieran Kitty Kurt Lachlan Lara
+Laurel Lawrence Leander Lenny Leonora Lester Lettie Lillian Linnea Lionel Lorenzo Loretta Lottie Louisa
+Lowell Luther Lyle Mabel Maddox Magnus Mallory Marcella Margot Marlowe Marnie Matilda Maxwell Maynard
+Melody Merrill Mervyn Millie Minnie Mitchell Morgan Morris Murray Nadine Nathaniel Nell Nessa Nigel
+Noelle Norris Octavia Odette Ogden Olga Orson Otis Otto Pamela Parker Patience Perry Petra Philippa
+Phyllis Pippa Porter Posy Prudence Quincy Raffles Rafferty Randall Reuben Rex Rhett Robbie Roland
+Rollo Romilly Rosalie Roscoe Rowan Russell Sabrina Sallie Sawyer Scarlett Sebastian Serena Seymour
+Shelby Sherman Sherry Sienna Sylvester Tabitha Tallulah Tanner Tatum Teddy Terrence Thaddeus Thomas
+Tobias Trixie Tristan Truman Tucker Valentine Vaughn Verity Vernon Victor Vincent Virgil Wallis Warren
+Wendell Wesley Whitney Wilfred Willard Willow Winston Wyatt Yolanda Yvette Zachary Zelda Zeke
+Abbott Allegra Anneka Barrie Bessie Billy Carroll Cassie Cherry Chuck Dolly Ellie Emmy Essie Garry
+Harry Holly Jenny Jimmy Johnny Kenny Kelsey Larry Libby Lizzie Maggie Matty Molly Nanny Neddy Olly
+Peggy Penny Poppy Robby Sally Sammy Sonny Tammy Terry Tilly Tommy Wally Willy Winnie""".split()
+FIRST = sorted(set(FIRST))

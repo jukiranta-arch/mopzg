@@ -1,12 +1,15 @@
 """Render a generated puzzle as a print-ready 6 x 9 inch PDF (needs reportlab).
 
-Layout: front matter padded to an even page count, so register page 1 lands
-on a right-hand page and printed page numbers match the facing-page rules.
+The layout follows the best sellers (briefs/2026-09-29_winners-samples.md):
+- the register is plain first names in justified lines; fairy-tale characters in italics;
+- chapters are places in the palace, each opened by a short scene;
+- clue cards: a witness line, then a plain Rule, an example and a tick box, with
+  checkpoints between the clue groups;
+- hints at the back, then the solution upside down behind a warning page.
 """
 
-import random
-
 import os
+import random
 
 from reportlab.lib.pagesizes import inch
 from reportlab.pdfbase import pdfmetrics
@@ -14,8 +17,9 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-from .model import PERSON_TITLES, READINGS, Register, letters, words
-from .names import ENDING, MOTIVES, chapter_scenes
+from .generate import CHUNK, HUNT
+from .model import BEARS, READINGS, ROYAL_WORDS, Register, letters, words
+from .names import ENDING, MOTIVES, PLACES_INDOOR, PLACES_OUTDOOR, ROYALS, WITNESS
 
 W, H = 6 * inch, 9 * inch
 # A generous inner margin: names that "run into the fold" are a complaint in competitors' reviews.
@@ -27,8 +31,8 @@ for _name, _file in (("BookSerif", "LiberationSerif-Regular.ttf"), ("BookSerif-B
                      ("BookSerif-Italic", "LiberationSerif-Italic.ttf")):
     pdfmetrics.registerFont(TTFont(_name, os.path.join(_FONTS, _file)))
 SERIF, SERIF_B, SERIF_I = "BookSerif", "BookSerif-Bold", "BookSerif-Italic"
-SEP = "  ·  "
-REG_SIZE, REG_LEADING = 10, 13       # register type: big enough for older eyes
+REG_SIZE, REG_LEADING = 10.5, 14      # register type: large and calm, as in The Killer Isn't Alice
+GAP = 0.7                             # minimum space between names, in ems
 
 
 class LayoutError(RuntimeError):
@@ -55,8 +59,7 @@ class Book:
         """Word-wrapped paragraph; returns the y below it."""
         c = self.c
         c.setFont(font, size)
-        line = ""
-        lines = []
+        line, lines = "", []
         for word in text.split(" "):
             trial = (line + " " + word).strip()
             if stringWidth(trial, font, size) <= x1 - x0:
@@ -74,9 +77,26 @@ class Book:
             y -= leading
         return y
 
+    def heading(self, title, size=16):
+        self.c.setFont(SERIF_B, size)
+        self.c.drawCentredString(W / 2, H - TOP - 20, title)
+
     def footer(self, number):
         self.c.setFont(SERIF, 9)
         self.c.drawCentredString(W / 2, BOTTOM / 2, str(number))
+
+    def notes_page(self, title="Notes"):
+        x0, x1 = self.margins()
+        self.heading(title)
+        c = self.c
+        c.setLineWidth(0.4)
+        c.setStrokeGray(0.6)
+        y = H - TOP - 60
+        while y > BOTTOM + 20:
+            c.line(x0, y, x1, y)
+            y -= 24
+        c.setStrokeGray(0)
+        self.next()
 
 
 def _verdicts(clue, name):
@@ -89,12 +109,90 @@ def _verdicts(clue, name):
 
 
 def _example_pair(reg, clue, rng, avoid=()):
-    """One name that passes and one that fails, both plain (no title) and unambiguous under every reading.
+    """One name that passes and one that fails, both unambiguous under every reading.
     Never a suspect's name: an example must not give the answer away."""
-    plain = sorted({n for n in reg.flat if len(n) < 22 and words(n)[0] not in PERSON_TITLES} - set(avoid))
+    plain = sorted({n for n in reg.flat if n not in reg.cast} - set(avoid))
     yes = [n for n in plain if _verdicts(clue, n) == {True}]
     no = [n for n in plain if _verdicts(clue, n) == {False}]
     return rng.choice(yes), rng.choice(no)
+
+
+def _layout_lines(names, cast, width, size):
+    """Split a page's names into lines that fit the width. Returns lists of names."""
+    gap = GAP * size
+    lines, line, used = [], [], 0.0
+    for name in names:
+        w = stringWidth(name, SERIF_I if name in cast else SERIF, size)
+        if line and used + gap + w > width:
+            lines.append(line)
+            line, used = [], 0.0
+        used += (gap if line else 0) + w
+        line.append(name)
+    if line:
+        lines.append(line)
+    return lines
+
+
+def _draw_line(c, x0, x1, y, line, cast, size, justify):
+    widths = [stringWidth(n, SERIF_I if n in cast else SERIF, size) for n in line]
+    gap = GAP * size
+    if justify and len(line) > 1:
+        gap = (x1 - x0 - sum(widths)) / (len(line) - 1)
+    x = x0
+    for name, w in zip(line, widths):
+        c.setFont(SERIF_I if name in cast else SERIF, size)
+        c.drawString(x, y, name)
+        x += w + gap
+
+
+def _about(n):
+    if n < 1000:
+        return format(n, ",")
+    return "about " + format(int(round(n, -2)), ",")
+
+
+def _pages_list(nums):
+    """1, 2, 3, 5, 9, 10 -> '1–3, 5, 9–10'"""
+    nums = sorted(nums)
+    out, i = [], 0
+    while i < len(nums):
+        j = i
+        while j + 1 < len(nums) and nums[j + 1] == nums[j] + 1:
+            j += 1
+        out.append(str(nums[i]) if i == j else "%d–%d" % (nums[i], nums[j]))
+        i = j + 1
+    return ", ".join(out)
+
+
+def _where_to_look(reg, clue, example):
+    """The second-level hint: facts from this register that make the clue easy to apply."""
+    k = clue.key
+    no = reg.page_no
+    if k == "chapter_indoors":
+        inside = [reg.chapters[i][0] for i in sorted(reg.indoor)]
+        return "The chapters set inside the palace are: %s. Cross out every other chapter." % ", ".join(inside)
+    if k == "three_bears":
+        chs = sorted({reg.chapter_of_page[reg.page_of[j]] + 1 for j in range(len(reg.flat) - 2)
+                      if tuple(reg.flat[j:j + 3]) == BEARS})
+        return "The Three Bears stand together in chapter%s %s." % ("s" if len(chs) > 1 else "",
+                                                                     ", ".join(map(str, chs)))
+    if k == "between_hansel_gretel":
+        return "Hansel is on page %d and Gretel is on page %d." % (
+            no(reg.page_of[reg.flat.index("Hansel")]), no(reg.page_of[reg.flat.index("Gretel")]))
+    if k == "near_wolf":
+        return "The Big Bad Wolf is on pages %s." % _pages_list(
+            {no(reg.page_of[j]) for j, n in enumerate(reg.flat) if n == "Big Bad Wolf"})
+    if k == "royal_on_page":
+        names = sorted({n for n in reg.flat if any(w in ROYAL_WORDS for w in words(n))})
+        return "The royal guests are %s. Mark every page they appear on." % ", ".join(names)
+    if k == "near_character":
+        return ("Highlight each name in italics and the ten names on either side of it. Every name outside "
+                "the highlights is crossed out.")
+    if k == "odd_page":
+        return "Cross out every even-numbered page."
+    if k == "key_letter":
+        return "Write the first letter of each page’s opening name at the top of the page, then check the names."
+    return "Work name by name. %s" % example
 
 
 def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
@@ -103,6 +201,12 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
     b = Book(path, title, subtitle)
     c = b.c
     n_names = solution["total_names"]
+    avoid = [s_["name"] for s_ in solution["suspects"]]
+    examples = {}
+    for cl in clues:
+        if cl.kind == "word":
+            yes, no = _example_pair(reg, cl, rng, avoid)
+            examples[cl.key] = "Example: %s is kept. %s is crossed out." % (yes, no)
 
     # --- Title page
     c.setFont(SERIF_B, 30)
@@ -112,7 +216,7 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
     c.drawCentredString(W / 2, H - 3.4 * inch, subtitle)
     c.setFont(SERIF, 11)
     c.drawCentredString(W / 2, H - 3.9 * inch,
-                        "%s names · %d clues · 1 killer" % (format(n_names, ","), len(clues)))
+                        "%s guests · %d clues · 1 killer" % (format(n_names, ","), len(clues)))
     if edition_note:
         c.setFont(SERIF_B, 10)
         c.drawCentredString(W / 2, 1.2 * inch, edition_note)
@@ -120,21 +224,19 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
 
     # --- The case
     x0, x1 = b.margins()
-    c.setFont(SERIF_B, 16)
-    c.drawCentredString(W / 2, H - TOP - 20, "The Case")
+    b.heading("The Case")
     story = [
-        "The Happily Ever After Ball was the event of the year. Every character from every tale had come: "
-        "princesses and paupers, giants and goose girls, and rather more wolves than anyone had invited.",
+        "The Happily Ever After Ball was the event of the year. Every character from every tale had come, "
+        "along with half the kingdom, and rather more wolves than anyone had invited.",
         "At the first stroke of midnight, Prince Charming fell face-first into the wedding cake. "
         "By the twelfth stroke he was dead.",
-        "The palace guards barred the doors and wrote down the name of every guest: %s names in all. "
-        "Witnesses agree that two guests slipped away from the dance floor just before midnight. "
-        "One of them is the killer." % format(n_names, ","),
-        "The guards have gathered %d clues. Every clue is true of both suspects. Work through the guest "
-        "register, strike out every name a clue rules out, and you will be left with two. The Final "
-        "Deduction at the back of the book tells you which of them did it, and the Verdict pages check "
-        "your answer without giving it away." % len(clues),
-        "All you need is a pencil, patience, and a sharp eye.",
+        "The Captain of the Guard barred the gates and wrote down the name of every guest, room by room and "
+        "garden by garden: %s names in all. Witnesses agree that two guests slipped away from the dance "
+        "floor just before midnight. One of them is the killer." % format(n_names, ","),
+        "The witnesses have given %d clues. Every clue is true of both of the guests who slipped away. Work "
+        "through the register, cross out every guest a clue rules out, and you will be left with two names. "
+        "The Final Deduction tells you which of them did it." % len(clues),
+        "All you need is a pencil, a highlighter, and a sharp eye.",
     ]
     y = H - TOP - 55
     for para in story:
@@ -143,27 +245,25 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
 
     # --- Rules
     x0, x1 = b.margins()
-    c.setFont(SERIF_B, 16)
-    c.drawCentredString(W / 2, H - TOP - 20, "Before You Begin")
+    b.heading("Before You Begin")
     rules = [
-        ("What is a name?", "Everything between two dots in the register is one name: a single name "
-         "(Cinderella), a full name (Ada Finch) or a name with a title (Queen Mabel, Mrs Lark)."),
-        ("Titles don’t count.", "A title at the start of a name (Mr, Mrs, Miss, Dr, Sir, Lady, Dame, Lord, "
-         "Captain, King or Queen) is left out when a clue checks letters: Queen Mabel is checked as Mabel."),
-        ("Letters only.", "Only the letters A to Z count. Spaces, hyphens and apostrophes do not."),
-        ("Vowels and consonants.", "The vowels are A, E, I, O and U. Every other letter is a consonant, "
-         "and that includes Y."),
-        ("Reading order.", "Names run left to right, line by line, page by page. A name never "
-         "breaks across two lines."),
-        ("Pages.", "Page numbers are printed at the foot of each register page. Facing pages are the two "
-         "you see side by side when the book lies open: an even page on the left, the next odd page on the right."),
-        ("Same name, different guest.", "Some names appear more than once. Each one is a different guest: "
-         "check each on its own."),
-        ("Any order.", "The clues can be used in any order and you will reach the same two names. They are "
-         "printed in a good order: the first ones clear whole pages, the letter clues come last."),
-        ("Checking your answer.", "The Checkpoints page tells you how many pages should still be in play "
-         "after each clue. At the end, the Verdict pages check your answer without spoiling it."),
-        ("Exact spelling.", "When a clue names a character, only that exact spelling counts."),
+        ("One name, one guest.", "Every guest is written as a single first name. Some names appear more than "
+         "once: each one is a different guest, so check each on its own."),
+        ("Fairy-tale characters.", "Characters from the old tales are printed in italics, like Snow White. "
+         "Each is one guest, however many words the name has."),
+        ("Letters.", "Every printed letter counts. The vowels are A, E, I, O and U; every other letter is a "
+         "consonant, and that includes Y."),
+        ("Reading order.", "Names run left to right, line by line, page by page. A name never breaks across "
+         "two lines."),
+        ("Pages and chapters.", "Page numbers are printed at the foot of each register page. Each chapter is "
+         "one place in the palace; The Palace page lists them all."),
+        ("Clues in any order.", "The clues can be used in any order and you will reach the same two names. "
+         "They are printed in a good order: the first ones clear whole chapters and pages, the letter clues "
+         "come last."),
+        ("Checkpoints.", "Between the groups of clues, a checkpoint tells you how many pages or names should "
+         "still be in play. If yours is different, read the last clues again."),
+        ("Stuck?", "Every clue has a hint at the back of the book. The solution is on the very last pages, "
+         "upside down, behind a warning page."),
     ]
     y = H - TOP - 50
     for head, body in rules:
@@ -172,53 +272,87 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
         y = b.text_block(x0, x1, y - 13, body, size=10, leading=13) - 6
     b.next()
 
-    # --- Clues
-    def clue_page_start():
-        x0, x1 = b.margins()
-        c.setFont(SERIF_B, 16)
-        c.drawCentredString(W / 2, H - TOP - 20, "The Clues")
-        return x0, x1, H - TOP - 50
-
-    x0, x1, y = clue_page_start()
-    for n, cl in enumerate(clues, 1):
-        need = 110
-        if y - need < BOTTOM:
-            b.next()
-            x0, x1, y = clue_page_start()
-        box_h = 38
-        c.setFillGray(0.9)
-        c.rect(x0, y - box_h + 12, x1 - x0, box_h, stroke=0, fill=1)
-        c.setFillGray(0)
-        c.setFont(SERIF_B, 9.5)
-        c.drawCentredString((x0 + x1) / 2, y, "CLUE %d" % n)
-        b.text_block(x0 + 8, x1 - 8, y - 14, cl.text, size=10.5, leading=13, align="center")
-        y -= box_h + 6
-        y = b.text_block(x0, x1, y, cl.explain, font=SERIF_I, size=9.5, leading=12)
-        if cl.kind == "word":
-            yes, no = _example_pair(reg, cl, rng, [s_["name"] for s_ in solution["suspects"]])
-            y = b.text_block(x0, x1, y - 2, "Example: %s qualifies. %s does not." % (yes, no), size=9.5, leading=12)
-        y -= 14
+    # --- The Palace (contents) and the Who's Who
+    x0, x1 = b.margins()
+    b.heading("The Palace")
+    y = b.text_block(x0, x1, H - TOP - 48, "The guards took down every name, place by place. These are the "
+                     "chapters of the register.", font=SERIF_I, size=10, leading=13) - 8
+    c.setFont(SERIF_B, 10)
+    c.drawString(x0, y, "Chapter")
+    c.drawRightString(x1, y, "Pages")
+    y -= 16
+    bounds = [s for _, s in reg.chapters] + [len(reg.pages)]
+    for i, (place, start) in enumerate(reg.chapters):
+        c.setFont(SERIF, 10.5)
+        c.drawString(x0, y, "%d.  %s" % (i + 1, place))
+        c.drawRightString(x1, y, "%d–%d" % (reg.page_no(start), reg.page_no(bounds[i + 1] - 1)))
+        y -= 16
+    y -= 16
+    c.setFont(SERIF_B, 13)
+    c.drawString(x0, y, "Who’s Who")
+    y = b.text_block(x0, x1, y - 16, "Fairy-tale characters at the ball (printed in italics in the register): "
+                     + ", ".join(sorted({n for n in reg.flat if n in reg.cast})) + ".", size=9.5, leading=12.5)
     b.next()
 
-    # --- Checkpoints: how much should still be in play, clue by clue (no spoilers)
-    x0, x1 = b.margins()
-    c.setFont(SERIF_B, 16)
-    c.drawCentredString(W / 2, H - TOP - 20, "Checkpoints")
-    y = b.text_block(x0, x1, H - TOP - 50,
-                     "Using the clues in the order printed, this is how many register pages should still have at "
-                     "least one name you have not crossed out, and roughly how many names. If you are far off, "
-                     "read the last clue again before going on.", size=10, leading=13) - 10
-    c.setFont(SERIF_B, 10)
-    c.drawString(x0, y, "After clue")
-    c.drawRightString(x0 + 190, y, "Pages in play")
-    c.drawRightString(x1, y, "Names in play")
-    y -= 16
-    c.setFont(SERIF, 10)
-    for cp in solution["checkpoints"]:
-        c.drawString(x0 + 20, y, str(cp["clue"]))
-        c.drawRightString(x0 + 190, y, str(cp["pages"]))
-        c.drawRightString(x1, y, _about(cp["names"]))
-        y -= 15
+    # --- The clues, as cards, with checkpoints between the groups
+    def clue_page_start(first):
+        x0, x1 = b.margins()
+        b.heading("The Clues" if first else "The Clues (continued)")
+        return x0, x1, H - TOP - 50
+
+    groups = []                                   # clue number after which a checkpoint goes
+    kinds = ["chunk" if cl.key in CHUNK else "hunt" if cl.key in HUNT else "letter" for cl in clues]
+    for k in range(1, len(clues)):
+        if kinds[k] != kinds[k - 1]:
+            groups.append(k)
+    checkpoints = {cp["clue"]: cp for cp in solution["checkpoints"]}
+    labels = iter("ABCDEFG")
+
+    x0, x1, y = clue_page_start(True)
+    for n, cl in enumerate(clues, 1):
+        witness = WITNESS.get(cl.key, "")
+        need = 30 + 13 * (2 + len(witness) // 60 + len(cl.text) // 60) + (13 if cl.key in examples else 0)
+        if y - need < BOTTOM:
+            b.next()
+            x0, x1, y = clue_page_start(False)
+        c.setFillGray(0.92)
+        c.rect(x0, y - 4, x1 - x0, 17, stroke=0, fill=1)
+        c.setFillGray(0)
+        c.setFont(SERIF_B, 10)
+        c.drawString(x0 + 6, y + 1, "CLUE %d" % n)
+        c.rect(x1 - 16, y - 1, 9, 9)              # tick box
+        y -= 20
+        y = b.text_block(x0, x1, y, witness, font=SERIF_I, size=9.5, leading=12) - 3
+        c.setFont(SERIF_B, 10.5)
+        c.drawString(x0, y, "Rule:")
+        y = b.text_block(x0 + 32, x1, y, cl.text, size=10.5, leading=13.5)
+        if cl.key in examples:
+            y = b.text_block(x0 + 32, x1, y - 1, examples[cl.key], font=SERIF_I, size=9.5, leading=12)
+        y -= 12
+        if n in groups or n == len(clues):
+            cp = checkpoints[n]
+            label = next(labels)
+            if n == len(clues):
+                text = "“If you have done it right,” says the Fairy Godmother, “two names are left. Now turn " \
+                       "to the Final Deduction.”"
+            elif kinds[n - 1] == "chunk":
+                text = ("“After clues 1 to %d,” says the Fairy Godmother, “%d pages of the register should "
+                        "still have names in play. More, and you have kept someone who was elsewhere. Fewer, and "
+                        "you have crossed out a page too many.”" % (n, cp["pages"]))
+            else:
+                text = ("“After clues 1 to %d,” says the Fairy Godmother, “there should be %s names left, on "
+                        "%d pages. Check again before you start on the letters.”"
+                        % (n, _about(cp["names"]), cp["pages"]))
+            if y - 60 < BOTTOM:
+                b.next()
+                x0, x1, y = clue_page_start(False)
+            c.setLineWidth(0.8)
+            top = y + 10
+            y = b.text_block(x0 + 10, x1 - 10, y - 14, text, font=SERIF_I, size=9.5, leading=12)
+            c.setFont(SERIF_B, 9.5)
+            c.drawString(x0 + 10, top - 12, "CHECKPOINT %s" % label)
+            c.rect(x0, y + 4, x1 - x0, top - y - 4)
+            y -= 16
     b.next()
 
     # --- Clue card to cut out, with a blank back
@@ -243,126 +377,89 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
 
     # --- Register
     size, leading = REG_SIZE, REG_LEADING
-    scenes = chapter_scenes(len(reg.chapters))
+    scenes = {**PLACES_INDOOR, **PLACES_OUTDOOR}
     position = {}                    # flat index -> (line on its page, place on that line), from 1
     lines_on_page = {}
+    chapter_starts = {start: (i, place) for i, (place, start) in enumerate(reg.chapters)}
     for p, names in enumerate(reg.pages):
         x0, x1 = b.margins()
         y = H - TOP
-        chapter_starts = {start: (i, q) for i, (q, start) in enumerate(reg.chapters)}
         if p in chapter_starts:
-            i, quote = chapter_starts[p]
-            c.setFont(SERIF, 9)
+            i, place = chapter_starts[p]
+            c.setFont(SERIF, 9.5)
             c.drawCentredString(W / 2, y - 6, "CHAPTER %d" % (i + 1))
-            c.setFont(SERIF_I, 15)
-            c.drawCentredString(W / 2, y - 28, "“%s”" % quote)
-            y = b.text_block(x0 + 12, x1 - 12, y - 50, scenes[i], font=SERIF_I, size=9.5, leading=12.5) - 10
-        c.setFont(SERIF, size)
-        line, line_no = [], 1
-        for k, name in enumerate(names):
-            trial = SEP.join(line + [name])
-            if line and stringWidth(trial, SERIF, size) > x1 - x0:
-                c.drawString(x0, y, SEP.join(line) + SEP.rstrip())
-                y -= leading
-                line, line_no = [], line_no + 1
-            line.append(name)
-            position[reg.page_start[p] + k] = (line_no, len(line))
-        if line:
-            c.drawString(x0, y, SEP.join(line) + SEP.rstrip())
+            c.setFont(SERIF_B, 17)
+            c.drawCentredString(W / 2, y - 28, place)
+            y = b.text_block(x0 + 12, x1 - 12, y - 50, scenes[place], font=SERIF_I, size=9.5, leading=12.5) - 12
+        lines = _layout_lines(names, reg.cast, x1 - x0, size)
+        k = 0
+        for ln_no, line in enumerate(lines, 1):
+            _draw_line(c, x0, x1, y, line, reg.cast, size, justify=ln_no < len(lines))
+            for at in range(1, len(line) + 1):
+                position[reg.page_start[p] + k] = (ln_no, at)
+                k += 1
             y -= leading
-        lines_on_page[p] = line_no
-        if y < BOTTOM:
+        lines_on_page[p] = len(lines)
+        if y + leading - size < BOTTOM:
             raise LayoutError("register page %d overflows; use fewer names per page" % reg.page_no(p))
         b.footer(reg.page_no(p))
         b.next()
 
     # --- Final deduction
     x0, x1 = b.margins()
-    c.setFont(SERIF_B, 16)
-    c.drawCentredString(W / 2, H - TOP - 20, "The Final Deduction")
+    b.heading("The Final Deduction")
     y = H - TOP - 60
     for para in [
         "You should now have two names left. Only one of them is the killer.",
         "As the clock struck twelve, the Fairy Godmother saw a guest run down the palace stairs and "
         "lose a shoe on the last step. “The one I saw,” she tells the guards, “has the "
         "longer name of the two.”",
-        "Count the letters A to Z in each name. The longer name is your killer.",
+        "Count the letters in each name. The longer name is your killer.",
         "The killer is: ______________________________   on page ______",
-        "Now check your answer: turn to the Verdict with the same number as your killer’s page.",
+        "Stuck? The hints come next. The solution is on the last pages of the book, upside down, behind a "
+        "warning page.",
     ]:
         y = b.text_block(x0, x1, y, para) - 10
     b.next()
 
-    # --- The Verdict: one entry per register page; only the killer's page confirms the answer
-    killer, pair = solution["killer_index"], solution["pair"]
-    innocent = pair[0] if pair[1] == killer else pair[1]
-    killer_page, innocent_page = reg.page_of[killer], reg.page_of[innocent]
-
-    def verdict(p):
-        no = reg.page_no(p)
-        if p == killer_page:
-            ln, at = position[killer]
-            total = lines_on_page[p]
-            where = ("line %d from the top" % ln if ln <= (total + 1) // 2
-                     else "line %d from the bottom" % (total - ln + 1))
-            return ("You have found the killer’s page. The guilty guest is name %d on %s of the names on "
-                    "page %d. If that is your guest, turn to the second-to-last page of the book and turn "
-                    "the book upside down." % (at, where, no))
-        if p == innocent_page:
-            return ("One guest on page %d did slip away from the dance floor, but not the one the Fairy "
-                    "Godmother saw. Look at the Final Deduction again." % no)
-        kind, k = solution["page_hints"][p]
-        if kind == "single":
-            return "Nobody on page %d is the killer: Clue %d rules out every guest here." % (no, k)
-        return ("Nobody on page %d is the killer. Using the clues in order, the last guest here is ruled out "
-                "by Clue %d." % (no, k))
-
-    def verdict_page_start(first):
+    # --- Hints: what each clue means, then where to look in this register
+    def hint_page_start(first):
         x0, x1 = b.margins()
-        c.setFont(SERIF_B, 16)
-        c.drawCentredString(W / 2, H - TOP - 20, "The Verdict" if first else "The Verdict (continued)")
+        b.heading("Hints" if first else "Hints (continued)")
         y = H - TOP - 44
         if first:
-            y = b.text_block(x0, x1, y, "Find the entry with the same number as your killer’s page. Read "
-                             "only that one.", font=SERIF_I, size=10, leading=13) - 8
+            y = b.text_block(x0, x1, y, "Read only the hint you need. A tells you what the clue means; B tells "
+                             "you where to look.", font=SERIF_I, size=10, leading=13) - 8
         return x0, x1, y
 
-    x0, x1, y = verdict_page_start(True)
-    for p in range(len(reg.pages)):
-        text_ = verdict(p)
-        lines_needed = 1 + int(stringWidth(text_, SERIF, 9) / (x1 - x0 - 28))
-        if y - lines_needed * 11.5 < BOTTOM:
+    x0, x1, y = hint_page_start(True)
+    for n, cl in enumerate(clues, 1):
+        a_text = "A. " + cl.explain
+        b_text = "B. " + _where_to_look(reg, cl, examples.get(cl.key, ""))
+        need = 14 + 12 * (2 + (len(a_text) + len(b_text)) // 70)
+        if y - need < BOTTOM:
             b.next()
-            x0, x1, y = verdict_page_start(False)
-        c.setFont(SERIF_B, 9)
-        c.drawRightString(x0 + 20, y, str(reg.page_no(p)))
-        y = b.text_block(x0 + 28, x1, y, text_, size=9, leading=11.5) - 4
+            x0, x1, y = hint_page_start(False)
+        c.setFont(SERIF_B, 10)
+        c.drawString(x0, y, "Clue %d" % n)
+        y = b.text_block(x0 + 10, x1, y - 13, a_text, size=9.5, leading=12) - 2
+        y = b.text_block(x0 + 10, x1, y, b_text, size=9.5, leading=12) - 10
     b.next()
 
-    # --- Notes, then a warning page, then the ending upside down on its back
-    def notes_page(title="Notes"):
-        x0, x1 = b.margins()
-        c.setFont(SERIF_B, 16)
-        c.drawCentredString(W / 2, H - TOP - 20, title)
-        c.setLineWidth(0.4)
-        c.setStrokeGray(0.6)
-        y = H - TOP - 60
-        while y > BOTTOM + 20:
-            c.line(x0, y, x1, y)
-            y -= 24
-        c.setStrokeGray(0)
-        b.next()
-
-    notes_page()
-    if b.pdf_page % 2 == 0:            # the warning must be a right-hand page, the ending on its back
-        notes_page()
+    # --- Notes, then a warning page, then the solution upside down on its back
+    b.notes_page()
+    if b.pdf_page % 2 == 0:            # the warning must be a right-hand page, the solution on its back
+        b.notes_page()
     x0, x1 = b.margins()
     c.setFont(SERIF_B, 20)
     c.drawCentredString(W / 2, H / 2 + 30, "Stop!")
     b.text_block(x0 + 20, x1 - 20, H / 2, "The other side of this page tells you who killed Prince Charming. "
-                 "Turn over only when the Verdict sends you here.", size=11, leading=15, align="center")
+                 "Turn over only when you have your answer, or when you give up.", size=11, leading=15,
+                 align="center")
     b.next()
 
+    killer, pair = solution["killer_index"], solution["pair"]
+    innocent = pair[0] if pair[1] == killer else pair[1]
     names = {"killer": reg.flat[killer], "innocent": reg.flat[innocent]}
     names["motive"] = rng.choice(MOTIVES).format(**names)
     c.saveState()
@@ -370,31 +467,29 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
     c.rotate(180)
     x0, x1 = OUTER, W - OUTER
     c.setFont(SERIF_B, 16)
-    c.drawCentredString(W / 2, H - TOP - 20, "The Truth")
+    c.drawCentredString(W / 2, H - TOP - 20, "The Solution")
     y = H - TOP - 55
     for i, para in enumerate(ENDING):
         y = b.text_block(x0, x1, y, para.format(**names), font=SERIF_B if i == 0 else SERIF,
                          size=12 if i == 0 else 10.5, leading=16 if i == 0 else 14) - 8
-    y -= 6
-    for s_ in solution["suspects"]:
-        y = b.text_block(x0, x1, y, "%s: page %d, chapter %d, %d letters." % (
-            s_["name"], s_["page"], s_["chapter"], len(letters(s_["name"]))), font=SERIF_I, size=9.5,
-            leading=12)
+    y -= 4
+    for idx in (killer, innocent):
+        p = reg.page_of[idx]
+        ln, at = position[idx]
+        total = lines_on_page[p]
+        where = "line %d from the top" % ln if ln <= (total + 1) // 2 else "line %d from the bottom" % (total - ln + 1)
+        y = b.text_block(x0, x1, y, "%s%s: page %d, %s, name %d on the line; %d letters." % (
+            reg.flat[idx], " (the killer)" if idx == killer else "", reg.page_no(p), where, at,
+            len(letters(reg.flat[idx]))), font=SERIF_I, size=9.5, leading=12)
+    y = b.text_block(x0, x1, y - 6, "Names left after each clue: " + ", ".join(
+        "%d: %s" % (k, format(cp["names"], ",")) for k, cp in enumerate(solution["checkpoints"], 1)) + ".",
+        font=SERIF_I, size=9, leading=11.5)
     c.restoreState()
     b.next()
-    notes_page()
+    b.notes_page()
     if (b.pdf_page - 1) % 2:               # an even page count, as print interiors expect
         c.setFont(SERIF, 1)
         c.drawString(0, 0, " ")
         b.next()
     c.save()
     return b.pdf_page - 1
-
-
-def _about(n):
-    """Checkpoint name counts: exact when small, rounded when large."""
-    if n < 100:
-        return str(n)
-    if n < 1000:
-        return "about %d" % (round(n, -1))
-    return "about %s" % format(int(round(n, -2)), ",")
