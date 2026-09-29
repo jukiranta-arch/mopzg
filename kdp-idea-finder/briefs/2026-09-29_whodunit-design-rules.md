@@ -89,20 +89,21 @@ These are 67 reviews shown on the book pages, plus each page's star breakdown an
 
 Physical complaints: 12 pt names running into the fold, tiny print that needs a magnifying glass, pages coming loose, missing page numbers, clues at the back. Praised: clues at the front, a tear-out clue card ("no flipping back and forth"), paper that highlighter doesn't bleed through.
 
-### Targets for *Who Killed Prince Charming?*
+### Targets for *Who Killed Prince Charming?* (built 2026-09-29)
 
-Checked by the generator where it can be; the "now" figures are from the current book preset, seed 1.
+The generator checks these for the book preset (`BOOK_BALANCE` in `whodunit/generate.py`). Figures are from a 150-page book (seed 1, 31,119 names).
 
-| Rule | Target | Now |
+| Rule | Target | Built |
 |---|---|---|
-| No clue is a knockout: readers use the clues in any order, so each is measured alone | every clue alone keeps **≥ 30%** of names | Hansel & Gretel alone keeps **20.8%** (fails) |
-| Page-level clues (hunt for names, cross off pages) come first, letter clues only on what is left | after all page-level clues, **3–10%** of names remain (about 1,000–3,000) | **207 names on 6 pages (0.7%)**: letter clues then take minutes, so the puzzle is too easy |
-| Hunting beats trawling | at least 6 clues about *where* a name is or *which characters are near it* | 7 |
-| Exactly one answer, whatever the reading | already enforced (READINGS) | ✓ |
-| Answer protected but in the book | the killer's name is printed only in code, decoded with the two suspects' page numbers | printed in plain text after a Notes page |
-| A story | a short scene opens each chapter; a proper ending after the reveal | a one-page setup only |
-| Self-checks without spoilers | "checkpoint" page: how many *pages* should still be open after each clue group | counts are only on the solution page |
-| Print | 10 pt names, **wider inner margin (0.85")** so nothing runs into the fold; page numbers on every register page; clues at the front plus a tear-out clue card at the back | 10 pt ✓; inner 0.70"; numbers ✓; front ✓; no card |
+| No knockout clue: readers use the clues in any order, so each page-level clue is measured alone | keeps ≥ 30% | enforced; typically 47–61% (Hansel & Gretel was 21%) |
+| Hunt first, letters last | page-level clues printed first; they leave 2–12% for the letter clues | enforced; about 1,400 names (4.6%) remain for the letter clues (was 207) |
+| Exactly one answer, whatever the reading | READINGS | enforced |
+| Answer in the book, not spoilable | **Verdict pages**: one entry per register page. Wrong pages name the clue that clears them; the innocent suspect's page points back to the Final Deduction; the killer's page gives line and position; the ending is upside down on the back of a "Stop!" page | built and checked by reading the PDF |
+| Self-checks | Checkpoints page: pages and names still in play after each clue | built |
+| A story | a scene opens each chapter (gatekeeper, Red Riding Hood, the Three Bears… the Fairy Godmother last); an ending with a motive | built |
+| Print | 10 pt names; inner margin 0.85"; clues at the front; tear-out clue card with a blank back; even page count; fonts embedded | built |
+
+The book is now 172 pages. No website: the answer lives entirely in the book (Juho's decision, 2026-09-29).
 
 ## Next
 

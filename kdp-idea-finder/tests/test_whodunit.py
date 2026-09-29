@@ -86,6 +86,28 @@ class GeneratorTests(unittest.TestCase):
             self.assertLessEqual(after, before * 0.97)
             before = after
 
+    def test_checkpoints_and_verdict_hints(self):
+        reg, clues, sol = generate_any(range(1, 200), n_pages=10, per_page=(200, 225), n_chapters=3)
+        self.assertEqual([cp["names"] for cp in sol["checkpoints"]], sol["counts"])
+        self.assertEqual(sol["checkpoints"][-1]["pages"], len({s["page"] for s in sol["suspects"]}))
+        suspect_pages = {reg.page_of[i] for i in sol["pair"]}
+        self.assertEqual(set(sol["page_hints"]), set(range(len(reg.pages))) - suspect_pages)
+        for p, (kind, k) in sol["page_hints"].items():
+            span = range(reg.page_start[p], reg.page_start[p] + len(reg.pages[p]))
+            if kind == "single":                                   # that clue alone clears the page
+                self.assertFalse(any(clues[k - 1].test(reg, i) for i in span))
+            else:                                                  # in order, the page is empty after clue k
+                self.assertFalse(set(span) & set(solve(reg, clues[:k])[0]))
+                self.assertTrue(set(span) & set(solve(reg, clues[:k - 1])[0]))
+
+    def test_book_balance(self):
+        from whodunit.generate import BOOK_BALANCE, BOOK_CLUES, PAGE_LEVEL
+        reg, clues, sol = generate_any(range(1, 40), n_pages=60, per_page=(200, 225), n_chapters=5,
+                                       clue_keys=BOOK_CLUES, balance=dict(BOOK_BALANCE, page_level_keep=(0.01, 0.2)))
+        for c in clues:
+            if c.key in PAGE_LEVEL:
+                self.assertGreaterEqual(sol["standalone"][c.key], 0.30, c.key)   # no knockout clue
+
     def test_landmarks_survive_placement(self):
         reg = build_register(random.Random(5), n_pages=12, per_page=(200, 225), n_chapters=3)
         self.assertEqual(reg.flat.count("Hansel"), 1)
@@ -123,6 +145,22 @@ class RenderTests(unittest.TestCase):
             self.assertIn(b"/FontFile2", pdf)                    # fonts embedded, as KDP requires
             for base14 in (b"/Helvetica", b"/Times-Roman", b"/Times-Bold"):
                 self.assertNotIn(base14, pdf)
+            self.assertEqual(n % 2, 0)                             # even page count for print
+            try:
+                import pymupdf
+            except ImportError:
+                return
+            doc = pymupdf.open(path)
+            self.assertEqual(doc.page_count, n)
+            text = [pg.get_text() for pg in doc]
+            self.assertTrue(any("Checkpoints" in t for t in text))
+            self.assertTrue(any("CLUE CARD" in t for t in text))
+            self.assertTrue(any("The Verdict" in t for t in text))
+            killer = sol["killer"]
+            stop = next(i for i, t in enumerate(text) if t.strip().startswith("Stop!"))
+            self.assertEqual(stop % 2, 0)                          # a right-hand page (0-based even)
+            self.assertIn("It was %s." % killer, text[stop + 1])   # the ending is on its back
+            self.assertFalse(any(killer in t for t in text[:stop] if "·" not in t))   # named nowhere else
             self.assertGreater(n, 10)
 
 

@@ -87,3 +87,67 @@ Sam Val Vivian""".split())
 FEMALE = set(FIRST) - MALE - UNISEX
 MALE_TITLES = {"Mr", "Sir", "Lord", "King"}
 FEMALE_TITLES = {"Mrs", "Miss", "Lady", "Dame", "Queen"}
+
+# A short scene opens each chapter of the register. The first and last are fixed; the book uses
+# as many of the middle ones as it has chapters. Scenes are story only: no clue depends on them.
+SCENE_FIRST = (
+    "The guards began at the palace gates. The gatekeeper swore that nobody had left since the first "
+    "stroke of midnight. “Every guest who came in is still inside,” he said, “and every one of them "
+    "is in your book.” The Captain of the Guard opened the register and sighed.")
+SCENE_LAST = (
+    "The last guests were questioned at dawn. The candles had burned down, the orchestra was asleep on "
+    "its instruments, and the Fairy Godmother was waiting in the hall. “I saw them,” she said. "
+    "“Bring me your last two names.”")
+SCENES_MIDDLE = [
+    "Little Red Riding Hood had watched the Big Bad Wolf by the punch bowl all evening. “He was far too "
+    "polite,” she said. “Wolves are never polite.” The Wolf claimed he had only come for the canapés.",
+    "The Three Bears had arrived late. Mama Bear noticed that somebody had tasted all three bowls of "
+    "porridge on the buffet. Papa Bear noticed that the Prince had not. Baby Bear noticed everything, "
+    "but nobody asked him.",
+    "Hansel and Gretel were found in the palace kitchen, surrounded by gingerbread. They insisted they had "
+    "followed a trail of crumbs from the ballroom, laid by someone who did not want to be followed.",
+    "The Queen’s mirror hung in the east gallery. When the guards asked it who was fairest, it answered "
+    "at once. When they asked it who had killed the Prince, it went quiet, and then very politely cracked.",
+    "Rumpelstiltskin refused to give his name, which was odd, since it was already in the register. He "
+    "spent the interview spinning straw into gold and muttering that the Prince had owed him a favour.",
+    "The glass slipper was found on the palace stairs at five past twelve. It fitted nobody the guards "
+    "tried it on, which was a relief to Cinderella, who had been wearing both of hers all night.",
+    "Puss in Boots had a perfect alibi, a signed menu, and three witnesses who would swear to anything "
+    "for a sardine. The guards thanked him politely and crossed nothing off at all.",
+    "In the orangery the Frog King sulked in the fountain. Someone had kissed him at a quarter to "
+    "midnight and he had stayed a frog. “That,” he said darkly, “was not a princess.”",
+    "The Snow Queen had kept one corner of the ballroom frozen all night. The ice showed footprints "
+    "leading to the servants’ stair: small, quick and, the guards agreed, in a great hurry.",
+    "The Pied Piper had played until his fingers ached. He remembered every dancer who passed the "
+    "bandstand, he said, except for two, who had slipped away just before the clock began to strike.",
+]
+
+
+def chapter_scenes(n):
+    """Scenes for n chapters: the gatekeeper first, the Fairy Godmother last."""
+    if n <= 1:
+        return [SCENE_FIRST][:n]
+    return [SCENE_FIRST] + SCENES_MIDDLE[:max(0, n - 2)] + [SCENE_LAST]
+
+
+# The ending, printed upside down on the second-to-last page. The killer is always "they".
+MOTIVES = [
+    "Years ago the Prince had promised {killer} the last dance at his wedding, and tonight he had given it "
+    "to somebody else.",
+    "The Prince had borrowed {killer}’s best horse for a quest three summers ago and never brought it back.",
+    "The Prince had once won a singing contest that {killer} was certain they should have won, and they "
+    "had been practising their revenge ever since.",
+    "The Prince had promised to marry {killer} in a letter, and then again in another letter, and then "
+    "married someone else.",
+]
+ENDING = [
+    "It was {killer}.",
+    "When the Fairy Godmother saw the last two names she pointed at once to the longer one. {killer} had "
+    "slipped away from the dance floor at a quarter to midnight, taken the servants’ stair down to the "
+    "kitchens, and added something to the icing on the wedding cake.",
+    "{motive}",
+    "The other guest, {innocent}, had only stepped outside for some air, and was very embarrassed to have "
+    "been suspected.",
+    "The guards led {killer} away at dawn. The wedding cake was thrown in the moat, and the Big Bad Wolf, "
+    "who had been blamed for everything all night, received a formal apology and a slice of something else.",
+]

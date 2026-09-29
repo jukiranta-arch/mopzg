@@ -1,13 +1,13 @@
 """python -m whodunit sample OUT.pdf  |  python -m whodunit book OUT.pdf"""
 import sys
 
-from .generate import BOOK_CLUES, SAMPLE_CLUES, generate_any
+from .generate import BOOK_BALANCE, BOOK_CLUES, SAMPLE_CLUES, generate_any
 from .render import render
 
 PRESETS = {
     "sample": dict(n_pages=10, per_page=(200, 225), n_chapters=3,
                    clue_keys=SAMPLE_CLUES),
-    "book": dict(n_pages=150, per_page=(200, 225), n_chapters=10, clue_keys=BOOK_CLUES),
+    "book": dict(n_pages=150, per_page=(200, 225), n_chapters=10, clue_keys=BOOK_CLUES, balance=BOOK_BALANCE),
 }
 
 
