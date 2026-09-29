@@ -62,9 +62,51 @@ A puzzle is accepted only if all of them leave the same two suspects (`whodunit/
   - *Paper:* KDP's paper is thinner than a trade publisher's. Test highlighter bleed on a proof copy, and suggest pencils or erasable highlighters in the book.
 - **A crowded, fast-growing lane:** *What If She's Innocent? (47,500 suspects)*, *The Sealed Verdict*, *The Flight Deduction*, *Detective Verdict* and *The Killer Is… Board* all appear in "customers also viewed". A theme that stands out matters even more.
 
+## Amazon reviews of 12 competitors (amazon.co.uk, 2026-09-29)
+
+These are 67 reviews shown on the book pages, plus each page's star breakdown and "Customers say" summary. Captured with KDP Capture, stored in `captures/inbox/reviews-*.json`. Read them with `python -m kdpfinder reviews`.
+
+| Book | Names | 1-star | 5-star | What the low ratings say |
+|---|---|---|---|---|
+| The Killer Isn't Alice | 46,600 | 6% | 80% | a bit of a grind; one clue seemed wrong |
+| The Lottery Killer Vol. 2 | ? | 2% | 82% | none: "perfect balance of hunt and find" |
+| Kill Grid Vol. 1 | cases | 0% | 74% | pages came loose from the binding |
+| Find the Spy | 180 | 0% | 66% | answers become guessable, repetitive |
+| Who Killed Mr Darcy? | 31,830 | 0% | 79% | none so far |
+| The Killer Never Checked In | 3,000 | 8% | 62% | too easy: "after 6 clues only 17 left"; no thinking needed |
+| Murder City | buildings | 16% | 45% | **wrong answer**; the QR check **shows the answer even when you're wrong** |
+| The Killer Was On The Guest List | 48,319 | 24% | 41% | "no story, just names"; clues at the back, **no page numbers**; letter clues on 20,000 names |
+| **Do No Harm** | 40,700 | **45%** | 36% | **too easy**: "one clue narrows it to two chapters instantly", done in 20–60 minutes; an inaccurate clue; the site spoils the answer |
+| **The Killer Is in This Book** | 51,200 | **44%** | 22% | **letter clues on every name**: "eliminating every name with a double letter, which would take weeks"; names you can't eliminate; tiny print; names run into the fold |
+
+### The five ways these books fail
+
+1. **Too easy.** One clue wipes out most of the book, or there's a handful of names left after a few clues. That gets 1 star from people who came from *Alice*.
+2. **Letter work on huge lists.** Checking every one of 20,000–50,000 names for a letter pattern gets called "weeks", "mind-numbing", "feels like AI". Hunting for specific names that clear whole pages is what people enjoy. One reader asked for more "rare" finds (Rosalba, Ezekiel): "those kinds of finds keep me motivated".
+3. **Wrong or ambiguous clues.** A wrong answer is fatal: "2 books whose answer we can't work out". Ambiguity lands you with "multiple pages & names left".
+4. **Spoiled answers.** QR or web checks that reveal the killer to a wrong guess, or that don't work. Praise goes to "the answer is in the book but not where you can accidentally read it" (*Never Checked In*) and "the end part in code" (*Mr Darcy*).
+5. **Just names, no story.** A reader wrote: "I expected clues about these characters, not just clues about their names." The praise goes to "a story that continues after you solve the crime" and "Easter eggs: famous names strategically placed together".
+
+Physical complaints: 12 pt names running into the fold, tiny print that needs a magnifying glass, pages coming loose, missing page numbers, clues at the back. Praised: clues at the front, a tear-out clue card ("no flipping back and forth"), paper that highlighter doesn't bleed through.
+
+### Targets for *Who Killed Prince Charming?*
+
+Checked by the generator where it can be; the "now" figures are from the current book preset, seed 1.
+
+| Rule | Target | Now |
+|---|---|---|
+| No clue is a knockout: readers use the clues in any order, so each is measured alone | every clue alone keeps **≥ 30%** of names | Hansel & Gretel alone keeps **20.8%** (fails) |
+| Page-level clues (hunt for names, cross off pages) come first, letter clues only on what is left | after all page-level clues, **3–10%** of names remain (about 1,000–3,000) | **207 names on 6 pages (0.7%)**: letter clues then take minutes, so the puzzle is too easy |
+| Hunting beats trawling | at least 6 clues about *where* a name is or *which characters are near it* | 7 |
+| Exactly one answer, whatever the reading | already enforced (READINGS) | ✓ |
+| Answer protected but in the book | the killer's name is printed only in code, decoded with the two suspects' page numbers | printed in plain text after a Notes page |
+| A story | a short scene opens each chapter; a proper ending after the reveal | a one-page setup only |
+| Self-checks without spoilers | "checkpoint" page: how many *pages* should still be open after each clue group | counts are only on the solution page |
+| Print | 10 pt names, **wider inner margin (0.85")** so nothing runs into the fold; page numbers on every register page; clues at the front plus a tear-out clue card at the back | 10 pt ✓; inner 0.70"; numbers ✓; front ✓; no card |
+
 ## Next
 
-Capture Amazon reviews, critical ones first, of the direct competitors. Run KDP Capture on amazon.co.uk in a private tab (no sign-in) and paste these into the **Book reviews** box:
+Done 2026-09-29 (above). To widen the sample, run the same list on amazon.com, whose book pages show a different set of top reviews. Run KDP Capture in a private tab (no sign-in) and paste these into the **Book reviews** box:
 
 ```
 B0GQ2VXKY7  The Killer Isn't Alice (indie edition, 1,902 reviews)

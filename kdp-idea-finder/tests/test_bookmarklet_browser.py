@@ -135,7 +135,8 @@ def review_2026(rid, stars, title, body, helpful="11 people found this helpful")
             '<span data-hook="reviewTitle"><span>%s</span></span>'
             '<span data-hook="review-date">Reviewed in the United Kingdom on 28 June 2026</span>'
             '<span data-hook="review-badges"><span>Verified Purchase</span></span>'
-            '<div data-hook="reviewTextContainer"><span data-hook="reviewText"><span>%s</span></span></div>'
+            '<div data-hook="reviewTextContainer"><span data-hook="reviewText"><span>Brief content visible, double '
+            'tap to read full content.</span><span>%s</span><span>Read more</span><span>Read less</span></span></div>'
             '<span>%s</span><a>Report</a></div></div>'
             % (rid, stars, title, body, helpful))
 

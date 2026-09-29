@@ -326,3 +326,11 @@ class BookmarkletTests(unittest.TestCase):
               "  var r = /a\\/b[/*]c/g, d = a / 2;\n  if (x) { return /^y/.test(z); }\n")
         self.assertEqual(minify(js), "var a = 'x /* not a comment */ y';\n"
                                      "var r = /a\\/b[/*]c/g, d = a / 2;\nif (x) { return /^y/.test(z); }")
+
+
+class ReviewTextTests(unittest.TestCase):
+    def test_screen_reader_phrases_are_dropped(self):
+        from kdpfinder.importer import _tidy_review
+        raw = ("Brief content visible, double tap to read full content.Full content visible, double tap to read "
+               "brief content.Too easy. Solved in an hour.Read moreRead less")
+        self.assertEqual(_tidy_review(raw), "Too easy. Solved in an hour.")

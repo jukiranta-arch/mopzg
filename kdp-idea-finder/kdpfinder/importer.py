@@ -126,8 +126,19 @@ def _save_product(conn, store, day, raw, source):
     return b
 
 
+_READER_PHRASES = re.compile(r"(?:Brief|Full) content visible, double tap to read (?:full|brief) content\.?")
+
+
+def _tidy_review(text):
+    """Drop the screen-reader phrases Amazon wraps around review text."""
+    text = _READER_PHRASES.sub(" ", text or "")
+    text = re.sub(r"(?:\s*Read (?:more|less))+\s*$", "", text, flags=re.IGNORECASE)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def _save_reviews(conn, store, day, asin, rows, default_source):
     for r in rows:
+        r = dict(r, body=_tidy_review(r.get("body")))
         key = r.get("id") or hashlib.sha256(((r.get("title") or "") + "|" + (r.get("body") or "")).encode()).hexdigest()[:16]
         conn.execute("INSERT OR REPLACE INTO reviews (asin, store, review_key, stars, title, body, review_date, "
                      "verified, helpful, source, taken_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",

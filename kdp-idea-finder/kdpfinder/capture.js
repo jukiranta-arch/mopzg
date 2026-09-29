@@ -111,6 +111,12 @@
   var R_STARS = '[data-hook="review-star-rating"], [data-hook="cmps-review-star-rating"]';
   var R_TITLE = '[data-hook="review-title"], [data-hook="reviewTitle"]';
   var R_BODY = '[data-hook="review-body"], [data-hook="reviewText"]';
+  /* Screen-reader phrases Amazon wraps around review text. */
+  function tidyReview(t) {
+    return clean(t.replace(/(?:Brief|Full) content visible, double tap to read (?:full|brief) content\.?/g, ' ')
+      .replace(/(?:\s*Read (?:more|less))+\s*$/i, ''));
+  }
+
   function parseReviews(doc) {
     var out = [], seen = [];
     Array.prototype.forEach.call(doc.querySelectorAll('[data-hook="review"]'), function (r) {
@@ -135,7 +141,7 @@
         title = text(copy).replace(/^\d(?:[.,]\d)? out of 5 stars\s*/i, '');
       }
       var bodyEl = find(R_BODY);
-      var body = bodyEl ? text(bodyEl).replace(/\s*Read more\s*$/i, '') : '';
+      var body = bodyEl ? tidyReview(text(bodyEl)) : '';
       if (!title && !body) { return; }
       var all = text(box);
       var helpful = txt(box, '[data-hook="helpful-vote-statement"]') ||
