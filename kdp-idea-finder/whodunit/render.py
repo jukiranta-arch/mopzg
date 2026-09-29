@@ -17,7 +17,7 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-from .generate import CHUNK, HUNT
+from .generate import GLANCE
 from .model import BEARS, READINGS, ROYAL_WORDS, Register, letters, words
 from .names import ENDING, MOTIVES, PLACES_INDOOR, PLACES_OUTDOOR, ROYALS, WITNESS
 
@@ -258,8 +258,8 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
         ("Pages and chapters.", "Page numbers are printed at the foot of each register page. Each chapter is "
          "one place in the palace; The Palace page lists them all."),
         ("Clues in any order.", "The clues can be used in any order and you will reach the same two names. "
-         "They are printed in a good order: the first ones clear whole chapters and pages, the letter clues "
-         "come last."),
+         "They are printed in a good order: first quick checks you make on every name, then clues about where "
+         "the killer was that night, then the finest letter checks on the few names left."),
         ("Checkpoints.", "Between the groups of clues, a checkpoint tells you how many pages or names should "
          "still be in play. If yours is different, read the last clues again."),
         ("Stuck?", "Every clue has a hint at the back of the book. The solution is on the very last pages, "
@@ -300,11 +300,10 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
         b.heading("The Clues" if first else "The Clues (continued)")
         return x0, x1, H - TOP - 50
 
-    groups = []                                   # clue number after which a checkpoint goes
-    kinds = ["chunk" if cl.key in CHUNK else "hunt" if cl.key in HUNT else "letter" for cl in clues]
-    for k in range(1, len(clues)):
-        if kinds[k] != kinds[k - 1]:
-            groups.append(k)
+    # Checkpoints after each group: the opening glance clues, the clues about where the killer
+    # was, and the final letter clues.
+    kinds = ["letter" if cl.kind == "word" or cl.key == "key_letter" else "place" for cl in clues]
+    groups = [k for k in range(1, len(clues)) if kinds[k] != kinds[k - 1]]
     checkpoints = {cp["clue"]: cp for cp in solution["checkpoints"]}
     labels = iter("ABCDEFG")
 
@@ -335,13 +334,14 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
             if n == len(clues):
                 text = "“If you have done it right,” says the Fairy Godmother, “two names are left. Now turn " \
                        "to the Final Deduction.”"
-            elif kinds[n - 1] == "chunk":
-                text = ("“After clues 1 to %d,” says the Fairy Godmother, “%d pages of the register should "
-                        "still have names in play. More, and you have kept someone who was elsewhere. Fewer, and "
-                        "you have crossed out a page too many.”" % (n, cp["pages"]))
+            elif kinds[n - 1] == "letter":
+                text = ("“After clues 1 to %d,” says the Fairy Godmother, “there should be %s names left, and "
+                        "still some on %s. More, and a name slipped past you. Fewer, and you crossed out "
+                        "someone innocent.”" % (n, _about(cp["names"]), "every page" if cp["pages"] ==
+                                                len(reg.pages) else "%d pages" % cp["pages"]))
             else:
                 text = ("“After clues 1 to %d,” says the Fairy Godmother, “there should be %s names left, on "
-                        "%d pages. Check again before you start on the letters.”"
+                        "%d pages. Check again before the last clues.”"
                         % (n, _about(cp["names"]), cp["pages"]))
             if y - 60 < BOTTOM:
                 b.next()

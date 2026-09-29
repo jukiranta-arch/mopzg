@@ -66,3 +66,33 @@ The common, accepted solution is the simplest one: a solution at the back, behin
 6. **Checkpoints with exact totals** after clue groups, in the witness's voice, with what to recheck.
 7. **Answer:** solution at the back behind a "do not read ahead" divider, printed upside down; optional 3-level hints per clue. This replaces the Verdict pages, which no winner uses.
 8. **Later, as a series differentiator:** guest cards with attributes (how they arrived: coach, pumpkin, broomstick; which tale they come from), as *Never Checked In* and *The Lottery Killer* do.
+
+## Who Killed Mr Darcy? – the full clue list (sample pages 3–11)
+
+The best-reviewed book in the category (79% 5★, 0% 1★, rank about 5,700 and climbing). Names are separated by dots; titles (Mr, Dr) are part of names and count as letters; famous screen characters sit **unmarked** among 31,830 ordinary names.
+
+1. odd number of consonants (whole name, Y a consonant)
+2. within one page of an Indiana Jones (he appears throughout)
+3. name ends in a consonant
+4. not in one of the three chapters that open and close with a famous duo (Romeo/Juliet, Batman/Robin, Thelma/Louise)
+5. within 11 names of a Doctor (Dr, Doc or Doctor), with a shaded worked example
+6. not on a page with an even number of names
+7. last two letters in alphabetical order
+8. between Sherlock Holmes's page and Dr Watson's page
+9. a double letter
+10. the chapter contains all three of the Golden Trio (Harry, Ron, Hermione)
+11. the page has both a Mr and a Mrs
+12. begins with A–M
+13. within three pages of one of the six Friends
+14. contains the first letter of the first name on its page
+15. the facing page carries an alliterative name
+
+Rules page: what a name is, exact spelling only, titles must be present, letters A–Z only, Y is a consonant, names never break across rows. Tip: "read through the clues and decide which might give you a head start; they don't need to be tackled in order". **No checkpoints.** The answer is a final deduction at the back.
+
+## Lessons from building Who Killed Prince Charming? (paused 2026-09-29)
+
+Juho's test solves showed what breaks the fun:
+- **The hunt is the work.** Page- and chapter-clearing clues are fine *because* the landmarks (Sherlock, Watson, Indiana Jones, Sasha) are hidden among ordinary names and finding them means reading every page. Italicising characters, printing a Who's Who and giving landmark page numbers in hints removed the hunt, and the page-clearing clues then felt pointless.
+- **Checkpoints with hundreds of names are useless:** nobody counts 714 names. The winners have none, or only small numbers (26).
+- **The theme needs a big pool of names readers love to spot** (Mr Darcy: hundreds of film and TV characters). Public-domain fairy tales give about 60, many obscure.
+- **Process:** copy the whole structure of the best-reviewed book first; add our angle only in theme, story and polish; write the spec and a paper prototype before building.

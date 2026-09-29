@@ -133,14 +133,17 @@ def build_register(rng, n_pages, per_page, n_chapters, n_indoor, first_page_no=1
     return reg
 
 
-# The printed order is the suggested order, as in the best sellers: a few clues clear whole
-# chapters or pages, then clues that make you hunt for characters and highlight around them,
-# then letter clues on the few hundred names left.
-SAMPLE_CLUES = ["chapter_indoors", "between_hansel_gretel", "near_wolf", "royal_on_page", "near_character",
-                "double_letter", "ends_consonant", "first_half", "key_letter"]
-BOOK_CLUES = ["chapter_indoors", "three_bears", "between_hansel_gretel", "near_wolf", "royal_on_page",
-              "near_character", "odd_consonants", "double_letter", "ends_consonant", "first_half", "even_vowels",
-              "key_letter"]
+# The printed order is the suggested order. Every page must matter, so the opening clues are
+# quick checks you make on every name, at a glance (first letter, last letter, a double letter):
+# they thin every page and empty none. Only then come the clues about where the killer was,
+# then highlighting around characters, then the counting clues on the last few hundred names.
+# (A clue that blanks most pages before any name is read is the Guest List's 1-star complaint.)
+SAMPLE_CLUES = ["first_half", "ends_consonant", "double_letter", "near_wolf", "royal_on_page",
+                "between_hansel_gretel", "chapter_indoors", "near_character", "key_letter"]
+BOOK_CLUES = ["first_half", "ends_consonant", "double_letter", "near_wolf", "royal_on_page",
+              "between_hansel_gretel", "chapter_indoors", "three_bears", "near_character", "odd_consonants",
+              "even_vowels", "key_letter"]
+GLANCE = {"first_half", "ends_consonant", "double_letter"}      # checked on every name at a glance
 CHUNK = {"chapter_indoors", "three_bears", "between_hansel_gretel", "odd_page"}
 HUNT = {"near_wolf", "royal_on_page", "near_character"}
 PAGE_LEVEL = CHUNK | HUNT
@@ -269,6 +272,14 @@ def generate(seed=1, n_pages=30, per_page=(200, 225), n_chapters=4, n_indoor=Non
         lo, hi = balance["page_level_keep"]
         if not lo <= page_keep <= hi:
             raise GenerationError("page-level clues keep %.1f%%" % (100 * page_keep))
+        # The opening glance clues must leave every page (or nearly every page) with names in play.
+        opening = 0
+        while opening < len(clues) and clues[opening].key in GLANCE:
+            opening += 1
+        if opening:
+            pages_left = len({reg.page_of[i] for i in solve(reg, clues[:opening])[0]})
+            if pages_left < 0.95 * len(reg.pages):
+                raise GenerationError("the opening clues empty %d pages" % (len(reg.pages) - pages_left))
     a, b = pair
     killer = a if len(letters(reg.flat[a])) > len(letters(reg.flat[b])) else b
     solution = {
