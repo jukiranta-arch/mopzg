@@ -6,15 +6,25 @@ on a right-hand page and printed page numbers match the facing-page rules.
 
 import random
 
+import os
+
 from reportlab.lib.pagesizes import inch
+from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
-from .model import Register, letters
+from .model import PERSON_TITLES, READINGS, Register, letters, words
 
 W, H = 6 * inch, 9 * inch
 INNER, OUTER, TOP, BOTTOM = 0.70 * inch, 0.50 * inch, 0.60 * inch, 0.65 * inch
-SERIF, SERIF_B, SERIF_I = "Times-Roman", "Times-Bold", "Times-Italic"
+# KDP needs every font embedded. Liberation Serif (SIL Open Font License, Times metrics)
+# ships in fonts/ and is embedded in the PDF; the built-in Times fonts are not.
+_FONTS = os.path.join(os.path.dirname(__file__), "fonts")
+for _name, _file in (("BookSerif", "LiberationSerif-Regular.ttf"), ("BookSerif-Bold", "LiberationSerif-Bold.ttf"),
+                     ("BookSerif-Italic", "LiberationSerif-Italic.ttf")):
+    pdfmetrics.registerFont(TTFont(_name, os.path.join(_FONTS, _file)))
+SERIF, SERIF_B, SERIF_I = "BookSerif", "BookSerif-Bold", "BookSerif-Italic"
 SEP = "  ·  "
 REG_SIZE, REG_LEADING = 10, 13       # register type: big enough for older eyes
 
@@ -25,7 +35,7 @@ class LayoutError(RuntimeError):
 
 class Book:
     def __init__(self, path, title, subtitle):
-        self.c = canvas.Canvas(path, pagesize=(W, H))
+        self.c = canvas.Canvas(path, pagesize=(W, H), initialFontName=SERIF, initialFontSize=10)
         self.c.setTitle(title)
         self.c.setSubject(subtitle)
         self.pdf_page = 1
@@ -67,9 +77,20 @@ class Book:
         self.c.drawCentredString(W / 2, BOTTOM / 2, str(number))
 
 
+def _verdicts(clue, name):
+    one = Register([[name]], [("", 0)]).index()
+    out = set()
+    for r in READINGS:
+        one.set_reading(r)
+        out.add(bool(clue.test(one, 0)))
+    return out
+
+
 def _example_pair(reg, clue, rng):
-    yes = [n for n in reg.flat if len(n) < 22 and clue.test(Register([[n]], [("", 0)]).index(), 0)]
-    no = [n for n in reg.flat if len(n) < 22 and not clue.test(Register([[n]], [("", 0)]).index(), 0)]
+    """One name that passes and one that fails, both plain (no title) and unambiguous under every reading."""
+    plain = sorted({n for n in reg.flat if len(n) < 22 and words(n)[0] not in PERSON_TITLES})
+    yes = [n for n in plain if _verdicts(clue, n) == {True}]
+    no = [n for n in plain if _verdicts(clue, n) == {False}]
     return rng.choice(yes), rng.choice(no)
 
 
@@ -123,8 +144,8 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
     rules = [
         ("What is a name?", "Everything between two dots in the register is one name: a single name "
          "(Cinderella), a full name (Ada Finch) or a name with a title (Queen Mabel, Mrs Lark)."),
-        ("Titles count.", "A title such as Mr, Mrs, Dr, Lady, King or Queen is part of the name. "
-         "When a clue counts or checks letters, the title’s letters are included."),
+        ("Titles don’t count.", "A title at the start of a name (Mr, Mrs, Miss, Dr, Sir, Lady, Dame, Lord, "
+         "Captain, King or Queen) is left out when a clue checks letters: Queen Mabel is checked as Mabel."),
         ("Letters only.", "Only the letters A to Z count. Spaces, hyphens and apostrophes do not."),
         ("Vowels and consonants.", "The vowels are A, E, I, O and U. Every other letter is a consonant, "
          "and that includes Y."),
@@ -132,6 +153,9 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
          "breaks across two lines."),
         ("Pages.", "Page numbers are printed at the foot of each register page. Facing pages are the two "
          "you see side by side when the book lies open: an even page on the left, the next odd page on the right."),
+        ("Same name, different guest.", "Some names appear more than once. Each one is a different guest: "
+         "check each on its own."),
+        ("Any order.", "The clues can be used in any order and you will reach the same two names."),
         ("Exact spelling.", "When a clue names a character, only that exact spelling counts."),
     ]
     y = H - TOP - 50
@@ -212,7 +236,7 @@ def render(reg, clues, solution, path, title="Who Killed Prince Charming?",
         "As the clock struck twelve, the Fairy Godmother saw a guest run down the palace stairs and "
         "lose a shoe on the last step. “The one I saw,” she tells the guards, “has the "
         "longer name of the two.”",
-        "Count the letters A to Z in each name, title included. The longer name is your killer.",
+        "Count the letters A to Z in each name. The longer name is your killer.",
         "The killer is: ______________________________",
     ]:
         y = b.text_block(x0, x1, y, para) - 10

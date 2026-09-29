@@ -79,6 +79,20 @@ CREATE TABLE IF NOT EXISTS marks (
     relation TEXT NOT NULL CHECK (relation IN ('direct', 'non_direct', 'unrelated')),
     PRIMARY KEY (keyword, store, asin)
 );
+CREATE TABLE IF NOT EXISTS reviews (
+    asin TEXT NOT NULL,
+    store TEXT NOT NULL,
+    review_key TEXT NOT NULL,         -- Amazon's review id, or a hash of title and text
+    stars REAL,
+    title TEXT,
+    body TEXT,
+    review_date TEXT,
+    verified INTEGER,
+    helpful TEXT,
+    source TEXT,                      -- product page, critical, positive
+    taken_at TEXT,
+    PRIMARY KEY (asin, store, review_key)
+);
 CREATE TABLE IF NOT EXISTS imports (
     sha256 TEXT PRIMARY KEY,
     path TEXT,
@@ -138,6 +152,16 @@ def marks(conn, keyword, store):
     rows = conn.execute("SELECT asin, relation FROM marks WHERE keyword = ? AND store = ?",
                         (keyword, store)).fetchall()
     return {r["asin"]: r["relation"] for r in rows}
+
+
+def reviews(conn, store, asins=None, max_stars=5):
+    sql = ("SELECT r.*, b.title AS book_title FROM reviews r LEFT JOIN books b ON b.asin = r.asin AND b.store = r.store "
+           "WHERE r.store = ? AND (r.stars IS NULL OR r.stars <= ?)")
+    args = [store, max_stars]
+    if asins:
+        sql += " AND r.asin IN (%s)" % ",".join("?" * len(asins))
+        args += list(asins)
+    return conn.execute(sql + " ORDER BY r.asin, r.stars, r.review_key", args).fetchall()
 
 
 def suggestions(conn, store):

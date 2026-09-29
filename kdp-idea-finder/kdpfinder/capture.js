@@ -19,6 +19,7 @@
   var AC_MIN = TEST ? 0 : 600, AC_MAX = TEST ? 5 : 1100;          /* autocomplete is light */
   var BETWEEN_MIN = TEST ? 0 : 15000, BETWEEN_MAX = TEST ? 5 : 30000;  /* rest between searches */
   var COOLDOWN_MIN = TEST ? 0 : (window.KDP_COOLDOWN_MIN || 60);     /* wait after a captcha */
+  var REVIEW_PAGES = window.KDP_REVIEW_PAGES || 3;   /* pages of critical reviews per book (10 per page) */
   var STATE_KEY = 'kdp-autopilot-state';
   /* Suggestions that are rarely a book you could publish: not ticked by default. */
   var NOT_A_NICHE = /gift ?cards?|new books?|new releases?|kindle|audible|amazon|prime|\b20\d\d\b|\bby [a-z]+ [a-z]+$/;
@@ -71,6 +72,43 @@
     var t = doc.body ? doc.body.textContent : '';
     return !!doc.querySelector('form[action*="validateCaptcha"]') ||
       /Enter the characters you see below|Type the characters you see in this image/i.test(t);
+  }
+
+  /* Amazon's full review pages need a signed-in account; signed out they show a sign-in form. */
+  function needsSignIn(doc) {
+    return !!doc.querySelector('form[name="signIn"], #ap_email, #ap_email_login');
+  }
+
+  /* ---------- reviews (product page or review list page) ---------- */
+  function parseReviews(doc) {
+    var out = [];
+    Array.prototype.forEach.call(doc.querySelectorAll('[data-hook="review"]'), function (r) {
+      var starEl = r.querySelector('[data-hook="review-star-rating"], [data-hook="cmps-review-star-rating"]');
+      var m = starEl ? text(starEl).match(/(\d(?:[.,]\d)?)/) : null;
+      var stars = m ? parseFloat(m[1].replace(',', '.')) : null;
+      if (stars === null && starEl) {
+        var c = (starEl.className || '').match(/a-star-(\d)/);
+        if (c) { stars = parseInt(c[1], 10); }
+      }
+      var titleEl = r.querySelector('[data-hook="review-title"]');
+      var title = '';
+      if (titleEl) {
+        var copy = titleEl.cloneNode(true);
+        Array.prototype.forEach.call(copy.querySelectorAll('[data-hook="review-star-rating"], .a-icon-alt, i'),
+          function (x) { x.remove(); });
+        title = text(copy);
+      }
+      var bodyEl = r.querySelector('[data-hook="review-body"]');
+      var body = bodyEl ? text(bodyEl).replace(/\s*Read more\s*$/i, '') : '';
+      if (!title && !body) { return; }
+      out.push({
+        id: r.id || '', stars: stars, title: title, body: body,
+        date: txt(r, '[data-hook="review-date"]'),
+        verified: !!r.querySelector('[data-hook="avp-badge"], [data-hook="avp-badge-linkless"]'),
+        helpful: txt(r, '[data-hook="helpful-vote-statement"]')
+      });
+    });
+    return out;
   }
 
   /* ---------- product page ---------- */
@@ -352,6 +390,58 @@
     return capture;
   }
 
+  /* Reviews of one book: those on its product page (no sign-in needed), then up to
+   * REVIEW_PAGES pages of critical reviews and one page of top positive ones. */
+  async function captureReviews(asin, progress) {
+    var cap = {
+      tool: 'kdp-capture', version: 1, store: storeOf(location.hostname), url: location.origin + '/dp/' + asin,
+      captured_at: new Date().toISOString(), type: 'reviews', keyword: 'reviews:' + asin, asin: asin, reviews: []
+    };
+    var seen = {};
+    function add(list, source) {
+      list.forEach(function (r) {
+        var k = r.id || (r.title + '|' + r.body.slice(0, 80));
+        if (seen[k]) { return; }
+        seen[k] = true;
+        r.source = source;
+        cap.reviews.push(r);
+      });
+    }
+    progress('book page');
+    var d = await getDoc('/dp/' + asin);
+    if (isBlocked(d)) { cap.partial = cap.blocked = true; return cap; }
+    cap.product = parseProduct(d, asin);
+    add(parseReviews(d), 'product page');
+    var views = [['critical', REVIEW_PAGES], ['positive', 1]];
+    outer:
+    for (var v = 0; v < views.length; v++) {
+      for (var pg = 1; pg <= views[v][1]; pg++) {
+        await pause();
+        progress(views[v][0] + ' reviews, page ' + pg);
+        var rd;
+        try {
+          rd = await getDoc('/product-reviews/' + asin + '/?filterByStar=' + views[v][0] +
+            '&reviewerType=all_reviews&sortBy=helpful&pageNumber=' + pg);
+        } catch (e) { break; }
+        if (isBlocked(rd)) { cap.partial = cap.blocked = true; return cap; }
+        if (needsSignIn(rd)) { cap.signed_out = true; break outer; }
+        var got = parseReviews(rd);
+        add(got, views[v][0]);
+        if (!got.length || !rd.querySelector('li.a-last:not(.a-disabled) a')) { break; }
+      }
+    }
+    cap.books_read = 1;
+    return cap;
+  }
+
+  function asinsIn(textValue) {
+    var out = [];
+    (textValue.match(/\b(?:B0[A-Z0-9]{8}|\d{9}[\dX])\b/g) || []).forEach(function (a) {
+      if (out.indexOf(a) < 0) { out.push(a); }
+    });
+    return out;
+  }
+
   /* ---------- autopilot: autocomplete discovery + capture queue ---------- */
   var MARKETS = {
     'amazon.com': ['completion.amazon.com', 'ATVPDKIKX0DER'],
@@ -502,12 +592,21 @@
         saveData(data);
         updateSaveBox();
       }
-      var i = 0;
+      var i = 0, signedOutWarned = false;
       for (; i < terms.length && !stopped; i++) {
         remember(i);
-        var cap = await captureSearch(terms[i], null, searchUrl(terms[i]), books, function (m) {
-          progress('Search ' + (i + 1) + ' of ' + terms.length + ' "' + terms[i] + '": ' + m);
-        });
+        var say_ = function (m) {
+          progress((/^reviews:/.test(terms[i]) ? 'Book ' : 'Search ') + (i + 1) + ' of ' + terms.length +
+            ' "' + terms[i] + '": ' + m);
+        };
+        var cap = /^reviews:/.test(terms[i])
+          ? await captureReviews(terms[i].slice(8), say_)
+          : await captureSearch(terms[i], null, searchUrl(terms[i]), books, say_);
+        if (cap.signed_out && !signedOutWarned) {
+          signedOutWarned = true;
+          alert('Amazon only shows the full review pages when you are signed in. This run keeps the reviews ' +
+            'shown on each book page (about 8 per book). For more, sign in to Amazon in this tab and run it again.');
+        }
         if (cap.blocked) {
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */
           progress('Amazon asked for a captcha after ' + i + ' searches. Those are kept: press Copy data ' +
@@ -558,7 +657,10 @@
       saveBox.textContent = '';
       saveBox.hidden = !data.captures.length && !data.suggestions.length;
       if (saveBox.hidden) { return; }
-      saveBox.appendChild(el('div', '', 'Kept in this tab: ' + data.captures.length + ' searches' +
+      var nReviews = data.captures.filter(function (c) { return c.type === 'reviews'; }).length;
+      var nSearches = data.captures.length - nReviews;
+      saveBox.appendChild(el('div', '', 'Kept in this tab: ' + nSearches + ' searches' +
+        (nReviews ? ', reviews of ' + nReviews + ' books' : '') +
         (data.suggestions.length ? ' and the autocomplete list' : '') + '. Copy data, then paste into your Capture Inbox.'));
       button('Copy data', function () {
         copyText(bundle(), function (ok) { progress(ok ? COPY_HELP : 'Copying failed. Tell Claude what happened.'); });
@@ -581,7 +683,7 @@
       if (!st || !st.remaining || !st.remaining.length) { resumeBox.hidden = true; return; }
       resumeBox.hidden = false;
       resumeBox.textContent = '';
-      resumeBox.appendChild(el('div', 'font-weight:700', st.remaining.length + ' searches left from your last run'));
+      resumeBox.appendChild(el('div', 'font-weight:700', st.remaining.length + ' left from your last run'));
       var info = el('div', 'margin-top:4px');
       resumeBox.appendChild(info);
       var go = button('Continue where it left off', function () {
@@ -632,6 +734,20 @@
     }, controls);
 
     button('Stop', function () { stopped = true; progress('Stopping after the current search...'); }, controls);
+
+    box.appendChild(el('div', 'font-weight:700;margin-top:12px', 'Book reviews'));
+    box.appendChild(el('div', 'opacity:.8', 'Paste Amazon links or ASINs of books to learn from (one per line). ' +
+      'Reads the reviews on each book page, plus critical reviews when you are signed in.'));
+    var reviewBox = el('textarea', 'width:100%;box-sizing:border-box;height:70px;font:12px monospace;color:#111');
+    reviewBox.id = 'kdp-review-asins';
+    box.appendChild(reviewBox);
+    var reviewControls = el('div', '');
+    box.appendChild(reviewControls);
+    button('Capture reviews of these books', function () {
+      var asins = asinsIn(reviewBox.value);
+      if (!asins.length) { progress('Paste at least one Amazon link or ASIN first.'); return; }
+      runQueue(asins.map(function (a) { return 'reviews:' + a; }), 0);
+    }, reviewControls).id = 'kdp-review-go';
     button('Close', function () { stopped = true; box.remove(); }, controls);
   }
 
@@ -653,6 +769,15 @@
       tool: 'kdp-capture', version: 1, store: storeOf(location.hostname),
       url: location.href, captured_at: new Date().toISOString()
     };
+
+    var reviewPage = path.match(/\/product-reviews\/([A-Z0-9]{10})/);
+    if (reviewPage) {
+      var rc = await captureReviews(reviewPage[1], function (m) { say('reading ' + m + '...'); });
+      save(rc, rc.signed_out
+        ? 'Saved ' + rc.reviews.length + ' reviews. Sign in to Amazon to read the critical review pages too.'
+        : 'Saved ' + rc.reviews.length + ' reviews of ' + reviewPage[1] + '.');
+      return;
+    }
 
     if (asinFromUrl(location.href) || document.querySelector('#productTitle')) {
       var product = parseProduct(document, asinFromUrl(location.href));

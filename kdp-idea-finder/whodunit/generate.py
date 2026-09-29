@@ -9,7 +9,8 @@ verified, not assumed.
 
 import random
 
-from .model import BEARS, Register, catalogue, letters, solve, starts_with_title, words
+from .model import (BEARS, PERSON_TITLES, READINGS, Register, catalogue, letters, solve, solve_all_readings,
+                    starts_with_title, words)
 from .names import (CHARACTERS, CHAPTER_QUOTES, FEMALE, FEMALE_TITLES, FIRST, LAST, MALE, MALE_TITLES,
                     TITLES)
 
@@ -44,12 +45,47 @@ def random_name(rng):
     return t + " " + first_for(rng, t) + " " + l
 
 
-def _word_passes(text, word_clues):
+def _word_passes(text, word_clues, reading=None):
     reg = Register([[text]], [("", 0)]).index()
+    reg.set_reading(reading or {})
     return all(c.test(reg, 0) for c in word_clues)
 
 
+def _word_fails_everywhere(text, word_clues):
+    """True if the name fails some word clue under every reading, so no slip can keep it alive."""
+    return not any(_word_passes(text, word_clues, r) for r in READINGS)
+
+
+def _key_initial(text):
+    ws = words(text)
+    return (ws[1] if len(ws) > 1 and ws[0] in PERSON_TITLES else ws[0])[0].upper()
+
+
+def _holds_everywhere(reg, i, clues):
+    ok = True
+    for r in READINGS:
+        reg.set_reading(r)
+        if not all(c.test(reg, i) for c in clues):
+            ok = False
+            break
+    reg.set_reading({})
+    return ok
+
+
+def _plan_suspect_pages(rng, n_pages, chapter_of, first_page_no):
+    """Two odd-numbered pages in different chapters, a sensible distance apart, with room
+    for Hansel before the first and Gretel after the second."""
+    near, far = max(1, n_pages // 12), max(2, n_pages // 3)
+    odd = [p for p in range(1, n_pages - 1) if (first_page_no + p) % 2 == 1]
+    pairs = [(p, q) for p in odd for q in odd
+             if near <= q - p <= far and chapter_of[p] != chapter_of[q]]
+    return rng.choice(pairs) if pairs else None
+
+
 def build_register(rng, n_pages, per_page, n_chapters, first_page_no=1, density=None):
+    """Random guests plus landmarks. The two suspect pages are planned first and the
+    landmarks placed around them (Wolf nearby, Hansel before, Gretel after, bears in both
+    chapters), so the place clues can hold for the suspects while cutting everyone else."""
     d = {"queen": 1 / 30, "king": 1 / 400, "character": 1 / 45, "wolf_every": 5}
     d.update(density or {})
     pages = [[random_name(rng) for _ in range(rng.randint(*per_page))] for _ in range(n_pages)]
@@ -60,6 +96,11 @@ def build_register(rng, n_pages, per_page, n_chapters, first_page_no=1, density=
     chapters = list(zip(quotes, starts))
     for p in starts:                       # a chapter heading takes about a tenth of the page
         del pages[p][int(len(pages[p]) * 0.88):]
+    chapter_of = [sum(1 for s in starts if s <= p) - 1 for p in range(n_pages)]
+    plan = _plan_suspect_pages(rng, n_pages, chapter_of, first_page_no)
+    if not plan:
+        raise GenerationError("no room for two suspect pages")
+    sp, sq = plan
 
     taken = set()
 
@@ -79,27 +120,34 @@ def build_register(rng, n_pages, per_page, n_chapters, first_page_no=1, density=
         put(rng.randrange(n_pages), "King " + first_for(rng, "King"))
     for _ in range(int(total * d["character"])):
         put(rng.randrange(n_pages), rng.choice(CHARACTERS))
-    for p in range(rng.randrange(d["wolf_every"]), n_pages, d["wolf_every"]):
+    wolf_pages = set(range(rng.randrange(d["wolf_every"]), n_pages, d["wolf_every"]))
+    for p in (sp, sq):
+        if not wolf_pages & {p - 1, p, p + 1}:
+            wolf_pages.add(rng.choice([x for x in (p - 1, p, p + 1) if 0 <= x < n_pages]))
+    for p in sorted(wolf_pages):
         put(p, "Big Bad Wolf")
-    # Hansel and Gretel: once each, a fair way apart.
-    a = rng.randrange(0, max(1, n_pages // 3))
-    b = rng.randrange(min(n_pages - 1, a + max(3, n_pages // 3)), n_pages)
-    put(a, "Hansel")
-    put(b, "Gretel")
-    # The three bears in about half of the chapters.
+    # Hansel and Gretel once each, just outside the suspect pages (in either order).
+    gap = max(1, n_pages // 15)
+    before, after = rng.randint(max(0, sp - gap), sp - 1), rng.randint(sq + 1, min(n_pages - 1, sq + gap))
+    first, second = ("Hansel", "Gretel") if rng.random() < 0.5 else ("Gretel", "Hansel")
+    put(before, first)
+    put(after, second)
+    # The three bears in both suspect chapters and about half of the others.
     for ci, (_, start) in enumerate(chapters):
         end = chapters[ci + 1][1] if ci + 1 < len(chapters) else n_pages
-        if rng.random() < 0.5:
+        if ci in (chapter_of[sp], chapter_of[sq]) or rng.random() < 0.5:
             for bear in BEARS:
                 put(rng.randrange(start, end), bear)
-    return Register(pages, chapters, first_page_no).index()
+    reg = Register(pages, chapters, first_page_no).index()
+    reg.planned = (sp, sq)
+    return reg
 
 
 # Page clues early: late in the order, the survivors sit only on the suspects' pages
 # and a page clue would have nothing left to eliminate.
-SAMPLE_CLUES = ["near_wolf", "odd_consonants", "even_page", "between_hansel_gretel", "ends_consonant",
-                "king_and_queen", "double_letter", "first_half", "key_letter"]
-BOOK_CLUES = ["odd_consonants", "near_wolf", "even_page", "ends_consonant", "three_bears", "double_letter",
+SAMPLE_CLUES = ["king_and_queen", "odd_consonants", "near_wolf", "ends_consonant", "odd_page",
+                "double_letter", "between_hansel_gretel", "first_half", "key_letter"]
+BOOK_CLUES = ["odd_consonants", "near_wolf", "odd_page", "ends_consonant", "three_bears", "double_letter",
               "between_hansel_gretel", "near_queen", "first_half", "king_and_queen", "even_vowels",
               "last_two_rising", "key_letter"]
 FIXABLE_PAGE_CLUES = {"king_and_queen", "even_page"}
@@ -132,72 +180,80 @@ def generate(seed=1, n_pages=12, per_page=(150, 175), n_chapters=3,
 
     reg = build_register(rng, n_pages, per_page, n_chapters, first_page_no, density)
 
-    # 1. Pick two suspect pages in different chapters where the structural clues
-    #    (Wolf, Hansel and Gretel, bears) already hold, then make the page-level
-    #    facts true on them: a King and a Queen present, an even name count.
+    # 1. The register planned the two suspect pages and put the landmarks around them.
+    #    Make the remaining page facts true there (a King and a Queen present, an even
+    #    name count). Everything about the suspects must hold under every reading.
     place_clues = [c for c in clues if c.kind == "place"]
-    structural = [c for c in place_clues if c.key not in FIXABLE_PAGE_CLUES | {"key_letter", "near_queen"}]
-    pages = [p for p in range(len(reg.pages)) if all(c.test(reg, reg.page_start[p] + 1) for c in structural)]
-    rng.shuffle(pages)
-    page_pair = next(((p, q) for p in pages for q in pages
-                      if reg.chapter_of_page[p] != reg.chapter_of_page[q]), None)
-    if not page_pair:
-        raise GenerationError("no two pages in different chapters satisfy the structural clues")
+    page_pair = reg.planned
     _fix_pages(reg, rng, {c.key for c in clues}, page_pair)
 
     # Places on those pages where every place clue holds, not a landmark, not first on its page.
     def places(p):
         out = [i for i in range(reg.page_start[p] + 1, reg.page_start[p] + len(reg.pages[p]))
                if reg.flat[i] not in UNIQUE_ANCHORS and words(reg.flat[i])[0] not in ("Queen", "King")
-               and all(c.test(reg, i) for c in place_clues if c.key != "key_letter")]
+               and _holds_everywhere(reg, i, [c for c in place_clues if c.key != "key_letter"])]
         return rng.choice(out) if out else None
     pair = tuple(places(p) for p in page_pair)
     if None in pair:
         raise GenerationError("no place on a suspect page satisfies the place clues")
 
     # 2. Name the suspects so they pass every clue, with different lengths for the final deduction.
+    #    Suspects never carry a title, so the answer reads the same however titles are counted.
     for n, idx in enumerate(pair):
         for _ in range(20000):
             name = random_name(rng)
-            if not _word_passes(name, word_clues):
+            if words(name)[0] in PERSON_TITLES:
+                continue
+            if not all(_word_passes(name, word_clues, r) for r in READINGS):
                 continue
             if n == 1 and len(letters(name)) == len(letters(reg.flat[pair[0]])):
                 continue
             p = reg.page_of[idx]
             reg.pages[p][idx - reg.page_start[p]] = name
             reg.index()
-            if all(c.test(reg, idx) for c in clues):
+            if _holds_everywhere(reg, idx, clues):
                 break
         else:
             raise GenerationError("could not name a suspect")
     suspect_names = [reg.flat[i] for i in pair]
 
-    # 3. Rename every other survivor until only the suspects remain.
+    # 3. Rename every other survivor, under any reading, until only the suspects remain.
     for _ in range(max_rounds):
         reg.index()
-        alive, counts = solve(reg, clues)
-        extra = [i for i in alive if i not in pair]
-        if not all(i in alive for i in pair) or [reg.flat[i] for i in pair] != suspect_names:
+        by_reading = solve_all_readings(reg, clues)
+        extra = sorted({i for alive in by_reading.values() for i in alive} - set(pair))
+        if (not all(i in alive for alive in by_reading.values() for i in pair)
+                or [reg.flat[i] for i in pair] != suspect_names):
             raise GenerationError("a repair broke a suspect")
         if not extra:
             break
         for i in extra:
             text = reg.flat[i]
+            p = reg.page_of[i]
+            if text in CHARACTERS:           # a cameo: swap in another character that fails a word clue
+                options = [c for c in CHARACTERS if c != text and _word_fails_everywhere(c, word_clues)]
+                if not options:
+                    raise GenerationError("no character fails the word clues")
+                reg.pages[p][i - reg.page_start[p]] = rng.choice(options)
+                continue
             if text in UNIQUE_ANCHORS:
                 raise GenerationError("a landmark character survived: %s" % text)
             head = words(text)[0]
+            opening = i == reg.page_start[p]
             for _ in range(2000):
                 new = (head + " " + first_for(rng, head)) if head in ("Queen", "King") else random_name(rng)
-                if not _word_passes(new, word_clues):
+                if opening and _key_initial(new) != _key_initial(text):
+                    continue                 # the opening name sets the page's key letter: keep it
+                if _word_fails_everywhere(new, word_clues):
                     break
-            p = reg.page_of[i]
             reg.pages[p][i - reg.page_start[p]] = new
     else:
         raise GenerationError("did not converge")
 
     reg.index()
+    for k, alive in solve_all_readings(reg, clues).items():
+        assert sorted(alive) == sorted(pair), (READINGS[k], alive, pair)
     alive, counts = solve(reg, clues)
-    assert sorted(alive) == sorted(pair), (alive, pair)
     # Every clue must do real work: remove at least min_cut of what is left before it.
     before = len(reg.flat)
     for c, after in zip(clues, counts):

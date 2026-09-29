@@ -125,6 +125,22 @@ def cmd_layers(args):
         print("  " + ", ".join(items))
 
 
+def cmd_reviews(args):
+    conn, _, _ = _ctx(args)
+    rows = db.reviews(conn, args.store, args.asins, args.max_stars)
+    if not rows:
+        print("No reviews captured yet. Use 'Capture reviews' in the KDP Capture panel.")
+        return
+    current = None
+    for r in rows:
+        if r["asin"] != current:
+            current = r["asin"]
+            print("\n== %s  %s" % (r["asin"], (r["book_title"] or "")[:80]))
+        stars = "%g" % r["stars"] if r["stars"] is not None else "?"
+        print("\n[%s stars%s] %s" % (stars, ", verified" if r["verified"] else "", r["title"] or ""))
+        print("   " + (r["body"] or "").replace("\n", " "))
+
+
 def build_parser():
     p = argparse.ArgumentParser(prog="kdp", description=__doc__)
     p.add_argument("--data", default=DEFAULT_DATA, help="data folder (default %(default)s, env KDP_DATA)")
@@ -167,6 +183,11 @@ def build_parser():
     s.add_argument("asin")
     s.add_argument("relation", choices=["direct", "non_direct", "unrelated"])
     s.set_defaults(fn=cmd_mark)
+
+    s = sub.add_parser("reviews", help="read captured reviews (complaints first)")
+    s.add_argument("asins", nargs="*")
+    s.add_argument("--max-stars", type=float, default=5, help="only reviews with at most this many stars")
+    s.set_defaults(fn=cmd_reviews)
 
     sub.add_parser("report", help="write a markdown shortlist to <data>/reports").set_defaults(fn=cmd_report)
     sub.add_parser("layers", help="list the layer library").set_defaults(fn=cmd_layers)

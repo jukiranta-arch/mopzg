@@ -33,7 +33,7 @@ Day Dean Denton Dixon Doyle Drake Drew Duffy Dunn Eaton Elder Ellis Emery Evans 
 Finch Fisher Fleming Fletcher Flint Ford Forrest Foster Fox Frost Fuller Gale Gardner Garland Gibbs
 Glass Glover Goode Gould Grant Gray Green Grove Hale Hall Hardy Harlow Harper Hart Hawkes Hayes Heath
 Hill Hobbs Holland Holt Hood Hope Horne Hughes Hunt Hurst Ivory Jarvis Jenkins Keane Kemp Kent Kerr
-King Knight Lake Lamb Lane Lark Lawson Lea Lister Lock Long Lowe Lucas Lyle Mace Mann Marsh Mason May
+Knight Lake Lamb Lane Lark Lawson Lea Lister Lock Long Lowe Lucas Lyle Mace Mann Marsh Mason May
 Mercer Miles Miller Moon Moore Morrow Moss Nash Nightingale Noble North Norton Oakes Orchard Page
 Palmer Parker Parr Payne Pearce Penn Perry Pike Pine Platt Pond Poole Potter Price Quill Quinn Rain
 Ray Reed Rhodes Rich Ridley Rivers Robin Rook Rose Ross Rowe Rush Russell Sage Salter Sands Saxon
@@ -50,7 +50,7 @@ CHARACTERS = """Cinderella|Snow White|Rose Red|Rapunzel|Rumpelstiltskin|Little R
 Tom Thumb|Thumbelina|Puss in Boots|Bluebeard|Briar Rose|Fairy Godmother|Evil Queen|Old King Cole|
 Little Bo Peep|Little Boy Blue|Jack Sprat|Mother Hubbard|Mother Goose|Humpty Dumpty|Georgie Porgie|
 Simple Simon|Wee Willie Winkie|Jack Horner|Mistress Mary|Tom Tom|Peter Piper|Lucy Locket|Kitty Fisher|
-Jack Frost|Mother Holle|Clever Gretel|Faithful John|Iron John|Ali Baba|Aladdin|Sinbad|Scheherazade|
+Jack Frost|Mother Holle|Faithful John|Iron John|Ali Baba|Aladdin|Sinbad|Scheherazade|
 Snow Queen|Ugly Duckling|Steadfast Tin Soldier|Emperor|Little Match Girl|Twelve Huntsmen|Goose Girl|
 Brave Tailor|Pied Piper|Beauty|Beast|Huntsman|Woodcutter|Miller|Miller's Daughter|Frog King|
 Golden Goose|Hans in Luck|Lazy Jack|Jack the Giant Killer|Giant|Ogre|Troll|Tooth Fairy|Sandman""".replace("\n", "").split("|")

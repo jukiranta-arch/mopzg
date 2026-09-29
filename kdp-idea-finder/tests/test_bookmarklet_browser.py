@@ -101,6 +101,41 @@ SUGGESTIONS = {
 }
 
 
+def review(rid, stars, title, body, hook="review-star-rating", verified=True):
+    return ('<li id="%s" data-hook="review" class="review aok-relative">'
+            '<div class="a-profile-content"><span class="a-profile-name">Reader</span></div>'
+            '<a data-hook="review-title" class="review-title" href="#"><i data-hook="%s" '
+            'class="a-icon a-icon-star a-star-%d review-rating"><span class="a-icon-alt">%d.0 out of 5 stars</span></i>'
+            '<span class="a-letter-space"></span><span>%s</span></a>'
+            '<span data-hook="review-date">Reviewed in the United States on September 1, 2026</span>%s'
+            '<span data-hook="review-body" class="review-text"><span>%s</span></span>'
+            '<span data-hook="helpful-vote-statement">12 people found this helpful</span></li>'
+            % (rid, hook, stars, stars, title, '<span data-hook="avp-badge">Verified Purchase</span>' if verified else "",
+               body))
+
+
+R1 = review("R1CRIT", 2, "Two names left at the end", "I followed every clue and was left with two names. Clue 7 is ambiguous.")
+R2 = review("R2CRIT", 1, "Print too small", "The font is tiny and the names run together.", verified=False)
+R3 = review("R3CRIT", 3, "Fun but no story", "The ending was a let-down.")
+R4 = review("R4POS", 5, "Addictive", "Took me three weeks with highlighters. Loved it.")
+P1 = review("P1PAGE", 4, "Great gift", "Bought it for my mum.", hook="cmps-review-star-rating")
+PRODUCT_REVIEWS = {"B0AAAAAAA1": P1 + R1, "B0AAAAAAA2": P1.replace("P1PAGE", "P2PAGE")}
+
+
+def review_page(asin, star, page):
+    if asin != "B0AAAAAAA1":
+        return ("<!doctype html><html><body><form name='signIn'><input id='ap_email'></form>"
+                "Sign in</body></html>")
+    if star == "critical":
+        items = [R1, R2] if page == 1 else [R3]
+    else:
+        items = [R4]
+    nxt = ('<li class="a-last"><a href="?pageNumber=%d">Next page</a></li>' % (page + 1) if star == "critical"
+           and page == 1 else '<li class="a-disabled a-last">Next page</li>')
+    return ("<!doctype html><html><body><div id='cm_cr-review_list'><ul>%s</ul></div>"
+            "<ul class='a-pagination'>%s</ul></body></html>" % ("".join(items), nxt))
+
+
 CAPTCHA = ("<!doctype html><html><body><form action='/errors/validateCaptcha'>"
            "Enter the characters you see below</form></body></html>")
 
@@ -142,6 +177,11 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_error(404)
                 return
             body = PRODUCT.format(title=b[0], rank=b[1], reviews=b[2], price=b[3], publisher=b[4], pages=b[5])
+            body = body.replace("</body>", PRODUCT_REVIEWS.get(path.split("/")[2], "") + "</body>")
+        elif path.startswith("/product-reviews/"):
+            q = parse_qs(url.query)
+            body = review_page(path.split("/")[2], q.get("filterByStar", ["critical"])[0],
+                               int(q.get("pageNumber", ["1"])[0]))
         elif path.startswith("/gp/bestsellers"):
             body = list_page()
         else:
@@ -234,7 +274,7 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertIn("captcha", first["status"])
         self.assertEqual(first["state"]["remaining"], ["gift for women"])
         # Clicking KDP Capture again offers to continue; continuing adds the rest.
-        self.assertIn("1 searches left", result["resumeText"])
+        self.assertIn("1 left from your last run", result["resumeText"])
         second = result["second"]
         self.assertEqual(second["downloads"], [])
         self.assertEqual([c["keyword"] for c in second["kept"]["captures"]], ["gift for nurses", "gift for women"])
@@ -268,6 +308,44 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(cap["type"], "product")
         p = importer.parse_product(cap["product"])
         self.assertEqual((p["asin"], p["bsr"], p["pub_date"]), ("B0AAAAAAA3", 150321, "2026-08-20"))
+
+    def test_review_page_capture(self):
+        cap = self.capture("/product-reviews/B0AAAAAAA1/?filterByStar=critical")
+        self.assertEqual((cap["type"], cap["asin"]), ("reviews", "B0AAAAAAA1"))
+        self.assertFalse(cap.get("signed_out"))
+        by_id = {r["id"]: r for r in cap["reviews"]}
+        self.assertEqual(sorted(by_id), ["P1PAGE", "R1CRIT", "R2CRIT", "R3CRIT", "R4POS"])   # R1 twice, kept once
+        self.assertEqual(by_id["R1CRIT"]["source"], "product page")
+        self.assertEqual(by_id["R3CRIT"]["source"], "critical")                  # followed the Next link
+        self.assertEqual(by_id["R4POS"]["source"], "positive")
+        self.assertEqual(by_id["R2CRIT"]["stars"], 1)
+        self.assertEqual(by_id["P1PAGE"]["stars"], 4)                              # newer star markup
+        self.assertEqual(by_id["R2CRIT"]["title"], "Print too small")              # no star text in the title
+        self.assertFalse(by_id["R2CRIT"]["verified"])
+        self.assertTrue(by_id["R1CRIT"]["verified"])
+        self.assertIn("Clue 7 is ambiguous", by_id["R1CRIT"]["body"])
+        ctx = Ctx()
+        importer.import_capture(ctx.conn, cap)
+        importer.import_capture(ctx.conn, cap)                                     # importing twice adds nothing
+        from kdpfinder import db
+        rows = db.reviews(ctx.conn, "amazon.com", max_stars=3)
+        self.assertEqual([r["review_key"] for r in rows], ["R2CRIT", "R1CRIT", "R3CRIT"])
+        self.assertEqual(rows[0]["book_title"], BOOKS["B0AAAAAAA1"][0])
+
+    def test_autopilot_captures_reviews_and_reports_signed_out(self):
+        env = dict(os.environ, NODE_PATH=NODE_MODULES)
+        out = subprocess.run(["node", os.path.join(HERE, "browser", "run_reviews.js"), self.base, CAPTURE_JS,
+                              "https://www.amazon.com/Some-Book/dp/B0AAAAAAA1/ref=sr_1_1\nB0AAAAAAA2 and B0AAAAAAA1"],
+                             capture_output=True, text=True, env=env, timeout=90)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        result = json.loads(out.stdout)
+        caps = result["kept"]["captures"]
+        self.assertEqual([c["asin"] for c in caps], ["B0AAAAAAA1", "B0AAAAAAA2"])   # links and ASINs, deduped
+        self.assertEqual(len(caps[0]["reviews"]), 5)
+        self.assertTrue(caps[1]["signed_out"])
+        self.assertEqual([r["id"] for r in caps[1]["reviews"]], ["P2PAGE"])         # book-page reviews still kept
+        self.assertEqual(len(result["dialogs"]), 1)                                  # told once about signing in
+        self.assertIn("reviews of 2 books", result["saved"])
 
     def test_list_capture(self):
         cap = self.capture("/gp/bestsellers/books/1234")

@@ -3,7 +3,7 @@ import tempfile
 import unittest
 
 from whodunit.generate import build_register, generate_any, random_name
-from whodunit.model import Register, catalogue, letters, solve, words
+from whodunit.model import PERSON_TITLES, READINGS, Register, catalogue, letters, solve, words
 from whodunit.names import FEMALE, FEMALE_TITLES, MALE, MALE_TITLES
 
 import random
@@ -23,7 +23,8 @@ class ClueTests(unittest.TestCase):
     def test_word_clues(self):
         self.check("odd_consonants", "Lucy", True)          # L, C, Y: Y is a consonant
         self.check("odd_consonants", "Ada", True)
-        self.check("odd_consonants", "Mrs Ada", False)      # title letters count: M, R, S, D
+        self.check("odd_consonants", "Mrs Ada", True)       # titles don't count: checked as Ada
+        self.check("first_half", "Lady Nell", False)        # begins with N once the title is dropped
         self.check("even_vowels", "Tim", False)
         self.check("even_vowels", "Lynn", True)             # no vowels counts as even
         self.check("ends_consonant", "Mrs O'Neil", True)    # apostrophe ignored
@@ -48,6 +49,14 @@ class ClueTests(unittest.TestCase):
         r = reg_of(["Ann"], ["Hansel"], ["Bo"], ["Cy"], ["Gretel"], ["Di"])
         between = cat["between_hansel_gretel"]
         self.assertEqual([between.test(r, i) for i in range(6)], [False, False, True, True, False, False])
+        r = reg_of(["Ann", "Robin King", "Evil Queen"], ["Bo", "Cy"])
+        self.assertTrue(cat["king_and_queen"].test(r, 0))   # any name with the word King / Queen in it
+        self.assertFalse(cat["king_and_queen"].test(r, 3))
+        r.set_reading({"titled_only": True})
+        self.assertFalse(cat["king_and_queen"].test(r, 0))  # the misreading the generator also checks
+        r.set_reading({})
+        r = reg_of(["Ann"], ["Bo"], ["Cy"])
+        self.assertEqual([cat["odd_page"].test(r, i) for i in range(3)], [True, False, True])
         r = reg_of(["Mr Kite", "Zoe Kane", "Zoe"])
         self.assertTrue(cat["key_letter"].test(r, 1))       # key letter K: the title Mr is skipped
         self.assertFalse(cat["key_letter"].test(r, 2))
@@ -61,8 +70,12 @@ class ClueTests(unittest.TestCase):
 class GeneratorTests(unittest.TestCase):
     def test_puzzle_has_exactly_two_suspects(self):
         reg, clues, sol = generate_any(range(1, 200), n_pages=10, per_page=(200, 225), n_chapters=3)
+        for reading in READINGS:                             # the same answer whatever slip a solver makes
+            self.assertEqual(len(solve(reg, clues, reading)[0]), 2, reading)
         alive, counts = solve(reg, clues)
         self.assertEqual(len(alive), 2)
+        for s in sol["suspects"]:
+            self.assertNotIn(words(s["name"])[0], PERSON_TITLES)
         self.assertEqual(sorted(reg.flat[i] for i in alive), sorted(s["name"] for s in sol["suspects"]))
         self.assertEqual({s["chapter"] for s in sol["suspects"]}.__len__(), 2)
         a, b = (len(letters(s["name"])) for s in sol["suspects"])
@@ -105,6 +118,11 @@ class RenderTests(unittest.TestCase):
             path = os.path.join(d, "s.pdf")
             n = render(reg, clues, sol, path)
             self.assertTrue(os.path.getsize(path) > 10000)
+            with open(path, "rb") as fh:
+                pdf = fh.read()
+            self.assertIn(b"/FontFile2", pdf)                    # fonts embedded, as KDP requires
+            for base14 in (b"/Helvetica", b"/Times-Roman", b"/Times-Bold"):
+                self.assertNotIn(base14, pdf)
             self.assertGreater(n, 10)
 
 

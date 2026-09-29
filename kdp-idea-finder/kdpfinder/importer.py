@@ -140,7 +140,7 @@ def import_capture(conn, capture):
             results.append(import_capture(conn, {"tool": "kdp-capture", "type": "suggestions", "store": store,
                                                  "captured_at": capture.get("captured_at"),
                                                  "rows": capture["suggestions"]}))
-        return "batch of %d searches:\n    " % len(capture.get("captures", [])) + "\n    ".join(results)
+        return "batch of %d captures:\n    " % len(capture.get("captures", [])) + "\n    ".join(results)
 
     if kind == "suggestions":
         rows = capture.get("rows", [])
@@ -198,6 +198,24 @@ def import_capture(conn, capture):
                                                item.get("title"), parse_int(item.get("reviews"))))
             _upsert_book(conn, store, {"asin": item["asin"], "title": item.get("title")})
         return "list '%s' on %s: %d books" % (info.get("name"), store, len(capture.get("items", [])))
+
+    if kind == "reviews":
+        asin = capture.get("asin")
+        if not asin:
+            raise CaptureError("reviews capture has no asin")
+        if capture.get("product"):
+            _save_product(conn, store, day, capture["product"], "product")
+        else:
+            _upsert_book(conn, store, {"asin": asin})
+        rows = capture.get("reviews", [])
+        for r in rows:
+            key = r.get("id") or hashlib.sha256(((r.get("title") or "") + "|" + (r.get("body") or "")).encode()).hexdigest()[:16]
+            conn.execute("INSERT OR REPLACE INTO reviews (asin, store, review_key, stars, title, body, review_date, "
+                         "verified, helpful, source, taken_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                         (asin, store, key, r.get("stars"), r.get("title"), r.get("body"), r.get("date"),
+                          1 if r.get("verified") else 0, r.get("helpful"), r.get("source"), day))
+        note = " (signed out: product-page reviews only)" if capture.get("signed_out") else ""
+        return "reviews %s: %d%s" % (asin, len(rows), note)
 
     raise CaptureError("unknown capture type %r" % kind)
 

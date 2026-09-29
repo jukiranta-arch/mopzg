@@ -63,6 +63,15 @@ Books on pages 2–3 aren't opened. Amazon's "N+ bought in past month" label, wh
 
 Global options are `--store amazon.co.uk` (or `KDP_STORE`) and `--data DIR` (or `KDP_DATA`).
 
+## Book reviews
+
+To learn what readers of competing books complain about, paste Amazon links or ASINs into the **Book reviews** box of the KDP Capture panel. It reads the reviews on each book page, plus up to 30 critical reviews per book when you're signed in to Amazon. Then read them with:
+
+```bash
+python -m kdpfinder reviews --max-stars 3          # complaints first, all books
+python -m kdpfinder reviews B0GQ2VXKY7             # one book
+```
+
 ## How a niche is scored (0–100)
 
 **Field:** the first 16 organic results of the niche's search. Sponsored results are ignored.
@@ -127,5 +136,7 @@ The browser test runs the real bookmarklet in headless Chromium against mock Ama
 python -m whodunit sample sample.pdf   # 10 register pages, 9 clues: try solving it by hand
 python -m whodunit book book.pdf       # 150 register pages, about 31,500 names, 13 clues
 ```
+
+Every puzzle is also solved under common misreadings of the rules (counting titles, Y as a vowel, off-by-one counts and so on), and is accepted only if every reading leaves the same two suspects. Fonts are embedded, as KDP requires.
 
 Every puzzle is checked by the solver before it's rendered: exactly two survivors, each clue removing at least 3% of the names still left, and different name lengths for the final deduction.
