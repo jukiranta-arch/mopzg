@@ -62,9 +62,14 @@ Based on comparable books, not a guarantee.
 | Average | about 3 a day | $400 a month |
 | Good (performs like *Mr Darcy*) | about 15 a day | $2,000 a month |
 
-Confidence: medium. The format and theme are proven, but only one Regency title shows the theme effect.
+Confidence: medium to high. The format is proven. The theme is proven by one title, now with a two-month sales history that keeps rising.
 
 ## Risks and unknowns
 - The *Mr Darcy* publisher may bring out more Regency titles.
 - Copycat waves hit this format fast, so publish soon and plan the series.
-- Only one day of rank data so far. Check *Mr Darcy*'s rank history for free on Keepa: keepa.com/#!product/1-B0H9PBXJSZ. A steady line confirms the demand; one early spike would weaken it.
+- ~~Only one day of rank data.~~ **Checked 2026-09-29** in the BookBeam rank history for *Mr Darcy*, published 2026-07-19:
+  - **August:** first ranked around 40,000, then swung between 20,000 and 60,000.
+  - **Late August:** climbed to 12,000–20,000.
+  - **Since 10 September:** a steady climb to 5,000–7,000, now 5,702.
+  - **Price:** raised from $12 to $13 in early August without hurting the climb, then returned to $11.99.
+  - **Reading:** sales have grown steadily for two months on 6 reviews. That points to buyers finding it through search, not a launch spike, so the demand is real and still growing.
