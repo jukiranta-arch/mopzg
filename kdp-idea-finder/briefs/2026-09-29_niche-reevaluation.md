@@ -49,3 +49,34 @@ Newcomer share of sales by search:
 1. **A classic puzzle type not yet made into a murder mystery**, with connected cases and a story (the *Kill Grid* model). This plays to our strength: puzzles generated and verified by code, story written by Claude. Needs searches to find which combinations are untaken but in demand.
 2. **Gift-occasion puzzle and activity books** (surgery recovery and similar). Needs searches for demand and competition.
 3. **A seasonal murder-mystery advent calendar:** proven (two in the list), but it would need to publish by mid-October.
+
+## 4. Validation searches (2026-09-29, second batch)
+
+**A classic puzzle type as a murder mystery.** For each search: how many books already do exactly this, and how the best of them sells.
+
+| Combination | Books already doing it | Best seller among them | Verdict |
+|---|---|---|---|
+| sudoku / logic grid | 39 | *Murdoku* BSR **8** (1,650/day), Vol. 2 BSR 49; clones 1–3/day | owned by one series; clones fail |
+| cryptograms | 33 | *Murdagrams* 1.3/day; the rest under 1/day | tried and failed |
+| crosswords | 8 | the few direct ones don't sell (*Double Cross* BSR 1.5M) | no proof of demand |
+| advent calendar | 45 | 11/day | crowded and seasonal |
+| nonograms | 5 | *Murdograms* 15/day at 41 days, 5 reviews; 4 copies already | one winner, copies arriving fast |
+| mazes, spot the difference, hidden object, fill-ins | 0–6, none selling | – | no demand signal |
+
+**Conclusion:** most combinations are either owned by one book (*Murdoku*) or have been tried without success (cryptograms, crosswords). The winners' originality came first; copying the formula now puts us in a queue.
+
+**Surgery-recovery activity books** (a gift for someone after an operation):
+
+| Book | Sales/day | Age | Reviews |
+|---|---|---|---|
+| Surgery Recovery Activity Book, Be Still Not Stuck | 14.2 | 242 d | 133 |
+| Surgery Recovery Activity Book for Women | 14.0 | 132 d | 137 |
+| … for Unstoppable Men | 13.3 | 188 d | 111 |
+| The Hysterical Hysterectomy Recovery Activity Book | 9.1 | **91 d** | 61 |
+| The Surgery Recovery Activity Book — Finally, a Reason… | 8.5 | **44 d** | 130 |
+| It's Not Me, It's My Uterus (hysterectomy) | 8.4 | 299 d | 172 |
+| Knee-d a Laugh (knee surgery) | 5.7 | **52 d** | 25 |
+
+Proven, evergreen demand (people have operations all year). Newcomers win quickly, especially when the book is **specific to one operation** (hysterectomy, knee) and funny. Each operation is its own small niche, which allows a series.
+
+**Sudoku with tracing:** *Pocket Sudoku & Aesthetic Ink Tracing* sells 63/day at 57 days, but 3 copies appeared within the last 10 days, and the format needs illustrations.
