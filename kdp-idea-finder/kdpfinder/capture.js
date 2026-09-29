@@ -106,36 +106,51 @@
   }
 
   /* ---------- reviews (product page or review list page) ---------- */
+  /* Amazon has used two sets of names for the parts of a review (review-title / review-body,
+   * and since 2026 reviewTitle / reviewText); both are read. */
+  var R_STARS = '[data-hook="review-star-rating"], [data-hook="cmps-review-star-rating"]';
+  var R_TITLE = '[data-hook="review-title"], [data-hook="reviewTitle"]';
+  var R_BODY = '[data-hook="review-body"], [data-hook="reviewText"]';
   function parseReviews(doc) {
-    var out = [];
+    var out = [], seen = [];
     Array.prototype.forEach.call(doc.querySelectorAll('[data-hook="review"]'), function (r) {
-      var starEl = r.querySelector('[data-hook="review-star-rating"], [data-hook="cmps-review-star-rating"]');
+      var box = r.closest('[data-hook="reviewContainer"]') || r;
+      if (box !== r && !box.contains(r)) { box = r; }
+      if (seen.indexOf(box) >= 0) { return; }
+      seen.push(box);
+      function find(sel) { return r.querySelector(sel) || box.querySelector(sel); }
+      var starEl = find(R_STARS);
       var m = starEl ? text(starEl).match(/(\d(?:[.,]\d)?)/) : null;
       var stars = m ? parseFloat(m[1].replace(',', '.')) : null;
       if (stars === null && starEl) {
         var c = (starEl.className || '').match(/a-star-(\d)/);
         if (c) { stars = parseInt(c[1], 10); }
       }
-      var titleEl = r.querySelector('[data-hook="review-title"]');
+      var titleEl = find(R_TITLE);
       var title = '';
       if (titleEl) {
         var copy = titleEl.cloneNode(true);
-        Array.prototype.forEach.call(copy.querySelectorAll('[data-hook="review-star-rating"], .a-icon-alt, i'),
+        Array.prototype.forEach.call(copy.querySelectorAll(R_STARS + ', .a-icon-alt, i'),
           function (x) { x.remove(); });
-        title = text(copy);
+        title = text(copy).replace(/^\d(?:[.,]\d)? out of 5 stars\s*/i, '');
       }
-      var bodyEl = r.querySelector('[data-hook="review-body"]');
+      var bodyEl = find(R_BODY);
       var body = bodyEl ? text(bodyEl).replace(/\s*Read more\s*$/i, '') : '';
       if (!title && !body) { return; }
+      var all = text(box);
+      var helpful = txt(box, '[data-hook="helpful-vote-statement"]') ||
+        ((all.match(/(?:\d[\d,]*|One) (?:people|person) found this helpful/i) || [''])[0]);
       out.push({
-        id: r.id || '', stars: stars, title: title, body: body,
-        date: txt(r, '[data-hook="review-date"]'),
-        verified: !!r.querySelector('[data-hook="avp-badge"], [data-hook="avp-badge-linkless"]'),
-        helpful: txt(r, '[data-hook="helpful-vote-statement"]')
+        id: r.id || box.id || '', stars: stars, title: title, body: body,
+        date: clean((find('[data-hook="review-date"]') || {}).textContent || ''),
+        verified: !!box.querySelector('[data-hook="avp-badge"], [data-hook="avp-badge-linkless"]') ||
+          /Verified Purchase/i.test(all),
+        helpful: helpful
       });
     });
     return out;
   }
+
 
   /* ---------- product page ---------- */
   function parseProduct(doc, asin) {
@@ -464,25 +479,37 @@
     return out;
   }
 
-  /* The star breakdown ("5 star 80%") and Amazon's "Customers say" summary, when present. */
+  /* The star breakdown ("5 star 80%") and Amazon's "Customers say" summary, when present.
+   * Rows are read one at a time (aria-label first, then the row's text), never a whole table. */
   function pageExtras(doc) {
     var out = {};
     var hist = {};
-    Array.prototype.forEach.call(doc.querySelectorAll('[id*="histogram"], [class*="histogram"]'), function (el) {
-      var t = text(el), m, re = /([1-5])\s*stars?\D{0,20}?(\d{1,3})\s*%/g;
-      while ((m = re.exec(t))) { hist[m[1]] = parseInt(m[2], 10); }
+    Array.prototype.forEach.call(doc.querySelectorAll('[aria-label]'), function (el) {
+      var m = (el.getAttribute('aria-label') || '').match(/(\d{1,3})\s*percent of reviews have ([1-5]) stars?/i);
+      if (m) { hist[m[2]] = parseInt(m[1], 10); }
     });
+    if (!Object.keys(hist).length) {
+      Array.prototype.forEach.call(doc.querySelectorAll('[id*="histogram"] li, [id*="histogram"] tr, ' +
+        '[class*="histogram"] li, [class*="histogram"] tr'), function (row) {
+        var m = text(row).match(/^\s*([1-5])\s*stars?\D{0,20}?(\d{1,3})\s*%/i);
+        if (m && !(m[1] in hist)) { hist[m[1]] = parseInt(m[2], 10); }
+      });
+    }
     if (Object.keys(hist).length) { out.histogram = hist; }
+    var histEl = doc.querySelector('[id*="histogram"], [class*="histogram"]');
+    if (histEl) { out.histogram_text = text(histEl).slice(0, 300); }    /* to check the parsing */
     var heads = doc.querySelectorAll('h2, h3, h4, span');
     for (var i = 0; i < heads.length; i++) {
       if (clean(heads[i].textContent) === 'Customers say') {
         var box = heads[i].parentElement && heads[i].parentElement.parentElement;
-        if (box) { out.customers_say = text(box).slice(0, 2000); }
+        if (box) { out.customers_say = text(box).replace(/^\s*Customers say\s*/, '').slice(0, 2000); }
         break;
       }
     }
     return out;
   }
+
+  var listsWalled = false;    /* set once this run finds the review lists behind a sign-in */
 
   /* Reviews of one book: those on its product page, then up to REVIEW_PAGES pages of
    * critical reviews and one page of top positive ones. If a filtered page is walled off,
@@ -549,6 +576,11 @@
       Object.assign(cap, shown.extras || {});
     }
     var results = [];
+    if (listsWalled && !startPage) {    /* already known this run: the review lists need a sign-in */
+      cap.signed_out = true;
+      cap.books_read = 1;
+      return cap;
+    }
     if (startPage) {
       results.push(await readList(startPage, 'this page', REVIEW_PAGES + 2));
     }
@@ -564,7 +596,10 @@
     } else {
       results.push(await readFrom(base + '&filterByStar=positive&pageNumber=1', 'positive', 1));
     }
-    if (results.indexOf('ok') < 0 && results.indexOf('walled') >= 0) { cap.signed_out = true; }
+    if (results.indexOf('ok') < 0 && results.indexOf('walled') >= 0) {
+      cap.signed_out = true;
+      listsWalled = results.every(function (r) { return r === 'walled'; });
+    }
     cap.books_read = 1;
     return cap;
 
@@ -745,11 +780,10 @@
         var cap = /^reviews:/.test(terms[i])
           ? await captureReviews(terms[i].slice(8), say_)
           : await captureSearch(terms[i], null, searchUrl(terms[i]), books, say_);
-        if (cap.signed_out && !signedOutWarned) {
+        if (cap.signed_out && !cap.reviews.length && !signedOutWarned) {
           signedOutWarned = true;
-          alert('Amazon showed a sign-in page instead of the review lists, so this run keeps only the reviews ' +
-            'on each book page. It carries on with the other books. Tip: if you can open a book\'s reviews ' +
-            'yourself (See more reviews), click KDP Capture on that page: it reads what is on your screen.');
+          alert('No reviews found on the page of ' + terms[i].slice(8) + ', and Amazon asks for a sign-in to see ' +
+            'its review lists. It carries on with the other books.');
         }
         if (cap.blocked) {
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */

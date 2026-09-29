@@ -126,14 +126,33 @@ R3 = review("R3CRIT", 3, "Fun but no story", "The ending was a let-down.")
 R4 = review("R4POS", 5, "Addictive", "Took me three weeks with highlighters. Loved it.")
 P1 = review("P1PAGE", 4, "Great gift", "Bought it for my mum.", hook="cmps-review-star-rating")
 R5 = review("R5PLAIN", 2, "Too hard", "Gave up after clue 9.")
+
+
+def review_2026(rid, stars, title, body, helpful="11 people found this helpful"):
+    """The markup amazon.co.uk served in September 2026: reviewTitle / reviewText, badges as text."""
+    return ('<div data-hook="reviewContainer" id="%s"><div data-hook="review">'
+            '<span data-hook="review-star-rating"><span class="a-icon-alt">%d.0 out of 5 stars</span></span>'
+            '<span data-hook="reviewTitle"><span>%s</span></span>'
+            '<span data-hook="review-date">Reviewed in the United Kingdom on 28 June 2026</span>'
+            '<span data-hook="review-badges"><span>Verified Purchase</span></span>'
+            '<div data-hook="reviewTextContainer"><span data-hook="reviewText"><span>%s</span></span></div>'
+            '<span>%s</span><a>Report</a></div></div>'
+            % (rid, stars, title, body, helpful))
+
+
+HISTOGRAM = ('<ul id="histogramTable">' + "".join(
+    '<li><a aria-label="%d percent of reviews have %d stars" href="#"><span>%d star</span><span>%d%%</span></a></li>'
+    % (pct, n, n, pct) for n, pct in ((5, 80), (4, 8), (3, 5), (2, 1), (1, 6))) + "</ul>")
 PRODUCT_REVIEWS = {
     "B0AAAAAAA1": P1 + R1,
     # Added by a script after the page loads, as some Amazon pages do; a fetched copy has none.
     "B0AAAAAAA2": ("<div id='reviewsMedley'></div><script>setTimeout(function () {"
                   "document.getElementById('reviewsMedley').innerHTML = %s;}, 150);</script>"
-                  "<div id='histogramTable'>5 star 80% 4 star 8% 3 star 5% 2 star 1% 1 star 6%</div>"
+                  + HISTOGRAM +
                   "<div><div><h3>Customers say</h3><p>Customers find it addictive but mention the number of names.</p>"
                   "</div></div>").replace("%s", json.dumps(P1.replace("P1PAGE", "P2PAGE"))),
+    "B0AAAAAAA4": (review_2026("RNEW1", 3, "Good, but a bit of a grind", "It does get a bit tedious at times.")
+                   + review_2026("RNEW2", 1, "Clue 7 is wrong", "Two names fit every clue.", helpful="One person found this helpful")),
     "B0AAAAAAA3": '<a data-hook="see-all-reviews-link-foot" '
                   'href="/product-reviews/B0AAAAAAA3/ref=cm_cr_dp_d_show_all_btm?ie=UTF8">See more reviews</a>',
 }
@@ -371,6 +390,19 @@ class BookmarkletBrowserTest(unittest.TestCase):
         walls = [d for d in cap["diagnostics"] if d["sign_in_form"] and not d["reviews_found"]]
         self.assertTrue(walls)                                               # the filtered page was walled
 
+    def test_reviews_in_2026_markup_when_review_lists_need_sign_in(self):
+        cap = self.capture("/product-reviews/B0AAAAAAA4/")
+        self.assertTrue(cap["signed_out"])
+        by_id = {r["id"]: r for r in cap["reviews"]}
+        self.assertEqual(sorted(by_id), ["RNEW1", "RNEW2"])
+        r = by_id["RNEW1"]
+        self.assertEqual((r["stars"], r["title"], r["body"]), (3, "Good, but a bit of a grind",
+                                                               "It does get a bit tedious at times."))
+        self.assertTrue(r["verified"])
+        self.assertEqual(r["helpful"], "11 people found this helpful")
+        self.assertEqual(by_id["RNEW2"]["helpful"], "One person found this helpful")
+        self.assertIn("Reviewed in the United Kingdom", r["date"])
+
     def test_product_page_capture_keeps_its_reviews(self):
         cap = self.capture("/dp/B0AAAAAAA1")
         self.assertEqual([r["id"] for r in cap["product"]["reviews"]], ["P1PAGE", "R1CRIT"])
@@ -395,7 +427,7 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(caps[1]["histogram"], {"5": 80, "4": 8, "3": 5, "2": 1, "1": 6})
         self.assertIn("number of names", caps[1]["customers_say"])
         self.assertIn("book page in frame", [d["what"] for d in caps[1]["diagnostics"]])
-        self.assertEqual(len(result["dialogs"]), 1)                                  # told once about signing in
+        self.assertEqual(result["dialogs"], [])          # the walled book still had book-page reviews: no alert
         self.assertIn("reviews of 3 books", result["saved"])
         ctx = Ctx()
         self.assertIn("not sold on", importer.import_capture(ctx.conn, dict(caps[2], store="amazon.co.uk")))

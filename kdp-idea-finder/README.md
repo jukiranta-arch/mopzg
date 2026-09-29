@@ -65,7 +65,7 @@ Global options are `--store amazon.co.uk` (or `KDP_STORE`) and `--data DIR` (or 
 
 ## Book reviews
 
-To learn what readers of competing books complain about, run KDP Capture on amazon.co.uk (it works in a private tab, no sign-in) and paste Amazon links or ASINs into the **Book reviews** box. For each book it reads the reviews on the book page, plus up to 30 critical reviews and the top positive ones. Books usually have the same ASIN on every Amazon site; one that isn't sold on the site you're using is skipped. Then read them with:
+To learn what readers of competing books complain about, run KDP Capture on amazon.co.uk (it works in a private tab, no sign-in) and paste Amazon links or ASINs into the **Book reviews** box. For each book it reads the reviews shown on the book page (usually 8–13), the star breakdown and Amazon's "Customers say" summary. Amazon's full review lists need a sign-in, so they're skipped when signed out. Books usually have the same ASIN on every Amazon site; one that isn't sold on the site you're using is skipped. Then read them with:
 
 ```bash
 python -m kdpfinder reviews --max-stars 3          # complaints first, all books, every Amazon site
