@@ -7,6 +7,19 @@
 >
 > What sells is a famous victim in the title, plus a world full of names readers recognize, plus a clean mechanic. The Regency angle below is withdrawn. The current lead is a **public-domain fairy-tale world**: *Who Killed Prince Charming?* Alternatives are *Who Killed Ebenezer Scrooge?* (Christmas, needs a mid-October launch) and *Who Killed Sherlock Holmes?* (trademark risk). The rest of this brief (format evidence, package, price, generator plan) still applies.
 
+> **Decision, 2026-09-29: *Who Killed Prince Charming?*** Three fairy-tale searches ("who killed prince charming", "fairy tale murder mystery", "fairy tale puzzle book for adults", 113 results, `captures/inbox/*2026-09-29.json`) found:
+> - **No find-the-killer puzzle book with a fairy-tale theme.** Every "killer" title in those results is a novel.
+> - **Fairy-tale puzzle buyers exist:** *Dark Fairy Tales* coloring is at BSR 11,696 and *Enchanted Fantasy Puzzles* (hidden objects) at BSR 20,800.
+> - **Avoid plain fairy-tale word searches:** 18 of them and almost all have 0 reviews.
+>
+> Generator: `whodunit/` (`python -m whodunit sample|book OUT.pdf`, needs reportlab).
+> - It builds a guest register at the Happily Ever After Ball: ordinary names plus public-domain fairy-tale and nursery characters as landmarks (the Big Bad Wolf, Hansel, Gretel, the three bears, Kings and Queens).
+> - It picks 13 clues and repairs the register until exactly two guests survive. The final deduction (the longer name is the killer) picks between them.
+> - **Book preset:** 31,500 names, 13 clues, about 160 pages in 10 pt print.
+> - **Sample case:** `briefs/samples/who-killed-prince-charming_sample.pdf`. It was checked by reading the names back out of the PDF and solving it with separate code.
+>
+> Execution risk: *Who Killed Count Dracula!* and *Who Killed Mr Danny?* use the same format and flopped. The theme has to be obvious on the cover and in the names, and the puzzle has to be fun to solve.
+
 Captured on amazon.com, 2026-09-28. BSR = Best Sellers Rank on that day. All sales figures are estimates from BSR.
 
 ## In one line

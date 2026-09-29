@@ -118,3 +118,14 @@ python -m unittest discover -s tests
 ```
 
 The browser test runs the real bookmarklet in headless Chromium against mock Amazon pages. It needs Node with Playwright and is skipped otherwise.
+
+## Whodunit puzzle generator
+
+`whodunit/` builds "find the killer" puzzle books like *Who Killed Prince Charming?*: a register of thousands of names, a set of clues that leaves exactly two suspects, and a final deduction that picks the killer. It needs reportlab (`pip install reportlab`).
+
+```bash
+python -m whodunit sample sample.pdf   # 10 register pages, 9 clues: try solving it by hand
+python -m whodunit book book.pdf       # 150 register pages, about 31,500 names, 13 clues
+```
+
+Every puzzle is checked by the solver before it's rendered: exactly two survivors, each clue removing at least 3% of the names still left, and different name lengths for the final deduction.

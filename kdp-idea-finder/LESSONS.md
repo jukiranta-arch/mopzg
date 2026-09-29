@@ -14,6 +14,7 @@ Amazon.com, captures from 2026-09-28 (about 3,600 books, 76 searches). BSR = Bes
 | Executive function workbook for adults | 12 exist and only one sells about 3/day (BSR 41,751). |
 | Christmas murder mystery word search | More than 30 exist; 9 of the top 16 are under 60 days old. |
 | Christmas dot marker book / monochrome Christmas coloring | More than 30 and 16 exist. Most sell under 1/day in September. Check last December on Keepa before deciding. |
+| Fairy-tale word search | 18 exist in "fairy tale puzzle book for adults" and almost all have 0 reviews (2026-09-29). Fairy-tale coloring and hidden-object books do sell: *Dark Fairy Tales*, BSR 11,696. |
 | Picture detective book for ages 5–7 | *Timmi Tobbson Junior* covers it; each book sells about 2–3/day. |
 
 ## Patterns
@@ -30,3 +31,4 @@ Amazon.com, captures from 2026-09-28 (about 3,600 books, 76 searches). BSR = Bes
    - Executive function workbooks for kids and teens: BSR 12,725 and 17,965.
    - Memory activity workbooks for seniors, including a volume 2 at 71 days old and BSR 26,923.
 5. **Seasonal niches have to be judged by last season.** In September, Christmas books look dead. Check their December rank history on Keepa.
+6. **In a proven format, the theme decides.** *Who Killed Mr Darcy?* (a world of famous characters) climbed to BSR 5,700 on 6 reviews. *Who Killed Mr Danny?* (generic) and *Who Killed Count Dracula!* use the same mechanic and don't sell. A theme needs a famous victim and a cast of names readers recognize.
