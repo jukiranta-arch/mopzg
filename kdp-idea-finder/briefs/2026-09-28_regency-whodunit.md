@@ -1,4 +1,11 @@
-# Brief: a Regency "find the killer" murder mystery puzzle book
+# Brief: a "find the killer" murder mystery puzzle book
+
+> **Correction, 2026-09-29.** The Amazon sample of *Who Killed Mr Darcy?* shows it is **not** a Regency or Austen book. It is set at "a film convention of fictional characters and their fans":
+> - The register holds 31,830 names, mixing ordinary names with famous screen characters used under an "unofficial" disclaimer.
+> - Chapter titles are film quotes.
+> - The puzzle has 15 clues, each true of two suspects, and a final deduction at the back.
+>
+> What sells is a famous victim in the title, plus a world full of names readers recognize, plus a clean mechanic. The Regency angle below is withdrawn. The current lead is a **public-domain fairy-tale world**: *Who Killed Prince Charming?* Alternatives are *Who Killed Ebenezer Scrooge?* (Christmas, needs a mid-October launch) and *Who Killed Sherlock Holmes?* (trademark risk). The rest of this brief (format evidence, package, price, generator plan) still applies.
 
 Captured on amazon.com, 2026-09-28. BSR = Best Sellers Rank on that day. All sales figures are estimates from BSR.
 
