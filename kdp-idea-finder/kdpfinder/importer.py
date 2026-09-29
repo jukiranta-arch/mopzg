@@ -126,6 +126,15 @@ def _save_product(conn, store, day, raw, source):
     return b
 
 
+def _save_reviews(conn, store, day, asin, rows, default_source):
+    for r in rows:
+        key = r.get("id") or hashlib.sha256(((r.get("title") or "") + "|" + (r.get("body") or "")).encode()).hexdigest()[:16]
+        conn.execute("INSERT OR REPLACE INTO reviews (asin, store, review_key, stars, title, body, review_date, "
+                     "verified, helpful, source, taken_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                     (asin, store, key, r.get("stars"), r.get("title"), r.get("body"), r.get("date"),
+                      1 if r.get("verified") else 0, r.get("helpful"), r.get("source") or default_source, day))
+
+
 def import_capture(conn, capture):
     """Import one capture dict. Returns a short summary string."""
     if capture.get("tool") != "kdp-capture":
@@ -151,7 +160,9 @@ def import_capture(conn, capture):
 
     if kind == "product":
         b = _save_product(conn, store, day, capture["product"], "product")
-        return "product %s  BSR %s" % (b["asin"], b["bsr"])
+        rows = capture["product"].get("reviews") or []
+        _save_reviews(conn, store, day, b["asin"], rows, "product page")
+        return "product %s  BSR %s%s" % (b["asin"], b["bsr"], "  %d reviews" % len(rows) if rows else "")
 
     if kind == "search":
         keyword = normalize(capture.get("keyword") or "")
@@ -208,12 +219,7 @@ def import_capture(conn, capture):
         else:
             _upsert_book(conn, store, {"asin": asin})
         rows = capture.get("reviews", [])
-        for r in rows:
-            key = r.get("id") or hashlib.sha256(((r.get("title") or "") + "|" + (r.get("body") or "")).encode()).hexdigest()[:16]
-            conn.execute("INSERT OR REPLACE INTO reviews (asin, store, review_key, stars, title, body, review_date, "
-                         "verified, helpful, source, taken_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                         (asin, store, key, r.get("stars"), r.get("title"), r.get("body"), r.get("date"),
-                          1 if r.get("verified") else 0, r.get("helpful"), r.get("source"), day))
+        _save_reviews(conn, store, day, asin, rows, None)
         if capture.get("not_found"):
             return "reviews %s: not sold on %s" % (asin, store)
         note = " (signed out: product-page reviews only)" if capture.get("signed_out") else ""

@@ -43,6 +43,25 @@ A puzzle is accepted only if all of them leave the same two suspects (`whodunit/
 - **The answer is checked online, not printed.** The same goes for *Do No Harm* (Ada Nightingale, 3 volumes): "no printed answer in the book, with answers verified online to avoid accidental spoilers… the complete account of why the murderer did it is revealed exclusively online".
   - *Worth copying:* no spoiler risk, a story reward, and an email list for the next book. For now our sample prints the solution after a Notes buffer page.
 
+**The Killer Isn't Alice on amazon.co.uk** (Century edition, BSR 11, 1,807 ratings; the page as a signed-out visitor sees it, 2026-09-29):
+- **Stars:** 80% 5-star, 8% 4-star, 5% 3-star, 1% 2-star, **6% 1-star**. For a bestseller, that 1-star share points to people who got stuck or felt cheated.
+- **Amazon's "Customers say" summary:** "highly addictive and entertaining… mixed feedback about its clues, with some finding them great while others find them awful… several customers mention getting bogged down in the sheer number of names."
+  - Its topic counts: Engaging 39, Content 37, Difficulty 13, Number of names 8, Clues 7, Plot 6.
+- **"Your interpretation of the clues along the way will affect your progress… If you get to a point where you have multiple pages & names left then your interpretation of the clues is off."** This is exactly what happened in our first sample.
+  - *Our rule:* robustness to misreadings (above).
+- **A Belgian reader: "1 clue is wrong I think, found the killer thanks to an extra hint."** Online hints rescue solvers.
+  - *Worth copying:* a hint page or site.
+- **Praise:**
+  - better focus and "limit screen time";
+  - Easter eggs: "famous names and characters strategically placed together. A great touch!";
+  - good paper: highlighter doesn't bleed through;
+  - "I thought I had it many times, only to find the name didn't meet one criteria! Frustratingly fun".
+- **"A bit of a grind… tedious at times."** Readers who realise the clues can be used in any order, and that some clues clear thousands of names at once, enjoy it more.
+  - *Our rule:* say so on the rules page (done). Consider a "where to start" tip.
+- **Bought together:** *Murdoku*, *The Killer Never Checked In* and **erasable highlighters** (Legami). Buyers use highlighters.
+  - *Paper:* KDP's paper is thinner than a trade publisher's. Test highlighter bleed on a proof copy, and suggest pencils or erasable highlighters in the book.
+- **A crowded, fast-growing lane:** *What If She's Innocent? (47,500 suspects)*, *The Sealed Verdict*, *The Flight Deduction*, *Detective Verdict* and *The Killer Is… Board* all appear in "customers also viewed". A theme that stands out matters even more.
+
 ## Next
 
 Capture Amazon reviews, critical ones first, of the direct competitors. Run KDP Capture on amazon.co.uk in a private tab (no sign-in) and paste these into the **Book reviews** box:

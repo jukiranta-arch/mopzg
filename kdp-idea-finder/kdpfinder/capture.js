@@ -74,9 +74,35 @@
       /Enter the characters you see below|Type the characters you see in this image/i.test(t);
   }
 
-  /* Amazon's full review pages need a signed-in account; signed out they show a sign-in form. */
-  function needsSignIn(doc) {
-    return !!doc.querySelector('form[name="signIn"], #ap_email, #ap_email_login');
+  /* Some Amazon sites show their full review pages only to signed-in visitors. A page counts
+   * as a sign-in wall only when it has a sign-in form (or redirected to one) and no reviews. */
+  var SIGN_IN = 'form[name="signIn"], #ap_email, #ap_email_login';
+  function needsSignIn(page) {
+    return !parseReviews(page.doc).length && (!!page.doc.querySelector(SIGN_IN) || /\/ap\/signin/.test(page.url));
+  }
+
+  /* What a page looked like, so markup changes can be fixed from the captured data alone. */
+  function reviewDiag(page, what) {
+    var doc = page.doc, hooks = {}, ids = [], classes = {};
+    Array.prototype.forEach.call(doc.querySelectorAll('[data-hook]'), function (e) {
+      var h = e.getAttribute('data-hook');
+      if (/review|cr|rating|star/i.test(h)) { hooks[h] = (hooks[h] || 0) + 1; }
+    });
+    Array.prototype.forEach.call(doc.querySelectorAll('[id]'), function (e) {
+      if (/review|cr-|cm_cr|cm-cr/i.test(e.id) && ids.length < 30 && ids.indexOf(e.id) < 0) { ids.push(e.id); }
+    });
+    Array.prototype.forEach.call(doc.querySelectorAll('[class*="review"]'), function (e) {
+      String(e.className).split(/\s+/).forEach(function (c) {
+        if (/review/i.test(c)) { classes[c] = (classes[c] || 0) + 1; }
+      });
+    });
+    var body = doc.body ? doc.body.textContent : '';
+    return {
+      what: what, status: page.status, url: page.url, title: clean(doc.title).slice(0, 120),
+      sign_in_form: !!doc.querySelector(SIGN_IN), reviews_found: parseReviews(doc).length,
+      stars_text: (body.match(/out of 5 stars/g) || []).length, hooks: hooks, ids: ids,
+      classes: Object.keys(classes).slice(0, 30)
+    };
   }
 
   /* ---------- reviews (product page or review list page) ---------- */
@@ -335,8 +361,12 @@
   function pause() { return sleep(DELAY_MIN + Math.random() * (DELAY_MAX - DELAY_MIN)); }
 
   async function getDoc(url) {
+    return (await getPage(url)).doc;
+  }
+
+  async function getPage(url) {
     var resp = await fetch(url, { credentials: 'include' });
-    return new DOMParser().parseFromString(await resp.text(), 'text/html');
+    return { doc: new DOMParser().parseFromString(await resp.text(), 'text/html'), status: resp.status, url: resp.url };
   }
 
   function searchUrl(term) {
@@ -390,12 +420,79 @@
     return capture;
   }
 
-  /* Reviews of one book: those on its product page (no sign-in needed), then up to
-   * REVIEW_PAGES pages of critical reviews and one page of top positive ones. */
-  async function captureReviews(asin, progress) {
+  /* Some Amazon pages add their reviews with scripts after the page loads, so a fetched copy
+   * has none. This opens the book page in a small, nearly invisible frame in this tab (same
+   * site, as if you opened it), scrolls it to the reviews and reads what appears. */
+  function loadInFrame(url, timeoutMs) {
+    return new Promise(function (resolve) {
+      var f = document.createElement('iframe');
+      f.style.cssText = 'position:fixed;right:0;bottom:0;width:480px;height:360px;opacity:0.01;' +
+        'pointer-events:none;border:0;z-index:1';
+      var done = false;
+      function finish(doc) { if (!done) { done = true; resolve({ frame: f, doc: doc }); } }
+      f.onload = function () { try { finish(f.contentDocument); } catch (e) { finish(null); } };
+      setTimeout(function () { finish(null); }, timeoutMs);
+      f.src = url;
+      document.body.appendChild(f);
+    });
+  }
+
+  async function renderedBookPage(asin) {
+    var r = await loadInFrame('/dp/' + asin, TEST ? 5000 : 30000);
+    var out = { reviews: [], page: null, blocked: false };
+    try {
+      if (!r.doc) { return out; }
+      if (isBlocked(r.doc)) { out.blocked = true; return out; }
+      var win = r.frame.contentWindow;
+      var anchor = r.doc.querySelector('#reviewsMedley, #customerReviews, #cm-cr-dp-review-list, ' +
+        '[data-hook="top-customer-reviews-widget"]');
+      if (anchor) { anchor.scrollIntoView(); }
+      for (var step = 0; step < 40; step++) {
+        out.reviews = parseReviews(r.doc);
+        if (out.reviews.length) { break; }
+        win.scrollBy(0, 700);
+        await sleep(TEST ? 25 : 400);
+      }
+      out.page = { doc: r.doc, status: 200, url: win.location.href };
+      out.diag = reviewDiag(out.page, 'book page in frame');
+      out.extras = pageExtras(r.doc);
+    } catch (e) {
+      out.error = String(e);
+    } finally {
+      r.frame.remove();
+    }
+    return out;
+  }
+
+  /* The star breakdown ("5 star 80%") and Amazon's "Customers say" summary, when present. */
+  function pageExtras(doc) {
+    var out = {};
+    var hist = {};
+    Array.prototype.forEach.call(doc.querySelectorAll('[id*="histogram"], [class*="histogram"]'), function (el) {
+      var t = text(el), m, re = /([1-5])\s*stars?\D{0,20}?(\d{1,3})\s*%/g;
+      while ((m = re.exec(t))) { hist[m[1]] = parseInt(m[2], 10); }
+    });
+    if (Object.keys(hist).length) { out.histogram = hist; }
+    var heads = doc.querySelectorAll('h2, h3, h4, span');
+    for (var i = 0; i < heads.length; i++) {
+      if (clean(heads[i].textContent) === 'Customers say') {
+        var box = heads[i].parentElement && heads[i].parentElement.parentElement;
+        if (box) { out.customers_say = text(box).slice(0, 2000); }
+        break;
+      }
+    }
+    return out;
+  }
+
+  /* Reviews of one book: those on its product page, then up to REVIEW_PAGES pages of
+   * critical reviews and one page of top positive ones. If a filtered page is walled off,
+   * the plain list the book page links to ("See more reviews") is tried instead.
+   * startPage is the review page on screen when the bookmarklet is clicked on one. */
+  async function captureReviews(asin, progress, startPage) {
     var cap = {
       tool: 'kdp-capture', version: 1, store: storeOf(location.hostname), url: location.origin + '/dp/' + asin,
-      captured_at: new Date().toISOString(), type: 'reviews', keyword: 'reviews:' + asin, asin: asin, reviews: []
+      captured_at: new Date().toISOString(), type: 'reviews', keyword: 'reviews:' + asin, asin: asin, reviews: [],
+      diagnostics: []
     };
     var seen = {};
     function add(list, source) {
@@ -407,36 +504,77 @@
         cap.reviews.push(r);
       });
     }
+    /* Reads a review list and follows its Next links. Returns 'ok', 'walled' or 'empty'. */
+    async function readList(first, source, maxPages) {
+      var page = first, next = null;
+      for (var pg = 1; pg <= maxPages; pg++) {
+        if (!page) {
+          await pause();
+          progress(source + ' reviews, page ' + pg);
+          try { page = await getPage(next); } catch (e) { return pg > 1 ? 'ok' : 'empty'; }
+        }
+        if (isBlocked(page.doc)) { cap.partial = cap.blocked = true; return 'blocked'; }
+        cap.diagnostics.push(reviewDiag(page, source + ' ' + pg));
+        if (needsSignIn(page)) { return pg > 1 ? 'ok' : 'walled'; }
+        var got = parseReviews(page.doc);
+        add(got, source);
+        var link = page.doc.querySelector('li.a-last:not(.a-disabled) a');
+        if (!got.length) { return pg > 1 ? 'ok' : 'empty'; }
+        if (!link) { return 'ok'; }
+        next = new URL(link.getAttribute('href'), page.url || location.href).toString();
+        page = null;
+      }
+      return 'ok';
+    }
     progress('book page');
-    var d = await getDoc('/dp/' + asin);
-    if (isBlocked(d)) { cap.partial = cap.blocked = true; return cap; }
-    cap.product = parseProduct(d, asin);
-    if (!cap.product.title) {            /* not sold on this Amazon site: skip its review pages */
+    var bookPage = await getPage('/dp/' + asin);
+    if (isBlocked(bookPage.doc)) { cap.partial = cap.blocked = true; return cap; }
+    cap.product = parseProduct(bookPage.doc, asin);
+    if (!cap.product.title && !startPage) {     /* not sold on this Amazon site: skip its review pages */
       cap.not_found = true;
       cap.books_read = 0;
       return cap;
     }
-    add(parseReviews(d), 'product page');
-    var views = [['critical', REVIEW_PAGES], ['positive', 1]];
-    outer:
-    for (var v = 0; v < views.length; v++) {
-      for (var pg = 1; pg <= views[v][1]; pg++) {
-        await pause();
-        progress(views[v][0] + ' reviews, page ' + pg);
-        var rd;
-        try {
-          rd = await getDoc('/product-reviews/' + asin + '/?filterByStar=' + views[v][0] +
-            '&reviewerType=all_reviews&sortBy=helpful&pageNumber=' + pg);
-        } catch (e) { break; }
-        if (isBlocked(rd)) { cap.partial = cap.blocked = true; return cap; }
-        if (needsSignIn(rd)) { cap.signed_out = true; break outer; }
-        var got = parseReviews(rd);
-        add(got, views[v][0]);
-        if (!got.length || !rd.querySelector('li.a-last:not(.a-disabled) a')) { break; }
-      }
+    cap.diagnostics.push(reviewDiag(bookPage, 'book page'));
+    add(parseReviews(bookPage.doc), 'product page');
+    Object.assign(cap, pageExtras(bookPage.doc));
+    if (!cap.reviews.length && !startPage) {
+      await pause();
+      progress('book page, letting its reviews load');
+      var shown = await renderedBookPage(asin);
+      if (shown.blocked) { cap.partial = cap.blocked = true; return cap; }
+      if (shown.diag) { cap.diagnostics.push(shown.diag); }
+      if (shown.error) { cap.diagnostics.push({ what: 'book page in frame', error: shown.error }); }
+      add(shown.reviews, 'product page');
+      Object.assign(cap, shown.extras || {});
     }
+    var results = [];
+    if (startPage) {
+      results.push(await readList(startPage, 'this page', REVIEW_PAGES + 2));
+    }
+    var base = '/product-reviews/' + asin + '/?reviewerType=all_reviews&sortBy=helpful';
+    var critical = await readFrom(base + '&filterByStar=critical&pageNumber=1', 'critical', REVIEW_PAGES);
+    results.push(critical);
+    if (critical === 'blocked') { return cap; }
+    if (critical !== 'ok') {
+      var seeAll = bookPage.doc.querySelector('a[data-hook="see-all-reviews-link-foot"], a[data-hook="see-all-reviews-link"]');
+      var plain = seeAll ? new URL(seeAll.getAttribute('href'), bookPage.url || location.href).toString()
+        : '/product-reviews/' + asin + '/';
+      results.push(await readFrom(plain, 'all', REVIEW_PAGES));
+    } else {
+      results.push(await readFrom(base + '&filterByStar=positive&pageNumber=1', 'positive', 1));
+    }
+    if (results.indexOf('ok') < 0 && results.indexOf('walled') >= 0) { cap.signed_out = true; }
     cap.books_read = 1;
     return cap;
+
+    async function readFrom(url, source, maxPages) {
+      await pause();
+      progress(source + ' reviews, page 1');
+      var first;
+      try { first = await getPage(url); } catch (e) { return 'empty'; }
+      return readList(first, source, maxPages);
+    }
   }
 
   function asinsIn(textValue) {
@@ -609,9 +747,9 @@
           : await captureSearch(terms[i], null, searchUrl(terms[i]), books, say_);
         if (cap.signed_out && !signedOutWarned) {
           signedOutWarned = true;
-          alert('This Amazon site only shows its full review pages to signed-in visitors. This run keeps the ' +
-            'reviews shown on each book page (about 8 per book). To get more without signing in, run it on ' +
-            'amazon.co.uk, which may show review pages to visitors.');
+          alert('Amazon showed a sign-in page instead of the review lists, so this run keeps only the reviews ' +
+            'on each book page. It carries on with the other books. Tip: if you can open a book\'s reviews ' +
+            'yourself (See more reviews), click KDP Capture on that page: it reads what is on your screen.');
         }
         if (cap.blocked) {
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */
@@ -778,15 +916,17 @@
 
     var reviewPage = path.match(/\/product-reviews\/([A-Z0-9]{10})/);
     if (reviewPage) {
-      var rc = await captureReviews(reviewPage[1], function (m) { say('reading ' + m + '...'); });
-      save(rc, rc.signed_out
-        ? 'Saved ' + rc.reviews.length + ' reviews. Sign in to Amazon to read the critical review pages too.'
-        : 'Saved ' + rc.reviews.length + ' reviews of ' + reviewPage[1] + '.');
+      var rc = await captureReviews(reviewPage[1], function (m) { say('reading ' + m + '...'); },
+        { doc: document, status: 200, url: location.href });
+      save(rc, 'Saved ' + rc.reviews.length + ' reviews of ' + reviewPage[1] + '.');
       return;
     }
 
     if (asinFromUrl(location.href) || document.querySelector('#productTitle')) {
       var product = parseProduct(document, asinFromUrl(location.href));
+      var here = { doc: document, status: 200, url: location.href };
+      product.reviews = parseReviews(document);          /* as rendered on screen */
+      product.review_diagnostics = reviewDiag(here, 'book page on screen');
       save(Object.assign({}, base, { type: 'product', product: product }),
         'Saved ' + (product.title || product.asin).slice(0, 60) + '.');
       return;

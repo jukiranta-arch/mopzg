@@ -125,18 +125,38 @@ R2 = review("R2CRIT", 1, "Print too small", "The font is tiny and the names run 
 R3 = review("R3CRIT", 3, "Fun but no story", "The ending was a let-down.")
 R4 = review("R4POS", 5, "Addictive", "Took me three weeks with highlighters. Loved it.")
 P1 = review("P1PAGE", 4, "Great gift", "Bought it for my mum.", hook="cmps-review-star-rating")
-PRODUCT_REVIEWS = {"B0AAAAAAA1": P1 + R1, "B0AAAAAAA2": P1.replace("P1PAGE", "P2PAGE")}
+R5 = review("R5PLAIN", 2, "Too hard", "Gave up after clue 9.")
+PRODUCT_REVIEWS = {
+    "B0AAAAAAA1": P1 + R1,
+    # Added by a script after the page loads, as some Amazon pages do; a fetched copy has none.
+    "B0AAAAAAA2": ("<div id='reviewsMedley'></div><script>setTimeout(function () {"
+                  "document.getElementById('reviewsMedley').innerHTML = %s;}, 150);</script>"
+                  "<div id='histogramTable'>5 star 80% 4 star 8% 3 star 5% 2 star 1% 1 star 6%</div>"
+                  "<div><div><h3>Customers say</h3><p>Customers find it addictive but mention the number of names.</p>"
+                  "</div></div>").replace("%s", json.dumps(P1.replace("P1PAGE", "P2PAGE"))),
+    "B0AAAAAAA3": '<a data-hook="see-all-reviews-link-foot" '
+                  'href="/product-reviews/B0AAAAAAA3/ref=cm_cr_dp_d_show_all_btm?ie=UTF8">See more reviews</a>',
+}
+SIGN_IN_WALL = ("<!doctype html><html><body><form name='signIn'><input id='ap_email'></form>"
+                "Sign in</body></html>")
 
 
 def review_page(asin, star, page):
-    if asin != "B0AAAAAAA1":
+    if asin == "B0AAAAAAA3":
+        # Filtered views are walled; the plain list shows reviews next to a "sign in to filter" form.
+        if star:
+            return SIGN_IN_WALL
         return ("<!doctype html><html><body><form name='signIn'><input id='ap_email'></form>"
-                "Sign in</body></html>")
+                "<div id='cm_cr-review_list'><ul>%s</ul></div></body></html>" % R5)
+    if asin != "B0AAAAAAA1":
+        return SIGN_IN_WALL
     if star == "critical":
         items = [R1, R2] if page == 1 else [R3]
     else:
         items = [R4]
-    nxt = ('<li class="a-last"><a href="?pageNumber=%d">Next page</a></li>' % (page + 1) if star == "critical"
+    nxt = ('<li class="a-last"><a href="/product-reviews/%s/ref=cm_cr_getr_d_paging_btm_next_%d?ie=UTF8'
+           '&amp;filterByStar=critical&amp;pageNumber=%d">Next page</a></li>' % (asin, page + 1, page + 1)
+           if star == "critical"
            and page == 1 else '<li class="a-disabled a-last">Next page</li>')
     return ("<!doctype html><html><body><div id='cm_cr-review_list'><ul>%s</ul></div>"
             "<ul class='a-pagination'>%s</ul></body></html>" % ("".join(items), nxt))
@@ -186,7 +206,7 @@ class Handler(BaseHTTPRequestHandler):
             body = body.replace("</body>", PRODUCT_REVIEWS.get(path.split("/")[2], "") + "</body>")
         elif path.startswith("/product-reviews/"):
             q = parse_qs(url.query)
-            body = review_page(path.split("/")[2], q.get("filterByStar", ["critical"])[0],
+            body = review_page(path.split("/")[2], q.get("filterByStar", [None])[0],
                                int(q.get("pageNumber", ["1"])[0]))
         elif path.startswith("/gp/bestsellers"):
             body = list_page()
@@ -322,13 +342,16 @@ class BookmarkletBrowserTest(unittest.TestCase):
         by_id = {r["id"]: r for r in cap["reviews"]}
         self.assertEqual(sorted(by_id), ["P1PAGE", "R1CRIT", "R2CRIT", "R3CRIT", "R4POS"])   # R1 twice, kept once
         self.assertEqual(by_id["R1CRIT"]["source"], "product page")
-        self.assertEqual(by_id["R3CRIT"]["source"], "critical")                  # followed the Next link
+        self.assertEqual(by_id["R3CRIT"]["source"], "this page")                 # followed Next from the page on screen
         self.assertEqual(by_id["R4POS"]["source"], "positive")
         self.assertEqual(by_id["R2CRIT"]["stars"], 1)
         self.assertEqual(by_id["P1PAGE"]["stars"], 4)                              # newer star markup
         self.assertEqual(by_id["R2CRIT"]["title"], "Print too small")              # no star text in the title
         self.assertFalse(by_id["R2CRIT"]["verified"])
         self.assertTrue(by_id["R1CRIT"]["verified"])
+        self.assertTrue(cap["diagnostics"])                                       # what each page looked like
+        self.assertEqual(cap["diagnostics"][0]["what"], "book page")
+        self.assertEqual(cap["diagnostics"][0]["hooks"]["review"], 2)
         self.assertIn("Clue 7 is ambiguous", by_id["R1CRIT"]["body"])
         ctx = Ctx()
         importer.import_capture(ctx.conn, cap)
@@ -340,6 +363,20 @@ class BookmarkletBrowserTest(unittest.TestCase):
         importer.import_capture(ctx.conn, dict(cap, store="amazon.co.uk"))       # same book, UK site
         self.assertEqual(len(db.reviews(ctx.conn, max_stars=3)), 6)                 # every site by default
         self.assertEqual(len(db.reviews(ctx.conn, "amazon.co.uk", max_stars=3)), 3)
+
+    def test_reviews_from_the_plain_list_when_filters_need_sign_in(self):
+        cap = self.capture("/product-reviews/B0AAAAAAA3/")
+        self.assertFalse(cap.get("signed_out"))
+        self.assertEqual([r["id"] for r in cap["reviews"]], ["R5PLAIN"])     # a sign-in form beside reviews is no wall
+        walls = [d for d in cap["diagnostics"] if d["sign_in_form"] and not d["reviews_found"]]
+        self.assertTrue(walls)                                               # the filtered page was walled
+
+    def test_product_page_capture_keeps_its_reviews(self):
+        cap = self.capture("/dp/B0AAAAAAA1")
+        self.assertEqual([r["id"] for r in cap["product"]["reviews"]], ["P1PAGE", "R1CRIT"])
+        self.assertEqual(cap["product"]["review_diagnostics"]["reviews_found"], 2)
+        ctx = Ctx()
+        self.assertIn("2 reviews", importer.import_capture(ctx.conn, cap))
 
     def test_autopilot_captures_reviews_and_reports_signed_out(self):
         env = dict(os.environ, NODE_PATH=NODE_MODULES)
@@ -354,7 +391,10 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(caps[2]["reviews"], [])
         self.assertEqual(len(caps[0]["reviews"]), 5)
         self.assertTrue(caps[1]["signed_out"])
-        self.assertEqual([r["id"] for r in caps[1]["reviews"]], ["P2PAGE"])         # book-page reviews still kept
+        self.assertEqual([r["id"] for r in caps[1]["reviews"]], ["P2PAGE"])         # loaded late, read in a frame
+        self.assertEqual(caps[1]["histogram"], {"5": 80, "4": 8, "3": 5, "2": 1, "1": 6})
+        self.assertIn("number of names", caps[1]["customers_say"])
+        self.assertIn("book page in frame", [d["what"] for d in caps[1]["diagnostics"]])
         self.assertEqual(len(result["dialogs"]), 1)                                  # told once about signing in
         self.assertIn("reviews of 3 books", result["saved"])
         ctx = Ctx()
