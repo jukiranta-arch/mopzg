@@ -203,7 +203,7 @@ def import_capture(conn, capture):
         asin = capture.get("asin")
         if not asin:
             raise CaptureError("reviews capture has no asin")
-        if capture.get("product"):
+        if capture.get("product") and not capture.get("not_found"):
             _save_product(conn, store, day, capture["product"], "product")
         else:
             _upsert_book(conn, store, {"asin": asin})
@@ -214,6 +214,8 @@ def import_capture(conn, capture):
                          "verified, helpful, source, taken_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                          (asin, store, key, r.get("stars"), r.get("title"), r.get("body"), r.get("date"),
                           1 if r.get("verified") else 0, r.get("helpful"), r.get("source"), day))
+        if capture.get("not_found"):
+            return "reviews %s: not sold on %s" % (asin, store)
         note = " (signed out: product-page reviews only)" if capture.get("signed_out") else ""
         return "reviews %s: %d%s" % (asin, len(rows), note)
 

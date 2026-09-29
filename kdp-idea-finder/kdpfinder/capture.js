@@ -411,6 +411,11 @@
     var d = await getDoc('/dp/' + asin);
     if (isBlocked(d)) { cap.partial = cap.blocked = true; return cap; }
     cap.product = parseProduct(d, asin);
+    if (!cap.product.title) {            /* not sold on this Amazon site: skip its review pages */
+      cap.not_found = true;
+      cap.books_read = 0;
+      return cap;
+    }
     add(parseReviews(d), 'product page');
     var views = [['critical', REVIEW_PAGES], ['positive', 1]];
     outer:
@@ -604,8 +609,9 @@
           : await captureSearch(terms[i], null, searchUrl(terms[i]), books, say_);
         if (cap.signed_out && !signedOutWarned) {
           signedOutWarned = true;
-          alert('Amazon only shows the full review pages when you are signed in. This run keeps the reviews ' +
-            'shown on each book page (about 8 per book). For more, sign in to Amazon in this tab and run it again.');
+          alert('This Amazon site only shows its full review pages to signed-in visitors. This run keeps the ' +
+            'reviews shown on each book page (about 8 per book). To get more without signing in, run it on ' +
+            'amazon.co.uk, which may show review pages to visitors.');
         }
         if (cap.blocked) {
           remember(i, { blockedAt: Date.now() });      /* redo the interrupted search */

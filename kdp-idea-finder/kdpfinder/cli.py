@@ -127,7 +127,7 @@ def cmd_layers(args):
 
 def cmd_reviews(args):
     conn, _, _ = _ctx(args)
-    rows = db.reviews(conn, args.store, args.asins, args.max_stars)
+    rows = db.reviews(conn, args.only_store, args.asins, args.max_stars)
     if not rows:
         print("No reviews captured yet. Use 'Capture reviews' in the KDP Capture panel.")
         return
@@ -137,7 +137,7 @@ def cmd_reviews(args):
             current = r["asin"]
             print("\n== %s  %s" % (r["asin"], (r["book_title"] or "")[:80]))
         stars = "%g" % r["stars"] if r["stars"] is not None else "?"
-        print("\n[%s stars%s] %s" % (stars, ", verified" if r["verified"] else "", r["title"] or ""))
+        print("\n[%s stars, %s%s] %s" % (stars, r["store"], ", verified" if r["verified"] else "", r["title"] or ""))
         print("   " + (r["body"] or "").replace("\n", " "))
 
 
@@ -187,6 +187,7 @@ def build_parser():
     s = sub.add_parser("reviews", help="read captured reviews (complaints first)")
     s.add_argument("asins", nargs="*")
     s.add_argument("--max-stars", type=float, default=5, help="only reviews with at most this many stars")
+    s.add_argument("--only-store", help="only reviews from this Amazon site (default: all sites)")
     s.set_defaults(fn=cmd_reviews)
 
     sub.add_parser("report", help="write a markdown shortlist to <data>/reports").set_defaults(fn=cmd_report)

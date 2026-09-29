@@ -45,7 +45,7 @@ A puzzle is accepted only if all of them leave the same two suspects (`whodunit/
 
 ## Next
 
-Capture Amazon reviews, critical ones first, of the direct competitors. Paste these into the **Book reviews** box of the KDP Capture panel (signed in to Amazon, for the critical-review pages):
+Capture Amazon reviews, critical ones first, of the direct competitors. Run KDP Capture on amazon.co.uk in a private tab (no sign-in) and paste these into the **Book reviews** box:
 
 ```
 B0GQ2VXKY7  The Killer Isn't Alice (indie edition, 1,902 reviews)

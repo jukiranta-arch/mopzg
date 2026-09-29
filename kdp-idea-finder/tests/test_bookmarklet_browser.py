@@ -331,21 +331,28 @@ class BookmarkletBrowserTest(unittest.TestCase):
         rows = db.reviews(ctx.conn, "amazon.com", max_stars=3)
         self.assertEqual([r["review_key"] for r in rows], ["R2CRIT", "R1CRIT", "R3CRIT"])
         self.assertEqual(rows[0]["book_title"], BOOKS["B0AAAAAAA1"][0])
+        importer.import_capture(ctx.conn, dict(cap, store="amazon.co.uk"))       # same book, UK site
+        self.assertEqual(len(db.reviews(ctx.conn, max_stars=3)), 6)                 # every site by default
+        self.assertEqual(len(db.reviews(ctx.conn, "amazon.co.uk", max_stars=3)), 3)
 
     def test_autopilot_captures_reviews_and_reports_signed_out(self):
         env = dict(os.environ, NODE_PATH=NODE_MODULES)
         out = subprocess.run(["node", os.path.join(HERE, "browser", "run_reviews.js"), self.base, CAPTURE_JS,
-                              "https://www.amazon.com/Some-Book/dp/B0AAAAAAA1/ref=sr_1_1\nB0AAAAAAA2 and B0AAAAAAA1"],
+                              "https://www.amazon.com/Some-Book/dp/B0AAAAAAA1/ref=sr_1_1\nB0AAAAAAA2 and B0AAAAAAA1\nB0NOTSOLD1"],
                              capture_output=True, text=True, env=env, timeout=90)
         self.assertEqual(out.returncode, 0, out.stderr)
         result = json.loads(out.stdout)
         caps = result["kept"]["captures"]
-        self.assertEqual([c["asin"] for c in caps], ["B0AAAAAAA1", "B0AAAAAAA2"])   # links and ASINs, deduped
+        self.assertEqual([c["asin"] for c in caps], ["B0AAAAAAA1", "B0AAAAAAA2", "B0NOTSOLD1"])   # deduped
+        self.assertTrue(caps[2]["not_found"])                                        # not sold here: skipped
+        self.assertEqual(caps[2]["reviews"], [])
         self.assertEqual(len(caps[0]["reviews"]), 5)
         self.assertTrue(caps[1]["signed_out"])
         self.assertEqual([r["id"] for r in caps[1]["reviews"]], ["P2PAGE"])         # book-page reviews still kept
         self.assertEqual(len(result["dialogs"]), 1)                                  # told once about signing in
-        self.assertIn("reviews of 2 books", result["saved"])
+        self.assertIn("reviews of 3 books", result["saved"])
+        ctx = Ctx()
+        self.assertIn("not sold on", importer.import_capture(ctx.conn, dict(caps[2], store="amazon.co.uk")))
 
     def test_list_capture(self):
         cap = self.capture("/gp/bestsellers/books/1234")

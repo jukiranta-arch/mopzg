@@ -154,14 +154,19 @@ def marks(conn, keyword, store):
     return {r["asin"]: r["relation"] for r in rows}
 
 
-def reviews(conn, store, asins=None, max_stars=5):
+def reviews(conn, store=None, asins=None, max_stars=5):
+    """Captured reviews, lowest stars first. store=None reads every Amazon site: the same
+    book usually has the same ASIN everywhere, and every site's reviews are useful."""
     sql = ("SELECT r.*, b.title AS book_title FROM reviews r LEFT JOIN books b ON b.asin = r.asin AND b.store = r.store "
-           "WHERE r.store = ? AND (r.stars IS NULL OR r.stars <= ?)")
-    args = [store, max_stars]
+           "WHERE (r.stars IS NULL OR r.stars <= ?)")
+    args = [max_stars]
+    if store:
+        sql += " AND r.store = ?"
+        args.append(store)
     if asins:
         sql += " AND r.asin IN (%s)" % ",".join("?" * len(asins))
         args += list(asins)
-    return conn.execute(sql + " ORDER BY r.asin, r.stars, r.review_key", args).fetchall()
+    return conn.execute(sql + " ORDER BY r.asin, r.stars, r.store, r.review_key", args).fetchall()
 
 
 def suggestions(conn, store):
