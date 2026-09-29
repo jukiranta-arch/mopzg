@@ -90,6 +90,13 @@ def search_page(page=1):
     return "<!doctype html><html><body><div class='s-main-slot'>%s</div></body></html>" % "".join(cards)
 
 
+def new_releases_page():
+    """Amazon's Hot New Releases page: the heading is generic, the category is the highlighted menu entry."""
+    return list_page().replace("<h1>Best Sellers in Grief &amp; Bereavement</h1>",
+                               "<h1>Amazon Hot New Releases</h1><div role='group'><span class="
+                               "'_p13n-zg-nav-tree-all_style_zg-selected__1SfhQ'>Crossword Puzzles</span></div>")
+
+
 def list_page():
     items = "".join(
         '<div id="gridItemRoot"><span class="zg-bdg-text">#%d</span>'
@@ -228,6 +235,8 @@ class Handler(BaseHTTPRequestHandler):
             q = parse_qs(url.query)
             body = review_page(path.split("/")[2], q.get("filterByStar", [None])[0],
                                int(q.get("pageNumber", ["1"])[0]))
+        elif path.startswith("/gp/new-releases"):
+            body = new_releases_page()
         elif path.startswith("/gp/bestsellers"):
             body = list_page()
         else:
@@ -449,8 +458,20 @@ class BookmarkletBrowserTest(unittest.TestCase):
         cap = self.capture("/gp/bestsellers/books/1234")
         self.assertEqual(cap["type"], "list")
         self.assertEqual(cap["list"]["kind"], "bestsellers")
+        self.assertEqual(cap["list"]["name"], "Best Sellers in Grief & Bereavement")
         self.assertEqual([i["asin"] for i in cap["items"]], [a for a in BOOKS if a not in PAGE2])
         self.assertEqual(cap["items"][0]["title"], BOOKS["B0AAAAAAA1"][0])
+        self.assertEqual(cap["books_read"], 3)                           # every book's own page was read
+        ctx = Ctx()
+        self.assertIn("3 book pages", importer.import_capture(ctx.conn, cap))
+        row = ctx.conn.execute("SELECT bsr, reviews FROM snapshots WHERE asin='B0AAAAAAA3'").fetchone()
+        self.assertEqual((row["bsr"], row["reviews"]), (150321, 9))
+
+    def test_list_names_are_unique_per_category_and_page(self):
+        cap = self.capture("/gp/new-releases/books/4416/ref=zg_bsnr_pg_2_books?ie=UTF8&pg=2")
+        self.assertEqual(cap["list"]["kind"], "new-releases")
+        self.assertEqual(cap["list"]["name"], "Hot New Releases in Crossword Puzzles (page 2)")
+        self.assertEqual((cap["list"]["node"], cap["list"]["page"]), ("4416", 2))
 
 
 if __name__ == "__main__":

@@ -276,6 +276,56 @@
     }).filter(function (it) { return it.title; });
   }
 
+  /* A name that is unique per list and page, e.g. "Hot New Releases in Crossword Puzzles (page 2)".
+   * The page heading is often just "Amazon Hot New Releases", so the category comes from the
+   * "... in <category>" text, the highlighted menu entry, or Amazon's category number. */
+  function listName(doc, url, kind) {
+    var u = new URL(url, location.origin);
+    var node = (u.pathname.match(/\/(\d{3,})(?:\/|$)/) || [])[1] || '';
+    var page = u.searchParams.get('pg') || (u.pathname.match(/_pg_(\d+)/) || [])[1] || '1';
+    var label = { 'new-releases': 'Hot New Releases', movers: 'Movers & Shakers', bestsellers: 'Best Sellers',
+      'wished-for': 'Most Wished For', gifted: 'Gift Ideas' }[kind] || 'List';
+    var category = '';
+    var heads = doc.querySelectorAll('h1, h2, [class*="zg-selected"], [class*="zg_selected"]');
+    for (var i = 0; i < heads.length && !category; i++) {
+      var t = clean(heads[i].textContent);
+      var m = t.match(/(?:Hot New Releases|Best Sellers|Movers & Shakers|Most Wished For|Gift Ideas) in (.+)$/i);
+      if (m) { category = m[1]; } else if (/selected/.test(heads[i].className || '') && t.length < 80) { category = t; }
+    }
+    if (!category) {
+      var tm = clean(doc.title).match(/(?:Hot New Releases|Best Sellers|Movers & Shakers|Most Wished For|Gift Ideas) in (.+?)(?:\s*[-:|]|$)/i);
+      if (tm) { category = tm[1]; }
+    }
+    category = category || ('category ' + (node || 'unknown'));
+    return { name: label + ' in ' + category + (page !== '1' ? ' (page ' + page + ')' : ''),
+      category: category, node: node, page: parseInt(page, 10) };
+  }
+
+  /* A best seller / new release / movers list, then each book's own page for rank, reviews and date. */
+  async function captureList(doc, url, progress) {
+    var kind = listKind(new URL(url, location.origin).pathname);
+    var info = listName(doc, url, kind);
+    var cap = {
+      tool: 'kdp-capture', version: 1, store: storeOf(location.hostname), url: url,
+      captured_at: new Date().toISOString(), type: 'list',
+      list: { kind: kind, name: info.name, category: info.category, node: info.node, page: info.page },
+      items: parseList(doc)
+    };
+    for (var n = 0; n < cap.items.length; n++) {
+      progress('book ' + (n + 1) + ' of ' + cap.items.length + ' (slow on purpose)');
+      await pause();
+      try {
+        var d = await getDoc('/dp/' + cap.items[n].asin);
+        if (isBlocked(d)) { cap.partial = cap.blocked = true; break; }
+        cap.items[n].product = parseProduct(d, cap.items[n].asin);
+      } catch (e) {
+        cap.items[n].error = String(e);
+      }
+    }
+    cap.books_read = cap.items.filter(function (i) { return i.product; }).length;
+    return cap;
+  }
+
   function listKind(path) {
     if (/movers-and-shakers/.test(path)) { return 'movers'; }
     if (/new-releases/.test(path)) { return 'new-releases'; }
@@ -973,10 +1023,11 @@
     }
 
     if (/bestsellers|movers-and-shakers|new-releases|most-wished-for|most-gifted|zgbs/.test(path)) {
-      var list = parseList(document);
-      var name = clean((document.querySelector('h1') || {}).textContent || document.title);
-      save(Object.assign({}, base, { type: 'list', list: { kind: listKind(path), name: name }, items: list }),
-        'Saved list "' + name.slice(0, 60) + '" (' + list.length + ' books).');
+      var lc = await captureList(document, location.href, function (m) { say('reading ' + m + '...'); });
+      save(lc, lc.partial
+        ? 'Amazon asked for a captcha, so it stopped. Saved "' + lc.list.name.slice(0, 60) + '" with ' +
+          lc.books_read + ' books read; try again later.'
+        : 'Saved "' + lc.list.name.slice(0, 70) + '" (' + lc.items.length + ' books, ' + lc.books_read + ' book pages).');
       return;
     }
 

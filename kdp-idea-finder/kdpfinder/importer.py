@@ -214,12 +214,18 @@ def import_capture(conn, capture):
             list_id = conn.execute("INSERT INTO lists (kind, name, store, taken_at, url) VALUES (?,?,?,?,?)",
                                    (info.get("kind"), info.get("name"), store, day,
                                     capture.get("url"))).lastrowid
+        read = 0
         for item in capture.get("items", []):
+            product = item.get("product")
+            b = _save_product(conn, store, day, dict(product, asin=item["asin"]), "list") if product else None
+            reviews = (b or {}).get("reviews") or parse_int(item.get("reviews"))
             conn.execute("INSERT OR REPLACE INTO list_items (list_id, rank, asin, title, reviews) "
-                         "VALUES (?,?,?,?,?)", (list_id, item["position"], item["asin"],
-                                               item.get("title"), parse_int(item.get("reviews"))))
-            _upsert_book(conn, store, {"asin": item["asin"], "title": item.get("title")})
-        return "list '%s' on %s: %d books" % (info.get("name"), store, len(capture.get("items", [])))
+                         "VALUES (?,?,?,?,?)", (list_id, item["position"], item["asin"], item.get("title"), reviews))
+            if not b:
+                _upsert_book(conn, store, {"asin": item["asin"], "title": item.get("title")})
+            read += 1 if b else 0
+        return "list '%s' on %s: %d books, %d book pages" % (info.get("name"), store,
+                                                             len(capture.get("items", [])), read)
 
     if kind == "reviews":
         asin = capture.get("asin")
