@@ -10,18 +10,24 @@ import json
 import os
 import shutil
 import subprocess
+import tempfile
 import threading
 import unittest
+import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 from helpers import Ctx
 
-from kdpfinder import importer
+from kdpfinder import bookmarklet, importer
 from kdpfinder.analysis import analyze
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CAPTURE_JS = os.path.join(os.path.dirname(HERE), "kdpfinder", "capture.js")
+# The browser runs exactly what the bookmark holds: the minified code decoded from its URL.
+_CODE_DIR = tempfile.mkdtemp(prefix="kdp-bm-")
+CAPTURE_JS = os.path.join(_CODE_DIR, "bookmarklet.js")
+with open(CAPTURE_JS, "w", encoding="utf-8") as _fh:
+    _fh.write(urllib.parse.unquote(bookmarklet.url()[len("javascript:"):]))
 NODE_MODULES = "/opt/node22/lib/node_modules"
 
 BOOKS = {
@@ -353,6 +359,18 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertIn("reviews of 3 books", result["saved"])
         ctx = Ctx()
         self.assertIn("not sold on", importer.import_capture(ctx.conn, dict(caps[2], store="amazon.co.uk")))
+
+    def test_clicking_the_bookmark_url_runs_it(self):
+        href = os.path.join(_CODE_DIR, "href.txt")
+        with open(href, "w", encoding="utf-8") as fh:
+            fh.write(bookmarklet.url())
+        env = dict(os.environ, NODE_PATH=NODE_MODULES)
+        out = subprocess.run(["node", os.path.join(HERE, "browser", "run_link.js"), self.base + "/dp/B0AAAAAAA3", href],
+                             capture_output=True, text=True, env=env, timeout=60)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        cap = json.loads(out.stdout)
+        self.assertEqual(cap["type"], "product")
+        self.assertEqual(importer.parse_product(cap["product"])["bsr"], 150321)
 
     def test_list_capture(self):
         cap = self.capture("/gp/bestsellers/books/1234")

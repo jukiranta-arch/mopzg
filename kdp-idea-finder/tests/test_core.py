@@ -310,3 +310,19 @@ class SeedAndAutocompleteTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class BookmarkletTests(unittest.TestCase):
+    def test_fits_in_a_firefox_bookmark(self):
+        from kdpfinder import bookmarklet
+        url = bookmarklet.url()
+        self.assertLess(len(url), bookmarklet.FIREFOX_URL_LIMIT - 8000)     # room to grow
+        for ch in '"<>&# \n\\':
+            self.assertNotIn(ch, url[len("javascript:"):])
+
+    def test_minify_keeps_strings_and_regexes(self):
+        from kdpfinder.bookmarklet import minify
+        js = ("/* header */\nvar a = 'x /* not a comment */ y';   /* note */\n"
+              "  var r = /a\\/b[/*]c/g, d = a / 2;\n  if (x) { return /^y/.test(z); }\n")
+        self.assertEqual(minify(js), "var a = 'x /* not a comment */ y';\n"
+                                     "var r = /a\\/b[/*]c/g, d = a / 2;\nif (x) { return /^y/.test(z); }")
