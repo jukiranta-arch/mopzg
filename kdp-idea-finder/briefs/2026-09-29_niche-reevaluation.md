@@ -80,3 +80,47 @@ Newcomer share of sales by search:
 Proven, evergreen demand (people have operations all year). Newcomers win quickly, especially when the book is **specific to one operation** (hysterectomy, knee) and funny. Each operation is its own small niche, which allows a series.
 
 **Sudoku with tracing:** *Pocket Sudoku & Aesthetic Ink Tracing* sells 63/day at 57 days, but 3 copies appeared within the last 10 days, and the format needs illustrations.
+
+## 5. Operation-specific surgery searches (2026-09-29/30, third batch)
+
+Fourteen "… surgery recovery gifts" searches. Counted: activity or puzzle books made for that one operation.
+
+| Operation | Books for it | Their sales, total/day | Best |
+|---|---|---|---|
+| knee / ACL | 34 | 16 | *Knee-d a Laugh* 5.7/day |
+| chemo | 36 | 14 | a journal 3.9/day, an activity book 3.0/day |
+| hip | 43 | 8 | 2.9/day |
+| gallbladder | 46 | 6 | 2.1/day |
+| back | 32 | 4 | 2.5/day |
+| mastectomy | 38 | 3 | under 2/day |
+| heart, shoulder, foot | 31–42 | about 2 each | under 1/day |
+| rotator cuff, broken leg | 28–38 | about 1 | under 1/day |
+| c-section, cataract, wisdom teeth | 12–48 | about 0 | – |
+
+Across all captures:
+- **generic** surgery activity books: 32 books, 70/day in total;
+- **operation-specific** ones: 149 books, 75/day in total;
+- only 9 of those 149 sell at least 2 a day.
+
+**Conclusion:**
+- Every operation already has 30–48 lookalike books, most selling under one a day. A series with one book per operation would be joining a pile, not filling a gap.
+- The sellers are the four generic books and the two hysterectomy books. **All of them have 60–170 reviews**; *Finally, a Reason…* had 130 reviews at 45 days.
+- Low-review newcomers in this category sell 1–2 a day.
+- This is **not** a niche where newcomers win with few reviews. Dropped.
+
+## 6. Where newcomers win with few reviews: the answer
+
+Of everything measured, only the murder-mystery puzzle category shows new books selling well with almost no reviews:
+
+| Book | Sales/day | Age | Reviews |
+|---|---|---|---|
+| Absolutely Serious Investigations | 12.5 | 21 d | 0 |
+| Eliminate Vol. 3 | 17 | 3 d | 0 |
+| Who Killed Mr Darcy? | 20 | 72 d | 6 |
+| Murdograms | 15 | 41 d | 5 |
+| Murder at Vex Manor | 19 | 49 d | 10 |
+| Black Tide House | 12 | 32 d | 11 |
+
+Readers of this category buy the next new case, and reviews matter less.
+
+**The risk is copying.** The winners are original in the *mechanic*, and theme swaps flop. The next step is to choose an original mechanic, check it against the data, and write a spec before any code.
