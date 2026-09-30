@@ -1,0 +1,831 @@
+{
+ "tool": "kdp-capture",
+ "version": 1,
+ "store": "amazon.com",
+ "url": "https://www.amazon.com/s?k=christmas+find+the+killer&i=stripbooks",
+ "captured_at": "2026-09-30T10:58:24.514Z",
+ "type": "search",
+ "keyword": "christmas find the killer",
+ "items": [
+  {
+   "position": 1,
+   "asin": "B0HFSPWNY7",
+   "sponsored": false,
+   "title": "Find the Christmas Killer: Elimination Mystery Puzzle Book (Elimination Puzzles)",
+   "reviews": "",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0HFSPWNY7",
+    "title": "Find the Christmas Killer: Elimination Mystery Puzzle Book (Elimination Puzzles)",
+    "author": "Tim Collins",
+    "format_text": "Paperback",
+    "price_text": "$15.99",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "#2,127,358 in Books (See Top 100 in Books) #7,133 in Activity Books #7,332 in Logic & Brain Teasers (Books) #9,252 in Cozy Craft & Hobby Mysteries",
+    "details": {
+     "ASIN": "B0HFSPWNY7",
+     "Publisher": "AMP",
+     "Publication date": "October 13, 2026",
+     "Language": "English",
+     "Print length": "194 pages",
+     "ISBN-13": "979-8881618896",
+     "Item Weight": "8.5 ounces",
+     "Dimensions": "6 x 0.49 x 9 inches",
+     "Part of series": "Elimination Puzzles",
+     "Best Sellers Rank": "#2,127,358 in Books (See Top 100 in Books) #7,133 in Activity Books #7,332 in Logic & Brain Teasers (Books) #9,252 in Cozy Craft & Hobby Mysteries"
+    }
+   }
+  },
+  {
+   "position": 2,
+   "asin": "B0HHRFZWQ1",
+   "sponsored": false,
+   "title": "FIND THE CHRISTMAS KILLER: Find the Killer among 50,000 Suspects and 20 Clues- Murder Mystery Crime Puzzle Book for Adults and Teens (Party Elimination Files)",
+   "reviews": "",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0HHRFZWQ1",
+    "title": "FIND THE CHRISTMAS KILLER: Find the Killer among 50,000 Suspects and 20 Clues- Murder Mystery Crime Puzzle Book for Adults and Teens (Party Elimination Files)",
+    "author": "TUCKHOUSE BOOKS",
+    "format_text": "Paperback",
+    "price_text": "$12.99",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "",
+    "details": {
+     "ASIN": "B0HHRFZWQ1",
+     "Publisher": "Independently published",
+     "Publication date": "September 3, 2026",
+     "Language": "English",
+     "Print length": "214 pages",
+     "ISBN-13": "979-8171449032",
+     "Item Weight": "1.39 pounds",
+     "Dimensions": "8.5 x 0.49 x 11 inches",
+     "Book 1 of 2": "Party Elimination Files"
+    }
+   }
+  },
+  {
+   "position": 3,
+   "asin": "B0HCKMN618",
+   "sponsored": false,
+   "title": "Can You Find the Christmas Killer: A Crime Mystery Puzzle Book For Adults (Mystery Puzzle Collection)",
+   "reviews": "",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0HCKMN618",
+    "title": "Can You Find the Christmas Killer: A Crime Mystery Puzzle Book For Adults (Mystery Puzzle Collection)",
+    "author": "Steve Lewis",
+    "format_text": "Paperback",
+    "price_text": "$13.48",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "",
+    "details": {
+     "ASIN": "B0HCKMN618",
+     "Publisher": "Independently published",
+     "Publication date": "August 2, 2026",
+     "Language": "English",
+     "Print length": "214 pages",
+     "ISBN-13": "979-8190267150",
+     "Item Weight": "13.6 ounces",
+     "Dimensions": "6 x 0.49 x 9 inches"
+    }
+   }
+  },
+  {
+   "position": 4,
+   "asin": "0590433113",
+   "sponsored": false,
+   "title": "The Christmas Killer",
+   "reviews": "13 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "0590433113",
+    "title": "The Christmas Killer",
+    "author": "Patricia Windsor",
+    "format_text": "Library Binding",
+    "price_text": "$19.81",
+    "reviews_text": "(13)",
+    "rating_text": "4.3 out of 5 stars",
+    "ranks_text": "#9,652,154 in Books (See Top 100 in Books) #154,634 in Teen & Young Adult Literature & Fiction",
+    "details": {
+     "Publisher": "Scholastic",
+     "Publication date": "October 1, 1991",
+     "Language": "English",
+     "Print length": "263 pages",
+     "ISBN-10": "0590433113",
+     "ISBN-13": "978-0590433112",
+     "Item Weight": "1.1 pounds",
+     "Reading age": "13 years and up",
+     "Grade level": "7 - 9",
+     "Best Sellers Rank": "#9,652,154 in Books (See Top 100 in Books) #154,634 in Teen & Young Adult Literature & Fiction",
+     "Customer Reviews": "4.3 4.3 out of 5 stars (13)"
+    }
+   }
+  },
+  {
+   "position": 5,
+   "asin": "B0HGBHFGGS",
+   "sponsored": false,
+   "title": "The Train Killer: The 45000 Record Murder Mystery Logic Puzzle - Search the 18 Clues in the Records, Eliminate Suspects and Find the Killer (Who is The Killer)",
+   "reviews": "16 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0HGBHFGGS",
+    "title": "The Train Killer: The 45000 Record Murder Mystery Logic Puzzle - Search the 18 Clues in the Records, Eliminate Suspects and Find the Killer (Who is The Killer)",
+    "author": "Rowan Black",
+    "format_text": "Paperback",
+    "price_text": "$14.99",
+    "reviews_text": "(16)",
+    "rating_text": "3.5 out of 5 stars",
+    "ranks_text": "#126,950 in Books (See Top 100 in Books) #795 in Logic & Brain Teasers (Books) #1,046 in Puzzles (Books) #6,614 in Amateur Sleuths",
+    "details": {
+     "ASIN": "B0HGBHFGGS",
+     "Publisher": "Independently published",
+     "Publication date": "August 24, 2026",
+     "Language": "English",
+     "Print length": "156 pages",
+     "ISBN-13": "979-8194592272",
+     "Item Weight": "10.4 ounces",
+     "Dimensions": "6 x 0.36 x 9 inches",
+     "Best Sellers Rank": "#126,950 in Books (See Top 100 in Books) #795 in Logic & Brain Teasers (Books) #1,046 in Puzzles (Books) #6,614 in Amateur Sleuths",
+     "Customer Reviews": "3.5 3.5 out of 5 stars (16)"
+    }
+   }
+  },
+  {
+   "position": 6,
+   "asin": "B0GC47JK57",
+   "sponsored": false,
+   "title": "A Killer for Christmas: A Novel",
+   "reviews": "18 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0GC47JK57",
+    "title": "A Killer for Christmas: A Novel",
+    "author": "Kim Harrington",
+    "format_text": "Paperback",
+    "price_text": "$19.99",
+    "reviews_text": "(18)",
+    "rating_text": "4.1 out of 5 stars",
+    "ranks_text": "#74,208 in Books (See Top 100 in Books) #2,555 in Women Sleuths (Books) #3,393 in Cozy Mysteries (Books) #33,644 in Genre Literature & Fiction",
+    "details": {
+     "ASIN": "B0GC47JK57",
+     "Publisher": "Crooked Lane Books",
+     "Publication date": "September 22, 2026",
+     "Language": "English",
+     "Print length": "320 pages",
+     "ISBN-13": "979-8892425032",
+     "Item Weight": "10.4 ounces",
+     "Dimensions": "5.5 x 0.76 x 8.26 inches",
+     "Best Sellers Rank": "#74,208 in Books (See Top 100 in Books) #2,555 in Women Sleuths (Books) #3,393 in Cozy Mysteries (Books) #33,644 in Genre Literature & Fiction",
+     "Customer Reviews": "4.1 4.1 out of 5 stars (18)"
+    }
+   }
+  },
+  {
+   "position": 7,
+   "asin": "B0FXM78FTR",
+   "sponsored": false,
+   "title": "The Christmas Killer: The BRAND NEW gripping police procedural from Ross Greenwood for Christmas 2026",
+   "reviews": "320 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0FXM78FTR",
+    "title": "The Christmas Killer: The BRAND NEW gripping police procedural from Ross Greenwood for Christmas 2026",
+    "author": "Ross Greenwood",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(320)",
+    "rating_text": "4.7 out of 5 stars",
+    "ranks_text": "#25,618 in Audible Books & Originals (See Top 100 in Audible Books & Originals) #75 in Holiday Fiction (Audible Books & Originals) #371 in Holiday Fiction (Books) #801 in Police Procedural Mysteries",
+    "details": {
+     "Listening Length": "9 hours and 31 minutes",
+     "Author": "Ross Greenwood",
+     "Narrator": "David Thorpe",
+     "Publication date": "September 2, 2026",
+     "Language": "English",
+     "Publisher": "Boldwood Books",
+     "ASIN": "B0FXM78FTR",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook",
+     "Best Sellers Rank": "#25,618 in Audible Books & Originals (See Top 100 in Audible Books & Originals) #75 in Holiday Fiction (Audible Books & Originals) #371 in Holiday Fiction (Books) #801 in Police Procedural Mysteries",
+     "Customer Reviews": "4.7 4.7 out of 5 stars (320)"
+    }
+   }
+  },
+  {
+   "position": 8,
+   "asin": "B0875VC5W7",
+   "sponsored": false,
+   "title": "The Christmas Killer: the PERFECT chilling thriller for 2026 (DI James Walker Book 1)",
+   "reviews": "8,889 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0875VC5W7",
+    "title": "The Christmas Killer: the PERFECT chilling thriller for 2026 (DI James Walker Book 1)",
+    "author": "Alex Pine",
+    "format_text": "Kindle",
+    "price_text": "$1.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(8,889)",
+    "rating_text": "3.9 out of 5 stars",
+    "ranks_text": "#412,823 in Kindle Store (See Top 100 in Kindle Store) #2,403 in Vigilante Justice #2,726 in Kidnapping Crime Fiction #3,379 in Vigilante Justice Thrillers",
+    "details": {
+     "ASIN": "B0875VC5W7",
+     "Publisher": "Avon",
+     "Accessibility": "Learn more",
+     "Publication date": "October 29, 2020",
+     "Language": "English",
+     "File size": "3.7 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "406 pages",
+     "ISBN-13": "978-0008402655",
+     "Page Flip": "Enabled",
+     "Book 1 of 8": "DI James Walker",
+     "Best Sellers Rank": "#412,823 in Kindle Store (See Top 100 in Kindle Store) #2,403 in Vigilante Justice #2,726 in Kidnapping Crime Fiction #3,379 in Vigilante Justice Thrillers",
+     "Customer Reviews": "3.9 3.9 out of 5 stars (8,889)"
+    }
+   }
+  },
+  {
+   "position": 9,
+   "asin": "B0DQBK74KZ",
+   "sponsored": false,
+   "title": "Red Suit Killer: Christmas Serial Killer Story (Christmas Series Book 12)",
+   "reviews": "7 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0DQBK74KZ",
+    "title": "Red Suit Killer: Christmas Serial Killer Story (Christmas Series Book 12)",
+    "author": "Dinesh Deckker",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(7)",
+    "rating_text": "4.7 out of 5 stars",
+    "ranks_text": "#2,526,703 in Kindle Store (See Top 100 in Kindle Store) #9,369 in Serial Killers #9,544 in Holiday Fiction (Kindle Store) #11,583 in Holiday Fiction (Books)",
+    "details": {
+     "ASIN": "B0DQBK74KZ",
+     "Publisher": "Dinsu Books",
+     "Accessibility": "Learn more",
+     "Publication date": "December 12, 2024",
+     "Language": "English",
+     "File size": "3.5 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Not Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "90 pages",
+     "Page Flip": "Enabled",
+     "Book 11 of 12": "Christmas Series",
+     "Reading age": "15 - 18 years",
+     "Best Sellers Rank": "#2,526,703 in Kindle Store (See Top 100 in Kindle Store) #9,369 in Serial Killers #9,544 in Holiday Fiction (Kindle Store) #11,583 in Holiday Fiction (Books)",
+     "Customer Reviews": "4.7 4.7 out of 5 stars (7)"
+    }
+   }
+  },
+  {
+   "position": 10,
+   "asin": "B00O9IH3UY",
+   "sponsored": false,
+   "title": "The Christmas Killer",
+   "reviews": "812 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B00O9IH3UY",
+    "title": "The Christmas Killer",
+    "author": "Jim Gallows",
+    "format_text": "Kindle",
+    "price_text": "$8.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(812)",
+    "rating_text": "3.8 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "ASIN": "B00O9IH3UY",
+     "Publisher": "Penguin",
+     "Accessibility": "Learn more",
+     "Publication date": "December 4, 2014",
+     "Language": "English",
+     "File size": "1.0 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "438 pages",
+     "ISBN-13": "978-1405920247",
+     "Page Flip": "Enabled",
+     "Customer Reviews": "3.8 3.8 out of 5 stars (812)"
+    }
+   }
+  },
+  {
+   "position": 11,
+   "asin": "B0DQDSFMFK",
+   "sponsored": false,
+   "title": "A Christmas Killer",
+   "reviews": "2 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0DQDSFMFK",
+    "title": "A Christmas Killer",
+    "author": "Jocelyn LaFavers",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(2)",
+    "rating_text": "5.0 out of 5 stars",
+    "ranks_text": "#3,759,338 in Kindle Store (See Top 100 in Kindle Store) #10,814 in Two-Hour Mystery, Thriller & Suspense Short Reads #11,311 in Serial Killers #16,151 in Two-Hour Teen & Young Adult Short Reads",
+    "details": {
+     "ASIN": "B0DQDSFMFK",
+     "Accessibility": "Learn more",
+     "Publication date": "December 12, 2024",
+     "Edition": "1st",
+     "Language": "English",
+     "File size": "4.3 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Not Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "98 pages",
+     "Page Flip": "Enabled",
+     "Reading age": "13 - 18 years",
+     "Best Sellers Rank": "#3,759,338 in Kindle Store (See Top 100 in Kindle Store) #10,814 in Two-Hour Mystery, Thriller & Suspense Short Reads #11,311 in Serial Killers #16,151 in Two-Hour Teen & Young Adult Short Reads",
+     "Customer Reviews": "5.0 5.0 out of 5 stars (2)"
+    }
+   }
+  },
+  {
+   "position": 12,
+   "asin": "B0CFD1G99R",
+   "sponsored": false,
+   "title": "The Christmas Killer",
+   "reviews": "5 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0CFD1G99R",
+    "title": "The Christmas Killer",
+    "author": "J.R. Mitchell Fletcher",
+    "format_text": "Kindle",
+    "price_text": "$9.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(5)",
+    "rating_text": "5.0 out of 5 stars",
+    "ranks_text": "#3,703,403 in Kindle Store (See Top 100 in Kindle Store) #372,013 in Literature & Fiction (Kindle Store) #1,534,372 in Literature & Fiction (Books)",
+    "details": {
+     "ASIN": "B0CFD1G99R",
+     "Publisher": "Page Publishing, Inc.",
+     "Accessibility": "Learn more",
+     "Publication date": "August 10, 2023",
+     "Language": "English",
+     "File size": "1.6 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Not Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "504 pages",
+     "ISBN-13": "979-8886548488",
+     "Page Flip": "Enabled",
+     "Best Sellers Rank": "#3,703,403 in Kindle Store (See Top 100 in Kindle Store) #372,013 in Literature & Fiction (Kindle Store) #1,534,372 in Literature & Fiction (Books)",
+     "Customer Reviews": "5.0 5.0 out of 5 stars (5)"
+    }
+   }
+  },
+  {
+   "position": 13,
+   "asin": "B07H27NCP4",
+   "sponsored": false,
+   "title": "The Killer Christmas Sweater Club (A Seaside Cove Bed & Breakfast Mystery Book 3)",
+   "reviews": "402 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B07H27NCP4",
+    "title": "The Killer Christmas Sweater Club (A Seaside Cove Bed & Breakfast Mystery Book 3)",
+    "author": "Terry Ambrose",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(402)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "#1,720,986 in Kindle Store (See Top 100 in Kindle Store) #36,569 in Cozy Mystery #51,079 in Cozy Mysteries (Books) #953,296 in Literature & Fiction (Kindle Store)",
+    "details": {
+     "ASIN": "B07H27NCP4",
+     "Accessibility": "Learn more",
+     "Publication date": "November 8, 2018",
+     "Language": "English",
+     "File size": "2.8 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Not Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "292 pages",
+     "Page Flip": "Enabled",
+     "Book 3 of 9": "A Seaside Cove Bed & Breakfast Mystery",
+     "Best Sellers Rank": "#1,720,986 in Kindle Store (See Top 100 in Kindle Store) #36,569 in Cozy Mystery #51,079 in Cozy Mysteries (Books) #953,296 in Literature & Fiction (Kindle Store)",
+     "Customer Reviews": "4.4 4.4 out of 5 stars (402)"
+    }
+   }
+  },
+  {
+   "position": 14,
+   "asin": "B076KQZ1GZ",
+   "sponsored": false,
+   "title": "Killer Christmas",
+   "reviews": "13 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B076KQZ1GZ",
+    "title": "Killer Christmas",
+    "author": "John Hall",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(13)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "#2,716,291 in Kindle Store (See Top 100 in Kindle Store) #7,167 in Teen & Young Adult Mysteries & Detective Stories #7,363 in Teen & Young Adult Horror eBooks #8,541 in Teen & Young Adult Mysteries & Thrillers eBooks",
+    "details": {
+     "ASIN": "B076KQZ1GZ",
+     "Publisher": "The Evan Marshall Agency",
+     "Accessibility": "Learn more",
+     "Publication date": "October 18, 2017",
+     "Language": "English",
+     "File size": "1.4 MB",
+     "Screen Reader": "Supported",
+     "Enhanced typesetting": "Enabled",
+     "X-Ray": "Not Enabled",
+     "Word Wise": "Enabled",
+     "Print length": "146 pages",
+     "Page Flip": "Enabled",
+     "Grade level": "7 - 12",
+     "Reading age": "13 - 18 years",
+     "Best Sellers Rank": "#2,716,291 in Kindle Store (See Top 100 in Kindle Store) #7,167 in Teen & Young Adult Mysteries & Detective Stories #7,363 in Teen & Young Adult Horror eBooks #8,541 in Teen & Young Adult Mysteries & Thrillers eBooks",
+     "Customer Reviews": "4.5 4.5 out of 5 stars (13)"
+    }
+   }
+  },
+  {
+   "position": 15,
+   "asin": "B0HC7JDL8G",
+   "sponsored": false,
+   "title": "The Aquarium Killer: The 3,000 Record Murder Mystery Logic Puzzle - Search the 9 Clues in the Aquarium Records, Eliminate Suspects and Find the Killer (Who is The Killer)",
+   "reviews": "5 ratings",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0HC7JDL8G",
+    "title": "The Aquarium Killer: The 3,000 Record Murder Mystery Logic Puzzle - Search the 9 Clues in the Aquarium Records, Eliminate Suspects and Find the Killer (Who is The Killer)",
+    "author": "Rowan Black",
+    "format_text": "Paperback",
+    "price_text": "$14.99",
+    "reviews_text": "(5)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "#718,644 in Books (See Top 100 in Books) #2,967 in Logic & Brain Teasers (Books) #4,382 in Puzzles (Books) #19,767 in Amateur Sleuths",
+    "details": {
+     "ASIN": "B0HC7JDL8G",
+     "Publisher": "Independently published",
+     "Publication date": "July 30, 2026",
+     "Language": "English",
+     "Print length": "163 pages",
+     "ISBN-13": "979-8189883934",
+     "Item Weight": "10.7 ounces",
+     "Dimensions": "6 x 0.37 x 9 inches",
+     "Best Sellers Rank": "#718,644 in Books (See Top 100 in Books) #2,967 in Logic & Brain Teasers (Books) #4,382 in Puzzles (Books) #19,767 in Amateur Sleuths",
+     "Customer Reviews": "4.5 4.5 out of 5 stars (5)"
+    }
+   }
+  },
+  {
+   "position": 16,
+   "asin": "B0HDNYTHG6",
+   "sponsored": false,
+   "title": "Who Is The Killer?: Christmas Edition - A Hard Murder Mystery Logic Puzzle Book For Teens and Adults",
+   "reviews": "",
+   "bought_text": "",
+   "page": 1,
+   "product": {
+    "asin": "B0HDNYTHG6",
+    "title": "Who Is The Killer?: Christmas Edition - A Hard Murder Mystery Logic Puzzle Book For Teens and Adults",
+    "author": "Dash Cormick",
+    "format_text": "Paperback",
+    "price_text": "$10.99",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "#2,034,783 in Books (See Top 100 in Books) #7,067 in Logic & Brain Teasers (Books) #11,469 in Puzzles (Books) #35,720 in Amateur Sleuths",
+    "details": {
+     "ASIN": "B0HDNYTHG6",
+     "Publisher": "Independently published",
+     "Publication date": "August 6, 2026",
+     "Language": "English",
+     "Print length": "219 pages",
+     "ISBN-13": "979-8191207834",
+     "Item Weight": "13.9 ounces",
+     "Dimensions": "6 x 0.55 x 9 inches",
+     "Best Sellers Rank": "#2,034,783 in Books (See Top 100 in Books) #7,067 in Logic & Brain Teasers (Books) #11,469 in Puzzles (Books) #35,720 in Amateur Sleuths"
+    }
+   }
+  },
+  {
+   "position": 17,
+   "asin": "B0HL79TRDL",
+   "sponsored": false,
+   "title": "THE 24 DOORS Mystery Advent Calendar for Adults: For true crime fans. 24 illustrated chapters, 24 logic puzzles. Investigate the crime and find the killer before Christmas.",
+   "reviews": "2 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 18,
+   "asin": "B0HLH3313F",
+   "sponsored": false,
+   "title": "The Elf Is Not The Killer – 20,000 SUSPECTS • 18 CLUES • ONE KILLER: A Christmas Whodunit Cross-Out Names Puzzle Book",
+   "reviews": "",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 19,
+   "asin": "B0HJDHXZHW",
+   "sponsored": false,
+   "title": "Murder Search: A Killer Christmas: 120 Christmas Murder Mystery Cases To Solve (Murder Search Mysteries)",
+   "reviews": "",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 20,
+   "asin": "3567022911",
+   "sponsored": false,
+   "title": "The Killer Isn't Aileen: A 3,000-Suspect Christmas Grand Hotel Murder Mystery Puzzle for Adults with Crime Scene Evidence, Logic Clues & Deduction Challenges for Armchair Detectives",
+   "reviews": "",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 21,
+   "asin": "B0DGMZPSN7",
+   "sponsored": false,
+   "title": "A Christmas Killer",
+   "reviews": "2 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 22,
+   "asin": "B0HCK2DMJ4",
+   "sponsored": false,
+   "title": "The Dog Show Killer: The 3000 Record Murder Mystery Logic Puzzle - Search the 18 Clues in the Dog Show Records, Eliminate Suspects and Find the Killer (Who is The Killer)",
+   "reviews": "4 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 23,
+   "asin": "B0HBN7N4WW",
+   "sponsored": false,
+   "title": "The Zoo Killer: The 3,000 Record Murder Mystery Logic Puzzle - Search the 15 Clues in the Zoo Records, Eliminate Suspects and Find the Killer (Who is The Killer)",
+   "reviews": "5 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 24,
+   "asin": "0352398183",
+   "sponsored": false,
+   "title": "A Christmas Killing (Columbo)",
+   "reviews": "4 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 25,
+   "asin": "B0H8TNT4SJ",
+   "sponsored": false,
+   "title": "The Cruise Killer: Mystery Logic Puzzle, Search the 8 Clues, Eliminate the Ship Records, and Find the Killer! (Who is The Killer)",
+   "reviews": "",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 26,
+   "asin": "B0DWNH37WH",
+   "sponsored": false,
+   "title": "The Christmas Cracker Killer: The new fiendishly clever Christmas mystery from the bestselling author of Murder on the Christmas Express",
+   "reviews": "161 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 27,
+   "asin": "B0HCZKJB9X",
+   "sponsored": false,
+   "title": "Who Killed The BOSS!: Interactive Murder Mystery Whodunit Puzzle Book Can You Solve the 5500-Suspect Case? to Find the Killer",
+   "reviews": "",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 28,
+   "asin": "B0HHJ1PHWW",
+   "sponsored": false,
+   "title": "Murder in Advent: Murder Mystery Word Search Puzzle Book Advent Calendar - 24 Days Whodunit Crime Cases to Solve | Can You Find the Killer?",
+   "reviews": "",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 29,
+   "asin": "B0788Z6KB8",
+   "sponsored": false,
+   "title": "Killer Christmas: Short Story (A DI Geraldine Steel Thriller)",
+   "reviews": "1,558 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 30,
+   "asin": "B00SI0B5R6",
+   "sponsored": false,
+   "title": "Rest Ye Murdered Gentlemen (Year-Round Christmas Mysteries Book 1)",
+   "reviews": "1,072 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 31,
+   "asin": "B0HLBQ9XDY",
+   "sponsored": false,
+   "title": "KILLER SEARCH: Murder Mystery Word Search Puzzle Book for Adults, Vol. 1: 100 Four-File Crime Cases to Solve, 400 Puzzles from Easy to Hard (Killer Gifts for Mystery Lovers)",
+   "reviews": "1 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 32,
+   "asin": "B07ZY52L5X",
+   "sponsored": false,
+   "title": "A KILLER CHRISTMAS EVE",
+   "reviews": "3 ratings",
+   "bought_text": "",
+   "page": 2
+  },
+  {
+   "position": 33,
+   "asin": "B01910O6I6",
+   "sponsored": false,
+   "title": "The Holiday Killer",
+   "reviews": "11 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 34,
+   "asin": "B0786P2DWN",
+   "sponsored": false,
+   "title": "KILLER CHRISTMAS PIE (Pies and Pages Cozy Mysteries Book 5)",
+   "reviews": "198 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 35,
+   "asin": "1835093248",
+   "sponsored": false,
+   "title": "North Parade Publishing Search Find Christmas Fun.",
+   "reviews": "",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 36,
+   "asin": "1913778118",
+   "sponsored": false,
+   "title": "A Killer Christmas: The festivities are to die for...",
+   "reviews": "4 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 37,
+   "asin": "B01N40G0JH",
+   "sponsored": false,
+   "title": "The Killer Cat's Christmas by Anne Fine (2009-11-05)",
+   "reviews": "150 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 38,
+   "asin": "B0017SWQ9W",
+   "sponsored": false,
+   "title": "The Christmas Cookie Killer (Fresh-Baked Mystery Book 3)",
+   "reviews": "168 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 39,
+   "asin": "B0HL7F7213",
+   "sponsored": false,
+   "title": "Murder in the Snow at Kittering St Mary: A Cozy Christmas Elimination Mystery Puzzle Book with Six Connected Cases, 5,500 Suspects and One Festive Mastermind for Adults Who Love Whodunits",
+   "reviews": "",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 40,
+   "asin": "B09LQJCSNZ",
+   "sponsored": false,
+   "title": "A Killer Christmas: The festivities are to die for... (Allensbury Mysteries Book 3)",
+   "reviews": "14 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 41,
+   "asin": "B0C1MJ2V28",
+   "sponsored": false,
+   "title": "The Killer’s Christmas List: The instant bestseller: a gripping festive detective crime thriller novel with a chilling twist (DI Tom Stonem Book 1)",
+   "reviews": "3,010 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 42,
+   "asin": "B08R317DHG",
+   "sponsored": false,
+   "title": "The Girl and the Black Christmas (Emma Griffin® FBI Mystery Book 11)",
+   "reviews": "8,908 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 43,
+   "asin": "B00P67YRO2",
+   "sponsored": false,
+   "title": "The Night Before Christmas",
+   "reviews": "16 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 44,
+   "asin": "0823464474",
+   "sponsored": false,
+   "title": "The Night Before Christmas (Gift Edition)",
+   "reviews": "5,798 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 45,
+   "asin": "B0HL6N4NN9",
+   "sponsored": false,
+   "title": "Who Killed the Ferryman?: A Cozy Murder Mystery Word Search Puzzle Book for Adults: One Case, 42 Puzzles, 12 Suspects, 1 Killer. Every Word Search Hides a Clue",
+   "reviews": "",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 46,
+   "asin": "1494300044",
+   "sponsored": false,
+   "title": "A Baby for Christmas (Love at the Crossroads)",
+   "reviews": "187 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 47,
+   "asin": "B0BNW3615S",
+   "sponsored": false,
+   "title": "Christmas in the Empty Cabin: A Collection of Supernatural and Horror Stories for Christmas, Thanksgiving, and Other Holidays (Horror for the Holidays)",
+   "reviews": "231 ratings",
+   "bought_text": "",
+   "page": 3
+  },
+  {
+   "position": 48,
+   "asin": "B0DCZXQ528",
+   "sponsored": false,
+   "title": "Stranded",
+   "reviews": "5,308 ratings",
+   "bought_text": "",
+   "page": 3
+  }
+ ],
+ "pages": 3,
+ "books_read": 16
+}

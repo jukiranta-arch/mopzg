@@ -111,3 +111,47 @@ Be different on **structure**, which no copycat in the pile has changed.
 | Trademarks | check every title word; avoid "Alice" and other series names |
 
 The scoring model (`04_learning/scoring_model.md`) is not in this container, so no score yet.
+
+## 5. New data (2026-09-30): the structure already has a winner
+
+Reviews captured from amazon.co.uk book pages. Two of the seven books (*Layover Murders*, *Cross It Out If…*) have no reviews there yet.
+
+**Eliminate! already does sections that feed a final answer.** It has three volumes selling 15–17/day each, 402 pages, and 71% 5-star reviews on amazon.co.uk.
+- **How it plays:** each section has its own list (names, items or places) and about 10 clues, and ends in one answer. That answer rules out suspects in a file at the back. You repeat until one suspect is left, then go online for the full story.
+- **What readers praise:**
+  - "eliminating things but in smaller categories so it's not overwhelming";
+  - "a category every day or so";
+  - "adding a feeling of actual deduction at the end: actual suspects you need to collect clues for";
+  - "so much better than other 'the killer isn't' books";
+  - "can't wait for volume 2/3".
+- **What they complain about:**
+  - an error found halfway, in a clue needed for the end (1 star: "pricey… can't return it, it's been highlighted");
+  - "repetitive";
+  - a heavy book;
+  - the story is online.
+
+**Other books:**
+- ***The Autumn Killer 3-in-1*** (by the author of *Lottery Killer*) has three answers to find: killer, victim, weapon. "It uses the whole of the book, rather than a certain chunk." The answer is behind a QR code.
+- ***Phone Book Serial Killer***: "love how each of the cases tie together with their clues."
+- ***Coroner's Cold Case Files***:
+  - "It's not just crossing off names: a place, a cause of death… took several days, not a month."
+  - 1 star: "I assumed *files* meant multiple cases… only 1 case." Readers want multiple cases.
+  - 3 stars: "applying successive filters to thousands of rows… feels like work."
+- ***Killer Bought a Ticket***:
+  - praise: "you know you are done after each page" (unlike *Alice*'s flipping back and forth);
+  - complaint: a clue that "instantly knocked off half the book";
+  - complaint: thin pages that highlighters bleed through.
+
+**What this changes.** Splitting the book into sections that feed a final answer is proven (*Eliminate* is its winner), but it is **not** unclaimed. It becomes our entry because readers are asking for it. The differences have to come from what *Eliminate* and the *Alice* pile get wrong:
+1. **Every answer is checked.** Each case's killer feeds a clue in the next case, so a wrong answer or a printing error shows up in the next case, not at the end. *Eliminate*'s worst review is exactly that failure.
+2. **The story is in the book,** not online. No website (Juho's rule).
+3. **Hunting, not filtering:** landmark names to find, and clues about positions on the page. This answers "feels like work".
+4. **A book you can hold:** about 200 pages, not 400.
+
+## 6. Christmas: not our first book
+
+- ***christmas find the killer*:** 48 results, 8/day in total. About 10 Christmas name-list books have come out in the last 60 days (*Find the Christmas Killer*, *The Elf Is Not the Killer*, *Killer Isn't Aileen*, *Not on the Naughty List*, *Christmas Cruise*, *Glenwall Castle*…). All sell 0–0.8/day in September.
+- **Can't judge before December** (Lesson 5). A new structure plus a crowded seasonal lane means two unknowns at once.
+- **Decision:** the first book is evergreen. A Christmas edition can follow once the format is proven.
+
+`find the killer volume 2` returned no relevant signal.
