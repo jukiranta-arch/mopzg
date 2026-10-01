@@ -4,7 +4,7 @@ Status: **draft, 2026-10-01**. No code until Juho approves. The evidence is in `
 
 ## The promise (cover and subtitle)
 
-> **5 murders · 25,000 suspects · 1 mastermind.**
+> **25,000 suspects · 1 mastermind.** Five murders, one summer, one village.
 > Every answer checks itself: no website, no QR code, no spoilers.
 
 ## What we keep from the genre (so the crowd recognises it)
@@ -90,6 +90,19 @@ It needs a reason for five murders in five different crowds, plus a mastermind b
 
 - **Correction to option B:** "nothing in our data either way" was wrong. Of 21 ship, train and flight books, none sells. Some are large print or for children, but the signal is still negative.
 - **Where the cozy sales come from:** almost all are word-search books. Cozy *name-list* books exist (*The Killer Borrowed a Book*, *Just One Murder Before Tea*, *Who Killed Lady Hawthorn?*, *Kittering St Mary*, *Murder, Tea, and Cat Hair*), but their pages weren't read, so their sales are unknown. Next searches: `cozy murder mystery puzzle book` and `cozy find the killer`.
+
+**The cozy searches** (2026-10-01; `cozy find the killer`, `cozy murder mystery puzzle book`; the capture read the first 16 books of each):
+- **Cozy is proven for story-plus-word-search books, not yet for name lists.**
+  - The cozy sellers are word-search story books: *Murder Among the Stacks* 30/day, *Murder for Breakfast* 15/day, *Murder, She Searched* 13/day.
+  - The name-list sellers in the same results are not cozy: *Alice*, *Darcy*, *Never Checked In*, *Eliminate*.
+  - The cozy name-list books (*The Killer Borrowed a Book*, *Just One Murder Before Tea*, *Lady Hawthorn*, *Murder, Tea, and Cat Hair*, *The Bookstore Killer*) all sit below the first 16 results, where ranks weren't read. Amazon orders search results largely by sales, so they are probably weaker, but this is not proven.
+- **A warning about the structure.** The *Find the Killer Mystery Files* series sells **0.1/day per book**, across four books (Ski Lodge, Superyacht, Casino, and one more), each with about 10 reviews at about 2 months. Each book is "Five 555-Suspect Murder Mystery Logic Puzzles", so it reads as five small separate puzzles. Compare:
+  - *Eliminate* (15 sections, 15/day) and *Autumn Killer* (3 trails, 10/day) sell. Both present **one big case** with one killer, and the sections are just how you get there.
+  - **So the cover and title must sell one big case:** "25,000 suspects, 1 mastermind". "Five linked murders" is how you play, not the headline. Never "5 puzzles".
+- **Setting decision (data-led):** an English village with a light, classic tone (Christie, not gore).
+  - It is the cozy buyer's world, and it is close to the most successful tone in our format (*Darcy*, *Alice*).
+  - The title uses the name-list lane's words (suspects, killer, mastermind) rather than "cozy word search", so the book shows up where name-list buyers look.
+  - Ship, train and flight are ruled out.
 
 **Landmark pool:** famous first-name groups and pairs from history, books and public life: John Paul George Ringo; Charlotte Emily Anne; Meg Jo Beth Amy; Orville Wilbur; Romeo Juliet; Bonnie Clyde… First names only, never brand or band names on the cover. The pool runs to hundreds, not the 60 fairy-tale names that sank Prince Charming.
 
