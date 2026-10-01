@@ -140,3 +140,17 @@ Keywords for the subtitle and backend: find the killer, murder mystery puzzle bo
 1. Approve or change the structure: five cases, a check after each case, the chain, the mastermind finale.
 2. The setting: A, B, or another.
 3. A working title, which can change later.
+
+## Prototype built (2026-10-01): Case One, The Summer Fête
+
+`python -m village OUT.pdf` builds the case, and `python -m village.check_pdf OUT.pdf` re-solves it from the PDF text alone. That checker has its own clue logic and tries every misreading.
+
+**What it contains (seed 1):**
+- 4,652 names on 20 ledger pages (6 × 9 in, 12 pt names) in 5 chapters: the Tea Tent, the Tombola, the Cake Stall, the Dog Show Ring, the Bowling Green.
+- 8 clues:
+  - hunt: the Beatles' chapter, between the Brontë and March sisters, near Bonnie and Clyde, within 10 names of a Musketeer;
+  - letter: ends in a vowel, an even number of vowels, no J/A/M, begins A–M.
+- On their own, the hunt clues keep 40%, 45%, 55% and 28% of the names. Together they leave 278 for the letter clues.
+- The check line is "4 letters, adding up to 44". 64 names in the ledger add up to 44, but no name that survives all the clues, or all but one, under any misreading matches it.
+
+**No chain clue yet.** Case One has no previous killer; the chain starts in Case Two.
