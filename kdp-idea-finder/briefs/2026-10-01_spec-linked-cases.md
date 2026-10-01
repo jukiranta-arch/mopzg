@@ -174,3 +174,47 @@ Juho: "I have no clue what an Ashcombe Raffle or a summer fête is." Our buyers 
 | Ship, train or plane | 21 | 2 | 0 | 0% |
 
 **What the winners do about the answer:** *Alice*, *Never Checked In*, *Find the Killer*, *Guest List*, *Eliminate* and *Autumn Killer* all end with **one** killer. Only *Darcy* ends with two suspects and a final deduction, and its sample doesn't show what that deduction is. **Decision:** the clues end at one killer, and the answer and check line go at the back.
+
+### The setting searches (2026-10-01): copies of a setting flop; the cozy small town is empty in our format
+
+**Hotel.** *Never Checked In* sells 36/day. The hotel name-list books that came after it sell almost nothing:
+
+| Book | Sales/day | Age |
+|---|---|---|
+| *Murder Hotel* (10 cases, 4,980 rooms) | 1.6 | 23 days |
+| *Murder at the Blackwood Hotel* (48,000 suspects) | 0.3 | |
+| ***The Wakeford Hotel Mysteries*** **(7 nights, 498 rooms)** | **0.2** | |
+| *The Moonholt Hotel Murder* | 0 | |
+
+*The Wakeford Hotel Mysteries* is close to our "five nights" idea, and it doesn't sell.
+
+**Ticket or event.** *The Killer Bought a Ticket* sells 10/day. The books that came after it don't:
+
+| Book | Sales/day | Age |
+|---|---|---|
+| *A Ticket to Murder* (47,000 fans, 26 reviews) | 0.6 | 20 days |
+| *Murder at a Stadium Concert: The Killer Had a Ticket* | 0.1 | |
+| *The Killer Took the Ticket* | 0 | |
+
+**Small town.**
+- The sellers are cozy word-search story books set in American small-town shops:
+  - *Murder Among the Stacks* (bookstore) 29/day;
+  - *Murder by Muffin* (bakery) 7.4/day;
+  - *Murder on Vacation* (B&B) 4.3/day;
+  - *Murder at the Antique Shop* 4.7/day;
+  - *Small Town Murders* 3.0/day.
+- *Murder for Breakfast* (15/day) is the same kind of book.
+- **No name-list book appears among the small-town results.** The readers are proven; our format hasn't been tried with them.
+
+**Conclusion.** In this lane, a setting doesn't sell on its own. The first strong book in a setting sells, and the copies that follow flop. Copying the hotel or the ticket means joining a pile of failures. The cozy American small town is the one big audience with no name-list book.
+
+**Setting decision (proposed):**
+- A cozy American small town.
+- Each case is one local shop, and its list of names is that shop's own record:
+  - the bookstore's customer list;
+  - the bakery's order book;
+  - the diner's tabs;
+  - the inn's guest book;
+  - the library's borrowers.
+- These are exactly the shops the selling cozy books use.
+- The title keeps the name-list lane's words: suspects, killer, mastermind.
