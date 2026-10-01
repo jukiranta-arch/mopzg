@@ -77,6 +77,20 @@ It needs a reason for five murders in five different crowds, plus a mastermind b
   - Against: cozy name-list books are appearing (*Kittering St Mary*, six connected cases; *Murder, Tea, and Cat Hair*), with no sales data yet.
 - **B. Five days on an ocean liner** (classic Golden Age tone): a passenger list per deck or class. Nothing in our data either way.
 
+**What the data says about setting** (2026-10-01; murder-mystery puzzle books on amazon.com, grouped by setting words in the title):
+
+| Setting | Books | Total sales/day | Selling at least 3/day | Newcomers selling at least 3/day |
+|---|---|---|---|---|
+| Cozy (village, bookshop, bakery, tea…) | 81 | 117 | 10 | 8 |
+| Dark (serial killer, forensic, true crime) | 90 | 82 | 7 | 4 |
+| Hotel | 16 | 65 | 4 | 4 |
+| Manor or period (*Darcy*, *Vex Manor*) | 32 | 50 | 4 | 3 |
+| Train or flight | 12 | 1 | 0 | 0 |
+| **Ship, cruise or liner** | **9** | **1** | **0** | **0** |
+
+- **Correction to option B:** "nothing in our data either way" was wrong. Of 21 ship, train and flight books, none sells. Some are large print or for children, but the signal is still negative.
+- **Where the cozy sales come from:** almost all are word-search books. Cozy *name-list* books exist (*The Killer Borrowed a Book*, *Just One Murder Before Tea*, *Who Killed Lady Hawthorn?*, *Kittering St Mary*, *Murder, Tea, and Cat Hair*), but their pages weren't read, so their sales are unknown. Next searches: `cozy murder mystery puzzle book` and `cozy find the killer`.
+
 **Landmark pool:** famous first-name groups and pairs from history, books and public life: John Paul George Ringo; Charlotte Emily Anne; Meg Jo Beth Amy; Orville Wilbur; Romeo Juliet; Bonnie Clyde… First names only, never brand or band names on the cover. The pool runs to hundreds, not the 60 fairy-tale names that sank Prince Charming.
 
 ## Title options (AI draft; Juho finishes)
