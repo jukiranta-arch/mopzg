@@ -157,3 +157,20 @@ The second version follows Darcy's order and wording:
 6. at the back: the final deduction (two suspects; the longer name is the killer), the check line, a Stop page, and the solution upside down on its back.
 
 The case has 9 clues, 4,367 names on 20 pages, and leaves 223 names after the hunt clues. `python -m village.check_pdf` re-solves it from the PDF under all 7 misreadings.
+
+## Setting, re-checked (2026-10-01): the village fête was not supported by data
+
+Juho: "I have no clue what an Ashcombe Raffle or a summer fête is." Our buyers are on amazon.com (US), where "fête" means little. Murder-mystery puzzle books on amazon.com, grouped by setting words in the title:
+
+| Setting | Books | Sales/day | Selling 3+/day | Hit rate |
+|---|---|---|---|---|
+| Ticket or big event (*Killer Bought a Ticket*, *Lottery Killer*, *Murder City*) | 11 | 31 | 4 | 36% |
+| Hotel, inn or guest list (*Never Checked In*, *Guest List*) | 18 | 61 | 5 | 28% |
+| Famous names (*Alice*, *Darcy*) | 20 | 479 | 5 | 25% |
+| Village or small town (mostly cozy word searches) | 56 | 84 | 9 | 16% |
+| Christmas or holiday | 124 | 96 | 11 | 9% |
+| Manor or castle | 26 | 27 | 2 | 8% |
+| **Fair, festival or market** | **17** | **2** | **0** | **0%** |
+| Ship, train or plane | 21 | 2 | 0 | 0% |
+
+**What the winners do about the answer:** *Alice*, *Never Checked In*, *Find the Killer*, *Guest List*, *Eliminate* and *Autumn Killer* all end with **one** killer. Only *Darcy* ends with two suspects and a final deduction, and its sample doesn't show what that deduction is. **Decision:** the clues end at one killer, and the answer and check line go at the back.
