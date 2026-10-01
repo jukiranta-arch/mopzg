@@ -96,3 +96,42 @@ Juho's test solves showed what breaks the fun:
 - **Checkpoints with hundreds of names are useless:** nobody counts 714 names. The winners have none, or only small numbers (26).
 - **The theme needs a big pool of names readers love to spot** (Mr Darcy: hundreds of film and TV characters). Public-domain fairy tales give about 60, many obscure.
 - **Process:** copy the whole structure of the best-reviewed book first; add our angle only in theme, story and polish; write the spec and a paper prototype before building.
+
+## Eliminate! and The Autumn Killer: samples (2026-10-01)
+
+Read with OCR from Juho's saved "Read sample" PDFs. The text is not stored.
+
+**Eliminate!** (Kimberley Kreates; 3 volumes at 15–17/day; 402 pages):
+- **Story:** Marion Vale, a records hunter, is found dead and her work bag is gone. You rebuild her case from the files she left behind.
+- **Structure:** 15 categories (school attended, birthplace, last known address, workplace…), about 1,000 options each, at roughly 27–80 a page.
+  - Each category opens with a page of story ("the folder was in the printer tray"), then 10 clues.
+  - The clues are almost all letter and word filters: ends with School, has an apostrophe, contains W, exactly two vowels, no doubled letters.
+  - The last clue is always a tie-breaker ("the one with the most T's"; "the shortest").
+- **The answers lead to suspects:** each category's answer rules out suspect cards (120 suspects, 1 killer). A missing detail on a card is "unknown, so they stay in".
+- **Teaching:** a worked example on a mini case (material, location, weapon cards).
+- **Answer:** the full story is online.
+- **No names to hunt for and no clues about the page:** it is filtering, not hunting. That is the "feels like work" risk.
+
+**The Autumn Killer** (A. S. Remington, author of *Lottery Killer*; 3-in-1):
+- **One archive:** 50,000 first names over about 230 pages, chapters named for times of day (Dawn…). Odd capitals inside names (quAnetta) are used as clue material.
+- **Three trails:**
+  - **Killer:** 18 clues mixing letter clues (one capital letter; no B, D or X; alphabet neighbours) with position and page clues:
+    - the name before the killer comes earlier in the alphabet than the name after;
+    - between the Leaf Anchors Maple and Chestnut;
+    - the facing page has an Autumn Marker;
+    - Loose Evidence within 4 pages.
+  - **Victim:** count the Recurring Names; the one appearing exactly 7 times.
+  - **Weapon:** find objects from a word bank hidden in the archive, filter them with 3 clues, and the first letters spell the weapon.
+- **Trails feed each other:** killer clue 10 uses the length of the victim's name.
+- **Very precise rules page:** names must match exactly; a crossed-out name still counts for later clues; the facing-page rule; worked examples for every clue at the back.
+- **Answer:** behind a QR code (a reviewer liked that it can't be seen by accident).
+
+**What is taken, then:**
+- sections feeding a final answer (*Eliminate*);
+- several answers from one archive, linked to each other (*Autumn Killer*);
+- hidden words whose first letters spell an answer (*Autumn Killer*'s weapon);
+- hidden landmarks (*Alice*, *Darcy*).
+
+Several small new books also advertise connected cases: *Murder in the Snow at Kittering St Mary* (six connected cases, 5,500 suspects), *Murder, Tea, and Cat Hair* (20 case files, 20 killers), *The Phone Book Serial Killer* (six parts).
+
+**What no one does:** check each answer in the book without revealing it. *Eliminate* sends you online, *Autumn* uses a QR code, *Alice* and *Do No Harm* use websites, and the others print the answer at the back.
