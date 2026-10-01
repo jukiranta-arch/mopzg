@@ -1,49 +1,56 @@
-"""One case of the linked-case book (spec: briefs/2026-10-01_spec-linked-cases.md).
+"""One case of the linked-case book, laid out like Who Killed Mr Darcy?
+(briefs/2026-09-29_winners-samples.md):
 
-A case is a gate ledger: first names in reading order, split into pages and
-chapters (places at the event). Famous groups stand among the ordinary names
-as landmarks to hunt for; they are printed like every other name.
+- the ledger is a list of entries separated by dots: first names, full names,
+  and famous names hidden among them, unmarked;
+- the clues are facts about the two suspects ("Each suspect's name...",
+  "Both suspects are within one page of a Robin Hood"), mixing letter clues
+  with hunt clues;
+- two suspects remain; a final deduction at the back of the book names the
+  killer, then a check line confirms it before the solution page.
 
-Clues come in two kinds:
-- hunt clues, about where a guest stands (a chapter, a page range, a page,
-  a distance in names from a landmark);
-- letter clues, about the name itself, meant for the few hundred names left.
-
-After the last clue comes the check line: the killer's name length and letter
-sum (A = 1 ... Z = 26). The generator makes sure it confirms only the killer:
-no other guest who survives all the clues, or all but one of them, under any
-of READINGS, has the same length and sum.
+Every case is solved under READINGS, the plausible misreadings of the rules,
+and is only accepted when each of them leaves the same two suspects.
 """
 
 import random
+import re
 from dataclasses import dataclass, field
 
-from whodunit.model import letters
-from whodunit.names import FIRST
+from whodunit.names import FIRST, LAST
 
 VOWELS = set("AEIOU")
 
 BEATLES = ("John", "Paul", "George", "Ringo")
-BRONTES = ("Charlotte", "Emily", "Anne")
-MARCH = ("Meg", "Jo", "Beth", "Amy")
-OUTLAWS = ("Bonnie", "Clyde")
 MUSKETEERS = ("Athos", "Porthos", "Aramis")
-EGGS = (("Orville", "Wilbur"), ("Caspar", "Melchior", "Balthazar"), ("Romeo", "Juliet"))
+ROBIN = "Robin Hood"
+ROMEO, JULIET = "Romeo", "Juliet"
+BONNIE, CLYDE = "Bonnie", "Clyde"
+# Famous names with no clue of their own, for readers to spot.
+EGGS = ["Florence Nightingale", "Charles Dickens", "Jane Austen", "Isaac Newton", "Ada Lovelace",
+        "Oliver Twist", "Long John Silver", "Captain Nemo", "Ebenezer Scrooge", "Lady Macbeth"]
 
-# Names that appear only as part of a landmark, so a lone one can never be mistaken for it.
-RESERVED = {"Ringo", "Charlotte", "Meg", "Jo", "Bonnie", "Clyde", *MUSKETEERS,
-            "Orville", "Wilbur", "Caspar", "Melchior", "Balthazar", "Romeo", "Juliet"}
-FILLER = [n for n in FIRST if n not in RESERVED and n.isalpha()]
+# First names and surnames that never appear in ordinary entries, so a landmark can't be confused
+# with an ordinary visitor ("Robin Finch" is not Robin Hood; "John Baker" is not a Beatle).
+RESERVED_FIRST = {*BEATLES, *MUSKETEERS, "Robin", ROMEO, JULIET, BONNIE, CLYDE}
+RESERVED_LAST = {"Hood", "Robin"}
+FIRSTS = [n for n in FIRST if n not in RESERVED_FIRST and n.isalpha()]
+LASTS = [n for n in LAST if n not in RESERVED_LAST and n.isalpha()]
+LANDMARKS = {*BEATLES, *MUSKETEERS, ROBIN, ROMEO, JULIET, BONNIE, CLYDE, *EGGS}
 
-# Plausible misreadings; every case must give the same answer under each of them.
 READINGS = [
     {},                          # the rules as printed
     {"y_vowel": True},           # treats Y as a vowel
     {"window": 1},               # "within 10 names" counted one too generously
     {"window": -1},              # ...or one too strictly
-    {"between_inclusive": True}, # counts the two sisters' own pages as "between"
-    {"outlaw_page_only": True},  # forgets "or the page just before or after"
+    {"between_inclusive": True}, # counts Romeo's and Juliet's own pages as "between"
+    {"robin_page_only": True},   # forgets the page before and after a Robin Hood
+    {"bonnie_or_clyde": True},   # takes "a Bonnie and a Clyde" as either one
 ]
+
+
+def letters(name):
+    return re.sub(r"[^A-Za-z]", "", name).upper()
 
 
 def signature(name):
@@ -54,7 +61,7 @@ def signature(name):
 
 @dataclass
 class Ledger:
-    pages: list                       # each page is a list of names
+    pages: list                       # each page is a list of entries
     chapters: list                    # (place, first page index)
     first_page_no: int = 1
     flat: list = field(default_factory=list)
@@ -73,10 +80,8 @@ class Ledger:
     def page_no(self, p):
         return self.first_page_no + p
 
-    def runs(self, group):
-        """Flat indices where the group starts, standing together in reading order."""
-        n = len(group)
-        return [i for i in range(len(self.flat) - n + 1) if tuple(self.flat[i:i + n]) == tuple(group)]
+    def pages_with(self, name):
+        return {self.page_of[i] for i, n in enumerate(self.flat) if n == name}
 
 
 # ---------------------------------------------------------------- clues
@@ -85,60 +90,52 @@ class Ledger:
 class Clue:
     key: str
     kind: str          # "hunt" or "letter"
-    rule: str          # the plain rule, as printed
-    witness: str       # the story line before it
-    example: str       # how to apply it
-    test: object       # test(ledger, i, reading) -> bool, for every flat index at once via prepare()
+    text: str          # the clue, as printed
+    explain: str       # how it works, as printed under it
+    test: object       # test(ledger, reading) -> list of bools, one per entry
 
 
-def _is_vowel(c, reading):
+def _vowel(c, reading):
     return c in VOWELS or (c == "Y" and bool(reading.get("y_vowel")))
 
 
 def word_test(fn):
-    def test(led, reading):
-        return [fn(n, reading) for n in led.flat]
-    return test
+    return lambda led, reading: [fn(n, reading) for n in led.flat]
 
 
-def ends_vowel(name, reading):
-    return _is_vowel(letters(name)[-1], reading)
+def odd_consonants(name, reading):
+    return sum(not _vowel(c, reading) for c in letters(name)) % 2 == 1
 
 
-def even_vowels(name, reading):
-    return sum(_is_vowel(c, reading) for c in letters(name)) % 2 == 0
+def ends_consonant(name, reading):
+    return not _vowel(letters(name)[-1], reading)
 
 
-def no_jam(name, reading):
-    return not set(letters(name)) & set("JAM")
+def double_letter(name, reading):
+    return any(re.search(r"([a-z])\1", w.lower()) for w in name.split())
 
 
-def first_a_to_m(name, reading):
+def a_to_m(name, reading):
     return letters(name)[0] <= "M"
 
 
-def beatles_chapter(led, reading):
-    chs = {led.chapter_of_page[led.page_of[i]] for i in led.runs(BEATLES)}
-    return [led.chapter_of_page[p] in chs for p in led.page_of]
-
-
-def between_sisters(led, reading):
-    pb = led.page_of[led.runs(BRONTES)[0]]
-    pm = led.page_of[led.runs(MARCH)[0]]
-    lo, hi = min(pb, pm), max(pb, pm)
-    if reading.get("between_inclusive"):
-        return [lo <= p <= hi for p in led.page_of]
-    return [lo < p < hi for p in led.page_of]
-
-
-def outlaws_near(led, reading):
-    pages = {led.page_of[i] for i in led.runs(OUTLAWS)}
-    if not reading.get("outlaw_page_only"):
-        pages |= {p + d for p in pages for d in (-1, 1)}
+def near_robin(led, reading):
+    pages = led.pages_with(ROBIN)
+    if not reading.get("robin_page_only"):
+        pages = {q for p in pages for q in (p - 1, p, p + 1)}
     return [p in pages for p in led.page_of]
 
 
-def musketeer_within(n):
+def not_beatles_chapter(led, reading):
+    found = {}
+    for i, n in enumerate(led.flat):
+        if n in BEATLES:
+            found.setdefault(led.chapter_of_page[led.page_of[i]], set()).add(n)
+    full = {ch for ch, names in found.items() if len(names) == 4}
+    return [led.chapter_of_page[p] not in full for p in led.page_of]
+
+
+def near_musketeer(n):
     def test(led, reading):
         w = n + reading.get("window", 0)
         out = [False] * len(led.flat)
@@ -151,75 +148,79 @@ def musketeer_within(n):
     return test
 
 
+def between_romeo_juliet(led, reading):
+    (pr,), (pj,) = led.pages_with(ROMEO), led.pages_with(JULIET)
+    lo, hi = min(pr, pj), max(pr, pj)
+    if reading.get("between_inclusive"):
+        return [lo <= p <= hi for p in led.page_of]
+    return [lo < p < hi for p in led.page_of]
+
+
+def bonnie_and_clyde(led, reading):
+    b, c = led.pages_with(BONNIE), led.pages_with(CLYDE)
+    pages = (b | c) if reading.get("bonnie_or_clyde") else (b & c)
+    return [p in pages for p in led.page_of]
+
+
 WINDOW = 10
 
 CLUES = [
+    Clue("odd_consonants", "letter",
+         "Each suspect's name has an odd number of consonants.",
+         "Count every letter in the whole name that isn't a vowel. Y is always a consonant; the vowels are A, E, "
+         "I, O and U.",
+         word_test(odd_consonants)),
+    Clue("robin", "hunt",
+         "Both suspects are within one page of a Robin Hood.",
+         "“Within one page” means the page before, the same page, or the page after. Robin Hood "
+         "turns up more than once; being within one page of any of his appearances qualifies.",
+         near_robin),
+    Clue("ends_consonant", "letter",
+         "Each suspect's name ends in a consonant.",
+         "Look only at the very last letter of the whole name. Y is a consonant.",
+         word_test(ends_consonant)),
     Clue("beatles", "hunt",
-         "Keep only guests in a chapter where John, Paul, George and Ringo stand together, in that order.",
-         "The skiffle band played Beatles songs all afternoon, and four of the audience sang along to every one. "
-         "They never left the side of whoever did it.",
-         "The four names stand one straight after another, in reading order. The group may run on to the next "
-         "line or page. Cross out every chapter where they don't stand together.",
-         beatles_chapter),
-    Clue("sisters", "hunt",
-         "Keep only guests on the pages between the Brontë sisters' page and the March sisters' page.",
-         "Mrs Pettigrew of the book stall saw the killer between two lots of sisters: Charlotte, Emily and Anne "
-         "came for the poetry, and Meg, Jo, Beth and Amy for the novels.",
-         "Charlotte, Emily and Anne stand together once in the ledger; Meg, Jo, Beth and Amy stand together once. "
-         "Find both pages. Only the pages between them count, not the two sisters' pages themselves.",
-         between_sisters),
-    Clue("outlaws", "hunt",
-         "Keep only guests on a page where Bonnie and Clyde stand side by side, or on the page just before or "
-         "just after one.",
-         "Two guests in matching hats kept slipping past the gate without paying. The constable never caught them, "
-         "but the killer was never far from where they had just been.",
-         "Bonnie and Clyde turn up more than once, always as a pair. Mark every page they share, then the page "
-         "either side of each one.",
-         outlaws_near),
+         "Neither suspect is in a chapter that contains all four Beatles.",
+         "Only the first names John, Paul, George and Ringo qualify, exactly as written and on their own "
+         "(John Baker is not a Beatle). All four must appear somewhere in the chapter, in any order. More "
+         "than one chapter may contain all four.",
+         not_beatles_chapter),
     Clue("musketeers", "hunt",
-         "Keep only guests at most %d names away from a Musketeer: Athos, Porthos or Aramis." % WINDOW,
-         "The fencing club gave displays all day. Their three swordsmen took the names of the Musketeers, and "
-         "the killer was standing close to one of them when the bell rang.",
-         "The Musketeers are scattered through the ledger, one at a time. Count in reading order: the very next "
-         "name is 1 away, and the count carries on across lines and pages. Crossed-out names still count. "
-         "Highlight the %d names either side of each Musketeer." % WINDOW,
-         musketeer_within(WINDOW)),
-    Clue("ends_vowel", "letter",
-         "Keep only names that end in a vowel.",
-         "The vicar heard the killer's name called across the tea tent. It ended softly, he said: on an open "
-         "sound, not a hard one.",
-         "Look only at the last letter. The vowels are A, E, I, O and U. Y is not a vowel.",
-         word_test(ends_vowel)),
-    Clue("even_vowels", "letter",
-         "Keep only names with an even number of vowels.",
-         "The raffle stub in the victim's hand had the killer's name half-torn away. The vowels that survived "
-         "came in pairs.",
-         "Count every A, E, I, O and U. Y is not a vowel. A name with no vowels has an even number (none).",
-         word_test(even_vowels)),
-    Clue("no_jam", "letter",
-         "Keep only names with none of the letters J, A or M.",
-         "The jam judge, who notices everything, swore the killer's name tag had none of the letters of her "
-         "favourite word on it.",
-         "Cross out every name that has a J, an A or an M anywhere in it.",
-         word_test(no_jam)),
-    Clue("first_a_to_m", "letter",
-         "Keep only names that begin with a letter from A to M.",
-         "The gate ledger was kept in two books, A to M and N to Z. The killer signed the first.",
-         "Look only at the first letter.",
-         word_test(first_a_to_m)),
+         "Each suspect sits within %d names of a Musketeer." % WINDOW,
+         "The Musketeers are Athos, Porthos and Aramis. Count names in normal reading order: the very next "
+         "name is 1 away. If a Musketeer is near the top or bottom of a page, the count carries on onto the "
+         "previous or next page.",
+         near_musketeer(WINDOW)),
+    Clue("romeo_juliet", "hunt",
+         "Both suspects appear between Romeo's page and Juliet's page.",
+         "Romeo and Juliet each appear only once in the ledger. Their own two pages don't count: each "
+         "suspect's page falls somewhere in between.",
+         between_romeo_juliet),
+    Clue("double_letter", "letter",
+         "Each suspect's name contains a double letter.",
+         "Two of the same letter sitting together in the name, not split by a space. It only needs to appear "
+         "once, anywhere in the name.",
+         word_test(double_letter)),
+    Clue("bonnie_clyde", "hunt",
+         "Each suspect's page contains both a Bonnie and a Clyde.",
+         "Both names must be on the page, anywhere on it. They don't need to sit together.",
+         bonnie_and_clyde),
+    Clue("a_to_m", "letter",
+         "Each suspect's name begins with a letter from the first half of the alphabet, A to M.",
+         "Look only at the very first letter of the name.",
+         word_test(a_to_m)),
 ]
-HUNT_KEYS = [c.key for c in CLUES if c.kind == "hunt"]
+FINAL = ("The killer's name is the longer of the two.",
+         "Count the letters in each suspect's whole name. Spaces don't count.")
 
 
 def solve(led, clues=CLUES, reading=None, skip=None):
-    """Flat indices passing every clue (except `skip`) under one reading."""
+    """Indices that pass every clue (except `skip`) under one reading."""
     reading = reading or {}
     alive = [True] * len(led.flat)
     for c in clues:
-        if c.key == skip:
-            continue
-        ok = c.test(led, reading)
-        alive = [a and b for a, b in zip(alive, ok)]
+        if c.key != skip:
+            alive = [a and b for a, b in zip(alive, c.test(led, reading))]
     return [i for i, a in enumerate(alive) if a]
 
 
@@ -232,156 +233,169 @@ def survivors_all_readings(led, clues=CLUES, skip=None):
 
 # ---------------------------------------------------------------- generation
 
-PLACES = ["The Tea Tent", "The Tombola", "The Cake Stall", "The Dog Show Ring", "The Bowling Green"]
+PLACES = ["The Church Gate", "The Tea Tent", "The Tombola", "The Cake Stall", "The Dog Show Ring",
+          "The Bowling Green"]
 
 
-def _letter_verdicts(name):
-    """For each letter clue, the set of verdicts across all readings."""
-    return {c.key: {c.test(Ledger([[name]], [("", 0)]).index(), r)[0] for r in READINGS}
-            for c in CLUES if c.kind == "letter"}
+def _verdicts(name):
+    one = Ledger([[name]], [("", 0)]).index()
+    return {c.key: {c.test(one, r)[0] for r in READINGS} for c in CLUES if c.kind == "letter"}
 
 
-def _passes_letters_everywhere(name):
-    return all(v == {True} for v in _letter_verdicts(name).values())
+def passes_letters(name):
+    return all(v == {True} for v in _verdicts(name).values())
 
 
-def _fails_letters_everywhere(name):
-    return any(v == {False} for v in _letter_verdicts(name).values())
+def fails_letters(name):
+    return any(v == {False} for v in _verdicts(name).values())
+
+
+def random_entry(rng, full_share=0.45):
+    first = rng.choice(FIRSTS)
+    return first + " " + rng.choice(LASTS) if rng.random() < full_share else first
 
 
 @dataclass
 class Case:
     ledger: Ledger
     killer: int
+    innocent: int
     check: tuple
     stats: dict
 
 
-def generate(seed=1, n_pages=20, per_page=(225, 240), pages_per_chapter=4, musketeers=70):
+def generate(seed=1, n_pages=20, per_page=(222, 232), pages_per_chapter=4, musketeers=70, heading_cost=30):
     rng = random.Random(seed)
     n_ch = n_pages // pages_per_chapter
-    places = PLACES[:n_ch]
-    chapters = [(places[k], k * pages_per_chapter) for k in range(n_ch)]
-    pages = [[rng.choice(FILLER) for _ in range(rng.randint(*per_page))] for _ in range(n_pages)]
+    chapters = [(PLACES[k], k * pages_per_chapter) for k in range(n_ch)]
     ch_of = [p // pages_per_chapter for p in range(n_pages)]
-    taken = [set() for _ in range(n_pages)]     # positions on a page already used by landmarks
+    pages = [[random_entry(rng) for _ in range(rng.randint(*per_page) - (heading_cost if p % pages_per_chapter == 0 else 0))]
+             for p in range(n_pages)]
+    taken = [set() for _ in range(n_pages)]
 
-    def put(group, page, at=None):
+    def put(name, page, near=None):
         names = pages[page]
-        span = len(group)
-        free = [k for k in range(2, len(names) - span - 2)
-                if not any(k + d in taken[page] for d in range(-2, span + 2))]
-        k = at if at is not None else rng.choice(free)
-        names[k:k + span] = list(group)
-        taken[page] |= set(range(k, k + span))
+        free = [k for k in range(1, len(names) - 1) if not ({k - 1, k, k + 1} & taken[page])]
+        if near is not None:
+            free = [k for k in free if 0 < abs(k - near) <= WINDOW - 2] or free
+        k = rng.choice(free)
+        names[k] = name
+        taken[page].add(k)
         return k
 
-    # Sisters: about half the pages strictly between them.
+    # Romeo and Juliet: about half the pages strictly between them.
     gap = rng.randint(9, 11)
-    lo = rng.randint(1, n_pages - gap - 2)
-    pb, pm = (lo, lo + gap + 1) if rng.random() < 0.5 else (lo + gap + 1, lo)
-    put(BRONTES, pb)
-    put(MARCH, pm)
-    # The killer's page: strictly between the sisters, at least two pages from either.
-    kp = rng.choice(range(min(pb, pm) + 2, max(pb, pm) - 1))
-    # Beatles: once in the killer's chapter and once in one other, so the chapter clue keeps 2 of 5.
-    beatle_chs = [ch_of[kp], rng.choice([c for c in range(n_ch) if c != ch_of[kp]])]
-    for ch in beatle_chs:
-        put(BEATLES, rng.choice([p for p in range(n_pages) if ch_of[p] == ch]))
-    # Outlaws on the killer's page and 3-4 more, spread so their pages and neighbours cover about 60%.
-    others = [p for p in range(n_pages) if abs(p - kp) >= 2]
-    outlaw_pages = {kp}
-    while len(outlaw_pages) < rng.randint(4, 5):
-        q = rng.choice(others)
-        if all(abs(q - x) >= 2 for x in outlaw_pages):
-            outlaw_pages.add(q)
-    for p in sorted(outlaw_pages):
-        put(OUTLAWS, p)
-    # Easter eggs: fun to find, no clue uses them.
-    for g in EGGS:
-        put(g, rng.randrange(n_pages))
-    # Musketeers: single names scattered everywhere.
+    lo = rng.randint(0, n_pages - gap - 2)
+    pr, pj = (lo, lo + gap + 1) if rng.random() < 0.5 else (lo + gap + 1, lo)
+    put(ROMEO, pr)
+    put(JULIET, pj)
+    inside = list(range(min(pr, pj) + 2, max(pr, pj) - 1))
+    # The two suspects: different pages, different chapters, strictly between the lovers.
+    for _ in range(100):
+        s1, s2 = rng.sample(inside, 2)
+        if ch_of[s1] != ch_of[s2] and abs(s1 - s2) >= 3:
+            break
+    else:
+        raise ValueError("no suspect pages (seed %d)" % seed)
+    # Beatles: all four in two chapters without a suspect; one to three of them in each other chapter.
+    free_chs = [c for c in range(n_ch) if c not in (ch_of[s1], ch_of[s2])]
+    full = set(rng.sample(free_chs, 2))
+    for ch in range(n_ch):
+        chosen = BEATLES if ch in full else rng.sample(BEATLES, rng.randint(1, 3))
+        for b in chosen:
+            put(b, rng.choice([p for p in range(n_pages) if ch_of[p] == ch]))
+    # Robin Hood: on both suspects' pages and one or two others.
+    robin_pages = {s1, s2} | set(rng.sample([p for p in range(n_pages) if abs(p - s1) > 2 and abs(p - s2) > 2],
+                                            rng.randint(1, 2)))
+    for p in robin_pages:
+        put(ROBIN, p)
+    # Bonnie and Clyde: both on the suspects' pages and on about half the others; one alone on a few more.
+    both = {s1, s2} | set(rng.sample(range(n_pages), n_pages // 2 - 2))
+    for p in both:
+        put(BONNIE, p)
+        put(CLYDE, p)
+    for p in rng.sample([p for p in range(n_pages) if p not in both], 3):
+        put(rng.choice((BONNIE, CLYDE)), p)
+    for egg in EGGS:
+        put(egg, rng.randrange(n_pages))
+    # Suspects, each with a Musketeer close by; then Musketeers everywhere.
+    pool = [e for e in {random_entry(rng, 0.8) for _ in range(4000)} if passes_letters(e)]
+    pool.sort()
+    for _ in range(200):
+        a, b = rng.sample(pool, 2)
+        if len(letters(a)) - len(letters(b)) >= 2 and not set(a.split()) & set(b.split()):
+            killer_name, innocent_name = a, b
+            break
+    else:
+        raise ValueError("no suspect names (seed %d)" % seed)
+    order = [(s1, killer_name), (s2, innocent_name)] if rng.random() < 0.5 else [(s1, innocent_name),
+                                                                                (s2, killer_name)]
+    spots = {}
+    for p, name in order:
+        k = put(name, p)
+        put(rng.choice(MUSKETEERS), p, near=k)
+        spots[name] = (p, k)
     for _ in range(musketeers):
-        put((rng.choice(MUSKETEERS),), rng.randrange(n_pages))
+        put(rng.choice(MUSKETEERS), rng.randrange(n_pages))
 
     led = Ledger(pages, chapters).index()
+    flat_at = lambda p, k: sum(len(x) for x in pages[:p]) + k
+    killer, innocent = flat_at(*spots[killer_name]), flat_at(*spots[innocent_name])
+    sig = signature(killer_name)
 
-    # The killer: a page that every hunt clue keeps under every reading (so on an outlaw page,
-    # strictly between the sisters, in a Beatles chapter), within WINDOW - 1 names of a Musketeer.
-    hunt = [c for c in CLUES if c.kind == "hunt"]
-    safe = set(range(len(led.flat)))
-    for r in READINGS:
-        safe &= set(solve(led, hunt, r))
-    choices = [i for i in safe if led.flat[i] not in RESERVED and not any(
-        led.flat[j] in RESERVED for j in range(max(0, i - 1), min(len(led.flat), i + 2)))]
-    if not choices:
-        raise ValueError("no place for the killer (seed %d)" % seed)
-    killer = rng.choice(sorted(choices))
-    pool = [n for n in FILLER if _passes_letters_everywhere(n)]
-    p, k = led.page_of[killer], killer - sum(len(x) for x in pages[:led.page_of[killer]])
-    pages[p][k] = rng.choice(pool)
-    led.index()
-    sig = signature(led.flat[killer])
-
-    # Repair: every other survivor gets a name that fails a letter clue under every reading;
-    # every near-survivor (all clues but one) must not match the check line.
-    failing = [n for n in FILLER if _fails_letters_everywhere(n)]
+    # Repair: everyone else who survives gets a name that fails a letter clue under every reading;
+    # nobody close to surviving may match the check line.
+    failing = sorted({e for e in {random_entry(rng) for _ in range(3000)} if fails_letters(e)})
     for _ in range(20):
-        changed = False
-        bad = survivors_all_readings(led) - {killer}
+        bad = survivors_all_readings(led) - {killer, innocent}
         for c in CLUES:
             bad |= {i for i in survivors_all_readings(led, skip=c.key)
                     if i != killer and signature(led.flat[i]) == sig}
-        for i in sorted(bad):
-            if led.flat[i] in RESERVED:
-                raise ValueError("a landmark would need renaming (seed %d)" % seed)
-            new = rng.choice([n for n in failing if signature(n) != sig])
-            p = led.page_of[i]
-            pages[p][i - sum(len(x) for x in pages[:p])] = new
-            changed = True
-        led.index()
-        if not changed:
+        if not bad:
             break
+        for i in bad:
+            if led.flat[i] in LANDMARKS:
+                raise ValueError("a landmark would need renaming (seed %d)" % seed)
+            p = led.page_of[i]
+            pages[p][i - sum(len(x) for x in pages[:p])] = rng.choice([n for n in failing if signature(n) != sig])
+        led.index()
     else:
         raise ValueError("repair did not settle (seed %d)" % seed)
-
-    stats = _stats(led, killer)
-    return Case(led, killer, sig, stats)
+    return Case(led, killer, innocent, sig, _stats(led, killer, innocent))
 
 
-def _stats(led, killer):
+def _stats(led, killer, innocent):
     total = len(led.flat)
-    alone = {c.key: round(sum(c.test(led, {})) / total, 2) for c in CLUES}
-    hunt = [c for c in CLUES if c.kind == "hunt"]
-    after_hunt = len(solve(led, hunt))
-    finals = {k: sorted(solve(led, CLUES, r)) for k, r in enumerate(READINGS)}
-    return dict(total=total, pages=len(led.pages), alone=alone, after_hunt=after_hunt, finals=finals,
-                killer=killer, killer_name=led.flat[killer], killer_page=led.page_no(led.page_of[killer]))
+    return dict(
+        total=total, pages=len(led.pages),
+        alone={c.key: round(sum(c.test(led, {})) / total, 2) for c in CLUES},
+        after_hunt=len(solve(led, [c for c in CLUES if c.kind == "hunt"])),
+        finals={k: sorted(solve(led, CLUES, r)) for k, r in enumerate(READINGS)},
+        killer=killer, killer_name=led.flat[killer], innocent_name=led.flat[innocent],
+        killer_page=led.page_no(led.page_of[killer]))
 
 
-def validate(case, keep=(0.3, 0.7)):
-    """The rules the spec sets for a case; returns a list of problems (empty when fine)."""
+def validate(case):
+    """The spec's rules for a case; returns a list of problems (empty when fine)."""
     led, s, problems = case.ledger, case.stats, []
+    pair = sorted([case.killer, case.innocent])
     for r, alive in s["finals"].items():
-        if alive != [case.killer]:
-            problems.append("reading %d leaves %s" % (r, alive))
-    for key in HUNT_KEYS:
-        if not keep[0] <= s["alone"][key] <= keep[1] and key != "musketeers":
-            problems.append("hunt clue %s alone keeps %.0f%%" % (key, 100 * s["alone"][key]))
-    if not 0.25 <= s["alone"]["musketeers"] <= 0.6:
-        problems.append("musketeer clue alone keeps %.0f%%" % (100 * s["alone"]["musketeers"]))
-    if not 60 <= s["after_hunt"] <= 400:
-        problems.append("%d names left for the letter clues" % s["after_hunt"])
+        if alive != pair:
+            problems.append("reading %d leaves %d names" % (r, len(alive)))
     for c in CLUES:
+        if c.kind == "hunt" and not 0.25 <= s["alone"][c.key] <= 0.75:
+            problems.append("hunt clue %s alone keeps %.0f%%" % (c.key, 100 * s["alone"][c.key]))
         near = survivors_all_readings(led, skip=c.key) - {case.killer}
         if any(signature(led.flat[i]) == case.check for i in near):
             problems.append("check line also fits a near-survivor (skipping %s)" % c.key)
-    if len(led.runs(BRONTES)) != 1 or len(led.runs(MARCH)) != 1:
-        problems.append("sisters not unique")
+    if not 40 <= s["after_hunt"] <= 300:
+        problems.append("%d names left for the letter clues" % s["after_hunt"])
+    if len(letters(led.flat[case.killer])) - len(letters(led.flat[case.innocent])) < 2:
+        problems.append("final deduction too close")
     return problems
 
 
-def generate_valid(seeds=range(1, 200), **kw):
+def generate_valid(seeds=range(1, 300), **kw):
     for s in seeds:
         try:
             case = generate(s, **kw)

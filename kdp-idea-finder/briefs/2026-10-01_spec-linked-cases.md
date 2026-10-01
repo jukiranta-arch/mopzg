@@ -141,16 +141,19 @@ Keywords for the subtitle and backend: find the killer, murder mystery puzzle bo
 2. The setting: A, B, or another.
 3. A working title, which can change later.
 
-## Prototype built (2026-10-01): Case One, The Summer Fête
+## Prototype, second version (2026-10-01): laid out like *Who Killed Mr Darcy?*
 
-`python -m village OUT.pdf` builds the case, and `python -m village.check_pdf OUT.pdf` re-solves it from the PDF text alone. That checker has its own clue logic and tries every misreading.
+Juho rejected the first version:
+- the answer check was printed before the names, so it gave away the killer's letter count;
+- I had invented rules ("standing together", "famous names") that he couldn't follow;
+- a line of story before every clue cluttered the clue pages.
 
-**What it contains (seed 1):**
-- 4,652 names on 20 ledger pages (6 × 9 in, 12 pt names) in 5 chapters: the Tea Tent, the Tombola, the Cake Stall, the Dog Show Ring, the Bowling Green.
-- 8 clues:
-  - hunt: the Beatles' chapter, between the Brontë and March sisters, near Bonnie and Clyde, within 10 names of a Musketeer;
-  - letter: ends in a vowel, an even number of vowels, no J/A/M, begins A–M.
-- On their own, the hunt clues keep 40%, 45%, 55% and 28% of the names. Together they leave 278 for the letter clues.
-- The check line is "4 letters, adding up to 44". 64 names in the ledger add up to 44, but no name that survives all the clues, or all but one, under any misreading matches it.
+The second version follows Darcy's order and wording:
+1. the story;
+2. The Case;
+3. The Clues ("Each suspect's name…", "Both suspects are within one page of a Robin Hood"), each with how it works and an example;
+4. Before You Start: what a name is, exact spelling only, letters, vowels, names don't break across rows, tips;
+5. the ledger: names separated by dots, first names and full names mixed, famous names unmarked, pages numbered from 1;
+6. at the back: the final deduction (two suspects; the longer name is the killer), the check line, a Stop page, and the solution upside down on its back.
 
-**No chain clue yet.** Case One has no previous killer; the chain starts in Case Two.
+The case has 9 clues, 4,367 names on 20 pages, and leaves 223 names after the hunt clues. `python -m village.check_pdf` re-solves it from the PDF under all 7 misreadings.

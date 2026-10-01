@@ -2,7 +2,7 @@ import os
 import tempfile
 import unittest
 
-from village.case import (BEATLES, CLUES, MARCH, READINGS, RESERVED, Ledger, generate_valid, signature, solve,
+from village.case import (CLUES, LANDMARKS, READINGS, Ledger, generate_valid, letters, signature, solve,
                           survivors_all_readings, validate)
 
 
@@ -16,27 +16,30 @@ def by_key(key):
 
 class ClueTests(unittest.TestCase):
     def test_letter_clues(self):
-        l = led(["Hope", "Lucy", "Rosa", "Jade", "Nora", "Cody"])
-        self.assertEqual(by_key("ends_vowel").test(l, {}), [True, False, True, True, True, False])
-        self.assertEqual(by_key("ends_vowel").test(l, {"y_vowel": True})[1], True)   # the misreading
-        self.assertEqual(by_key("even_vowels").test(l, {}), [True, False, True, True, True, False])
-        self.assertEqual(by_key("no_jam").test(l, {}), [True, True, False, False, False, True])
-        self.assertEqual(by_key("first_a_to_m").test(l, {}), [True, True, False, True, False, True])
+        l = led(["Ian Scott", "Lucy", "Rosa", "Ada Finch", "Nora Bell"])
+        self.assertEqual(by_key("odd_consonants").test(l, {}), [True, True, False, True, True])
+        self.assertEqual(by_key("odd_consonants").test(l, {"y_vowel": True})[1], False)   # the misreading
+        self.assertEqual(by_key("ends_consonant").test(l, {}), [True, True, False, True, True])
+        self.assertEqual(by_key("double_letter").test(l, {}), [True, False, False, False, True])
+        self.assertFalse(by_key("double_letter").test(led(["Cara Anders"]), {})[0])   # split by a space
+        self.assertEqual(by_key("a_to_m").test(l, {}), [True, True, False, True, False])
 
     def test_hunt_clues(self):
-        pages = [["Ann", "Charlotte", "Emily", "Anne"], ["Bo", "John", "Paul", "George", "Ringo"],
-                 ["Cy", "Athos"], ["Di", "Meg", "Jo", "Beth", "Amy"], ["Ed", "Bonnie", "Clyde"]]
+        pages = [["Ann", "Romeo", "Robin Hood"], ["John", "Paul", "Bonnie", "Clyde"], ["George", "Ringo", "Athos"],
+                 ["Di", "Bonnie"], ["Ed", "Juliet"]]
         l = led(*pages, chapters=[("A", 0), ("B", 2)])
-        beatles = by_key("beatles").test(l, {})
-        self.assertTrue(all(beatles[:9]) and not any(beatles[9:]))          # chapter A only
-        sisters = by_key("sisters").test(l, {})
-        self.assertEqual([l.page_of[i] for i, v in enumerate(sisters) if v], [1] * 5 + [2] * 2)
-        inclusive = by_key("sisters").test(l, {"between_inclusive": True})
-        self.assertEqual(sum(inclusive), len(l.flat) - 3)                    # all but the last page
-        outlaws = by_key("outlaws").test(l, {})
-        self.assertEqual({l.page_of[i] for i, v in enumerate(outlaws) if v}, {3, 4})
-        musk = by_key("musketeers").test(l, {"window": -9})                  # within 1 name
-        self.assertEqual([l.flat[i] for i, v in enumerate(musk) if v], ["Cy", "Di"])  # across a page break
+        on = lambda key, r={}: sorted({l.page_of[i] for i, v in enumerate(by_key(key).test(l, r)) if v})
+        self.assertEqual(on("robin"), [0, 1])
+        self.assertEqual(on("robin", {"robin_page_only": True}), [0])
+        self.assertEqual(on("beatles"), [0, 1, 2, 3, 4])                  # neither chapter has all four
+        self.assertEqual(on("romeo_juliet"), [1, 2, 3])
+        self.assertEqual(on("romeo_juliet", {"between_inclusive": True}), [0, 1, 2, 3, 4])
+        self.assertEqual(on("bonnie_clyde"), [1])
+        self.assertEqual(on("bonnie_clyde", {"bonnie_or_clyde": True}), [1, 3])
+        near = by_key("musketeers").test(l, {"window": -9})                # within 1 name
+        self.assertEqual([l.flat[i] for i, v in enumerate(near) if v], ["Ringo", "Di"])   # across a page break
+        l2 = led(["John", "Paul", "George", "Ringo"], ["Ann"], chapters=[("A", 0), ("B", 1)])
+        self.assertEqual(by_key("beatles").test(l2, {}), [False] * 4 + [True])
 
 
 class GenerationTests(unittest.TestCase):
@@ -44,30 +47,26 @@ class GenerationTests(unittest.TestCase):
     def setUpClass(cls):
         cls.case = generate_valid()
 
-    def test_one_answer_under_every_reading(self):
+    def test_two_suspects_under_every_reading(self):
         c = self.case
         for r in READINGS:
-            self.assertEqual(solve(c.ledger, CLUES, r), [c.killer])
+            self.assertEqual(solve(c.ledger, CLUES, r), sorted([c.killer, c.innocent]))
         self.assertEqual(validate(c), [])
 
-    def test_check_line_confirms_only_the_killer(self):
-        c = self.case
-        self.assertEqual(signature(c.ledger.flat[c.killer]), c.check)
+    def test_final_deduction_and_check_line(self):
+        c, l = self.case, self.case.ledger
+        self.assertGreaterEqual(len(letters(l.flat[c.killer])) - len(letters(l.flat[c.innocent])), 2)
+        self.assertEqual(signature(l.flat[c.killer]), c.check)
         for cl in CLUES:
-            near = survivors_all_readings(c.ledger, skip=cl.key) - {c.killer}
-            self.assertFalse([i for i in near if signature(c.ledger.flat[i]) == c.check], cl.key)
+            near = survivors_all_readings(l, skip=cl.key) - {c.killer}
+            self.assertFalse([i for i in near if signature(l.flat[i]) == c.check], cl.key)
 
-    def test_landmarks(self):
-        l = self.case.ledger
-        self.assertEqual(len(l.runs(BEATLES)), 2)
-        self.assertEqual(len(l.runs(MARCH)), 1)
-        self.assertNotIn(l.flat[self.case.killer], RESERVED)
-        self.assertTrue(all(n.isalpha() for n in l.flat))                    # plain A-Z names only
-
-    def test_no_knockout_hunt_clue(self):
-        alone = self.case.stats["alone"]
-        for key in ("beatles", "sisters", "outlaws"):
-            self.assertTrue(0.3 <= alone[key] <= 0.7, (key, alone[key]))
+    def test_suspects(self):
+        c, l = self.case, self.case.ledger
+        a, b = l.flat[c.killer], l.flat[c.innocent]
+        self.assertNotIn(a, LANDMARKS)
+        self.assertFalse(set(a.split()) & set(b.split()))                  # no shared first name or surname
+        self.assertNotEqual(l.chapter_of_page[l.page_of[c.killer]], l.chapter_of_page[l.page_of[c.innocent]])
 
 
 try:

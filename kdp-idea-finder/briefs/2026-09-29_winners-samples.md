@@ -135,3 +135,7 @@ Read with OCR from Juho's saved "Read sample" PDFs. The text is not stored.
 Several small new books also advertise connected cases: *Murder in the Snow at Kittering St Mary* (six connected cases, 5,500 suspects), *Murder, Tea, and Cat Hair* (20 case files, 20 killers), *The Phone Book Serial Killer* (six parts).
 
 **What no one does:** check each answer in the book without revealing it. *Eliminate* sends you online, *Autumn* uses a QR code, *Alice* and *Do No Harm* use websites, and the others print the answer at the back.
+
+## Lesson (2026-10-01): copy the winner's format, invent only the theme
+
+The first village test case failed on things no winner does: an answer check before the register, a rules page with made-up rules, and a line of story before every clue. **Default:** take the best-reviewed book's page order, rules page and clue wording (here *Who Killed Mr Darcy?*). Change only the theme, the names and the story, plus any difference the spec names explicitly. Anything new goes at the back, after the register.
