@@ -1,210 +1,164 @@
-# Cover prompt pack, round 2: *Who Sent the Killers?*
+# Cover prompt pack, round 3: *Who Sent the Killers?*
 
-For the image agent. Read this whole file before generating anything.
+For the image agent. Read the whole file before generating anything.
 
-## 0. What changed since round 1, and your job
+## 0. Round 2 feedback, and your job
 
-**Round 1 feedback (from the person you work for):**
-- **Blue "Five Lit Windows" (A):** dropped.
-- **"Case File" (B):** good, but it needs to stand out more, in deep purple.
-- **"Five Tokens" (C):** liked, but not in teal. Also deep purple.
-- **All three were far too bare:** flat clip-art buildings, little to look at. The image model is extremely capable, so **don't hold back on detail.** Prompt for the best cover you can imagine.
-- **The author name was too large.**
+**Feedback on round 2:**
+- **Colours:** the deep purple, cream and gold palette is right. **Keep it.**
+- **Season:** the covers didn't know what season they were. Autumn leaves plus snow plus frosty sprigs read as a **Christmas book.** The cover must be **evergreen, with no season at all**: no autumn leaves, no snow, no frost, no holiday wreaths or decorations.
+- **The title lettering looked too cartoony:** the extra-heavy capitals with a cut-paper drop shadow, in bright school-bus yellow.
+- **Favourites:**
+  - **B2 "The Case File"**, best part: the magnifying glass over the circled name.
+  - **D "The Whole Case"**, which should gain **the drifting mist from C2.**
+  - The person leans slightly towards B2.
 
 **Your job:**
-- Make **three covers**: B2 (Case File), C2 (Evidence Tags), and D (The Whole Case, a combination).
-- Make 2–3 versions of each, then keep the best.
-- Compare them at Amazon thumbnail size and recommend one.
+- Make **B3** and **D3**, each in **two type styles** (T1 and T2, section 4), so four covers.
+- Make 2–3 versions of each and keep the best.
+- Compare all four at full size and at 150 px wide, and recommend one.
 
-**First read OpenAI's prompting guide** for the image model if you can reach it:
+**First read OpenAI's image prompting guide** if you can reach it:
 - https://developers.openai.com/api/docs/guides/image-prompting
 - https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide
 - a GitHub copy: https://github.com/openai/openai-cookbook/blob/main/examples/multimodal/image-gen-models-prompting-guide.ipynb
 
-The main points are in section 3.
+**How to prompt:**
+- Label the prompt parts: USE, BACKGROUND, SUBJECT, DETAILS, TEXT, STYLE, CONSTRAINTS.
+- Put exact text in quotes, in capitals, and spell tricky words letter by letter.
+- Use the highest quality setting.
+- Iterate with single changes, repeating what must stay the same.
+- Never feed an earlier cover back in as a reference: the model copies its layout.
 
-## 1. The book
+## 1. The book (unchanged)
 
 - **Title:** Who Sent the Killers?
 - **Author:** Nora Clewes
-- **What it is:** a find-the-killer murder mystery puzzle book for adults. The reader crosses names out of long printed lists of suspects, using clues, until one name is left.
-- **The story:** Juniper Falls, a cozy small American town, one autumn into winter (October to February).
-  - Five beloved townspeople die in five beloved places: the bookstore (a bookmark stamped "1" left behind), the bakery (a prize ribbon marked "2"), the diner (an order ticket marked "3"), the inn (a brass room key tagged "4") and the library (a borrower's card stamped "5").
-  - Each was killed by a different killer, and all five killers were sent letters by one hidden mastermind.
-  - The motive goes back to 1996, when the town council flooded a valley for a reservoir.
-  - Totals: 18,000 suspects, 5 killers, 1 mastermind.
+- **What it is:** a find-the-killer murder mystery puzzle book for adults. The reader crosses names out of long lists of suspects, using clues, until one name is left.
+- **The story:** Juniper Falls, a cozy small American town.
+  - Five beloved townspeople die in five beloved places. A token is left each time: a bookmark "1", a prize rosette "2", a diner order ticket "3", a room key tagged "4", a library card "5".
+  - Five killers, all sent letters by one hidden mastermind.
 - **Buyers:** mostly women 40+ who love cozy mysteries and logic puzzles, plus gift buyers.
-- **Interior art:** hand-cut black paper silhouettes. The cover belongs to the same family, richer and in colour.
 
-## 2. The genre formula (keep it) and how we stand out
+## 2. Evergreen: what to use instead of seasons
 
-**Keep, from the eight best sellers:**
-1. **The title is the picture:** huge, heavy, condensed capitals filling 40–60% of the cover, 2–4 stacked lines, one word in an accent colour, readable at 150 px wide.
-2. **The game is shown:** a list of names with some neatly struck through and one circled.
-3. **A silhouette.**
-4. **A numbers line** in a strip or ribbon.
+- **Trees:** dark **evergreen pines, firs and juniper bushes**, as layered cut-paper silhouettes. They are timeless, and juniper is the town's name.
+- **Weather:** **drifting lavender night mist** (as in round 2's C2), low in the valleys and between the layers.
+- **Sky:** a clear deep-purple night, a full or half moon in antique gold, a few faint stars.
+- **The ground:** grass and pavement on a dry night.
+- **Banned:** autumn leaves, snow, frost, icicles, bare winter branches, wreaths, holly, pumpkins, candles in windows, anything Christmas or Halloween.
 
-**Stand out:**
-- **Colour:** deep purple night, which none of the best sellers uses. They are cream with black and red, or hot magenta, or orange.
-- **Medium:** a **layered cut-paper diorama** with real depth and soft shadows between the paper layers. Nobody in the niche does this, and it reads as hand-made.
-- **The town itself as the setting;** every competitor shows a person or a document.
-
-## 3. How to prompt (from OpenAI's guide)
-
-- **Structure:** label the parts of every prompt, in this order: USE, BACKGROUND, SUBJECT, DETAILS, TEXT, STYLE, CONSTRAINTS.
-- **Purpose:** say what the image is for: "the front cover of a paperback puzzle book, seen first as a small Amazon thumbnail".
-- **Lettering:**
-  - Put every word that must appear in quotes, in capitals.
-  - Spell the tricky ones letter by letter.
-  - Give each one's typeface style, size, colour and placement.
-  - Say "no other text".
-  - Use the highest quality setting.
-- **Medium:** name it concretely: "layered hand-cut paper, each layer casting a soft shadow on the one behind, fine scissor-cut detail, visible paper fibre".
-- **Layout:** describe where everything goes.
-- **Iterating:** in small single changes, repeating what must stay ("keep everything the same, only…").
-- **References:** don't feed earlier covers back in as references; the model copies their layout.
-
-## 4. The palette (all three covers)
+## 3. Palette (as round 2, but the yellow is calmer)
 
 | Role | Colour |
 |---|---|
-| Sky and background | deep midnight purple / aubergine, layered in 3–4 slightly different purple papers for depth (darkest at the top) |
-| Distant hills, mist | dusky plum and soft lavender-grey paper |
-| Town silhouettes | near-black purple paper |
-| Lit windows, moon, accent word | warm amber gold |
-| Title and paper items | warm cream / ivory |
-| Autumn leaves | burnt orange and rust, used sparingly |
-| Snow | frosty white flecks, used sparingly |
+| Background | deep midnight purple / aubergine, in 3–4 layered purple papers |
+| Hills, mist | dusky plum and soft lavender-grey |
+| Silhouettes | near-black purple |
+| Lit windows, moon, accent word | **antique gold / warm muted amber** (like old gold foil). **Not** bright yellow. |
+| Title, paper items | warm cream / ivory |
 
-No other strong colours: no red, no teal, no green, no pink.
+No red, no green except the near-black of the evergreen silhouettes, no teal, no orange, no pink.
 
-## 5. The exact text (spell exactly)
+## 4. Two type styles (make each cover in both)
+
+The title stays **huge**, filling the top 35–40% on three lines (WHO SENT / THE / KILLERS?), readable at 150 px. "KILLERS?" is in antique gold; the other words are cream. The other text lines use the same family in smaller sizes.
+
+- **T1, elegant poster serif:**
+  - a bold, condensed, high-contrast serif display face, in the spirit of classic book-jacket and theatre-poster type (the family of Playfair Display Black and Didone poster faces);
+  - sharp thin hairlines and heavy thick strokes, tall and narrow;
+  - letters printed flat on the paper with a very slight letterpress bite: **no drop shadow, no 3D, no cut-paper extrusion.**
+- **T2, refined condensed sans:**
+  - a heavy, tall, condensed sans-serif in the spirit of vintage American wood type and old movie posters;
+  - **flat ink with a subtle letterpress texture** and slightly worn edges;
+  - **no drop shadow, no bevel, no comic outline.**
+  - Tighter and more serious than round 2.
+
+Both should feel like a well-designed adult mystery cover, not a children's or comic book.
+
+## 5. Exact text (spell exactly)
 
 | Element | Text | Size |
 |---|---|---|
 | Title | "WHO SENT THE KILLERS?" (W-H-O S-E-N-T T-H-E K-I-L-L-E-R-S, then a question mark) | huge |
-| Numbers line | "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" | clearly readable |
 | Genre line | "A FIND-THE-KILLER MURDER MYSTERY PUZZLE BOOK" | small |
-| Author | "NORA CLEWES" (N-O-R-A C-L-E-W-E-S) | **modest**: smaller than the numbers line, about the genre line's size or a little larger |
-| Optional small line above the title | "A JUNIPER FALLS MYSTERY" | small |
+| Numbers line | "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" | clearly readable |
+| Author | "NORA CLEWES" (N-O-R-A C-L-E-W-E-S) | modest: smaller than the numbers line |
 
-Allowed small extra text on objects only (each optional):
-- the numerals 1–5 and "?" on evidence items;
-- "1996" on the folder;
+Allowed text on objects only:
 - "SHERIFF'S OFFICE" stamped on the folder;
-- "ONE OF FIVE" typed on a note.
+- "1996" on the folder tab;
+- "ONE OF FIVE" on a typed note;
+- the numerals 1–5.
 
-Names on lists are ordinary first names (Ruth, Harold, Joan, Walter, June, Arthur, Peggy, Frank, Edna, Louis, Alice, Henry, Mabel, Clyde), legible but small. No other words anywhere.
+Names on lists are ordinary first names (Ruth, Harold, Joan, Walter, June, Arthur, Peggy, Frank, Edna, Louis, Alice, Henry, Mabel, Clyde), small. No other words.
 
-## 6. The three covers
+## 6. The covers
 
-### B2. "The Case File" (the genre favourite, made rich)
+### B3. "The Case File" (refined: less clutter, the magnifier is the hero)
 
-> USE: the front cover of a paperback murder-mystery puzzle book; it must work as a small Amazon thumbnail and look premium up close.
+> USE: the front cover of a paperback murder-mystery puzzle book; it must read instantly as a small Amazon thumbnail and look premium up close.
 >
-> BACKGROUND: a deep aubergine-purple desk surface, seen from straight above, with soft warm light falling from the upper left like a desk lamp in a dark room.
+> BACKGROUND: a deep aubergine-purple desk seen from straight above, lit softly from above, with even, calm light (no lamp in the picture).
 >
-> SUBJECT: a worn cream manila case file, slightly open, fills most of the cover.
-> - **The folder:** "SHERIFF'S OFFICE" is stamped faintly in faded purple ink near the tab, and "1996" is written in pencil on the tab.
-> - **The photograph:** clipped to the folder with a paper clip, a cut-paper photograph of the town at night. Layered purple paper sky, a near-black silhouette of storefronts, a church steeple, a water tower and a town hall clock tower. Exactly five windows glow amber, and one small window high in the clock tower glows too.
-> - **The register page:** a typed page of first names in three columns, many neatly struck through in pencil, one circled in amber.
->
-> DETAILS, arranged naturally around and on the folder:
-> - the five pieces of evidence: a tasselled bookmark with a big "1", a small prize rosette with "2", a diner order ticket with "3", an old brass room key on a teardrop tag with "4", a library borrower's card with "5";
-> - a magnifying glass resting on the register, slightly enlarging one crossed-out name;
-> - a sealed envelope with a typed note peeking out reading "ONE OF FIVE";
-> - two or three rust-orange autumn leaves and a few frosty snowflakes scattered across the desk (autumn turning to winter);
-> - a pencil.
->
-> TEXT:
-> - Across the top 40%: "WHO SENT THE KILLERS?" in huge heavy condensed capitals on three lines (WHO SENT / THE / KILLERS?), printed in cream on the purple desk. "KILLERS?" is in warm amber gold. The letters look cut from thick paper and cast a slight shadow.
-> - Under it, small cream capitals: "A FIND-THE-KILLER MURDER MYSTERY PUZZLE BOOK".
-> - A cream paper ribbon across the lower part: "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" in deep purple condensed capitals.
-> - At the bottom, modest cream capitals: "NORA CLEWES".
-> - No other text except the allowed object text.
->
-> STYLE: everything rendered as layered hand-cut paper and card with fine scissor-cut edges, visible paper fibre, and soft realistic shadows between layers, like a paper shadow-box. Rich, warm, cozy and quietly ominous. No glossy digital look, no blood, no gradients except the soft light, no faces.
-
-### C2. "The Evidence Tags" (the original idea, made rich)
-
-> USE: the front cover of a paperback murder-mystery puzzle book; it must work as a small Amazon thumbnail and look premium up close.
->
-> BACKGROUND: a layered cut-paper night scene in deep purples.
-> - Several layers of purple paper hills and drifting lavender mist.
-> - A large amber full moon low on the left.
-> - A few rust autumn leaves falling on the left that turn into snowflakes on the right.
->
-> SUBJECT: across the middle, six cream paper luggage tags hang from a thin twine line strung across the cover, each pinned with a tiny wooden clothes-peg and swaying slightly.
-> - Each tag carries a finely cut black paper silhouette of one piece of evidence and a big stamped numeral:
->   - "1": a tasselled bookmark;
->   - "2": a prize rosette;
->   - "3": a diner order ticket on a clip;
->   - "4": an old room key on a teardrop tag;
->   - "5": a library borrower's card.
-> - The sixth tag is slightly larger and darker, and carries only a big amber "?".
+> SUBJECT, arranged in a calm, deliberate composition with breathing room:
+> - **The folder:** a worn cream manila case file, slightly open, filling the middle and lower part of the cover. "SHERIFF'S OFFICE" is stamped faintly in faded purple ink near the top edge, and "1996" is pencilled on the tab.
+> - **The photograph:** clipped to the folder with a paper clip, a cut-paper picture of the town at night: layered purple sky with a gold moon, drifting lavender mist, dark evergreen pines, a church steeple, a water tower and the town hall clock tower. Exactly five windows glow antique gold, plus one small window high in the clock tower.
+> - **The register page, the hero of the cover:** a typed page of first names in three columns, most neatly struck through in pencil. A magnifying glass rests on it, enlarging one name circled in antique gold.
 >
 > DETAILS:
-> - Along the bottom, the town of Juniper Falls as a detailed near-black cut-paper silhouette: storefronts with awnings, a church steeple, a water tower, a big wooden inn on a rise, a library with columns, and the town hall clock tower in the centre.
-> - Exactly five windows glow amber, one under each numbered tag, and one small window high in the clock tower glows under the "?" tag.
-> - Faint pale names drift through the mist like a list, a few struck through, one circled in amber.
+> - Only three of the evidence tokens, tucked at the folder's edges: the tasselled bookmark "1", the brass room key with its teardrop tag "4", and the library card "5".
+> - A sealed envelope with a typed note peeking out: "ONE OF FIVE".
+> - A pencil.
+> - Nothing seasonal.
 >
 > TEXT:
-> - Top 35%: "WHO SENT THE KILLERS?" in huge heavy condensed capitals on two or three lines, in cream, with "KILLERS?" in amber gold. The letters look cut from thick paper and cast a slight shadow.
+> - Top 35–40%, on the purple desk above the folder: "WHO SENT THE KILLERS?" in the chosen type style (section 4), cream, with "KILLERS?" in antique gold.
 > - Under it, small cream capitals: "A FIND-THE-KILLER MURDER MYSTERY PUZZLE BOOK".
-> - An amber paper ribbon just below the tags: "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" in deep purple condensed capitals.
-> - At the bottom, modest cream capitals: "NORA CLEWES".
-> - No other text except the numerals and "?".
+> - A cream paper strip near the bottom: "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" in deep purple.
+> - Below it, modest cream capitals: "NORA CLEWES".
 >
-> STYLE: as B2: a layered hand-cut paper diorama with real depth, soft shadows between layers and fine scissor detail. Cozy, autumn-into-winter, quietly ominous. No glossy digital look, no gradients beyond the paper layering, no faces.
+> STYLE: layered hand-cut paper and card with fine scissor-cut edges, visible paper fibre, and soft shadows between the paper layers (the objects, not the title letters). Calm, cozy, quietly ominous, premium. No glossy digital look, no clutter, no seasonal elements.
 
-### D. "The Whole Case" (combine the strongest parts)
+### D3. "The Whole Case" (with mist)
 
-> USE: the front cover of a paperback murder-mystery puzzle book; it must work as a small Amazon thumbnail and look premium up close.
+> USE: the front cover of a paperback murder-mystery puzzle book; it must read instantly as a small Amazon thumbnail and look premium up close.
 >
-> BACKGROUND: a deep purple layered cut-paper night sky, with an amber moon partly behind drifting lavender paper clouds.
+> BACKGROUND: a deep purple layered cut-paper night sky, an antique-gold moon partly veiled by soft lavender paper clouds, a few faint stars.
 >
-> SUBJECT: the town of Juniper Falls as a rich multi-layer cut-paper diorama filling the bottom 45%:
-> - **In front:** a snowy street with old storefronts.
-> - **Behind:** a church steeple, a water tower, a wooden inn on a hill, and a small library with columns.
-> - **Centre back:** the town hall clock tower, tallest of all.
-> - **The windows:** exactly five glow amber (bookstore, bakery, diner, inn, library). High in the clock tower one small window glows, and in it stands the tiny black silhouette of a person watching the town.
+> SUBJECT: the town of Juniper Falls as a rich multi-layer cut-paper diorama in the middle and lower part of the cover.
+> - **Layout:** a quiet main street of old storefronts in front. Behind it, a church steeple, a water tower, a wooden inn on a hill, and a small library with columns. The town hall clock tower stands tallest at centre back.
+> - **Mist:** soft lavender **mist drifts between every layer** and pools in the valley, as in a quiet night after rain.
+> - **Trees:** dark **evergreen pines, firs and juniper bushes** frame the town.
+> - **Windows:** exactly five glow antique gold: bookstore, bakery, diner, inn, library. Small cream tags numbered "1" to "5" hang from those five buildings. High in the clock tower one small window glows, and in it stands the tiny black silhouette of a person watching the town.
 >
-> DETAILS:
-> - A long cream paper list of names unrolls like a scroll across the foreground in front of the town. The names are small, many neatly struck through, one circled in amber.
-> - Five small cream evidence tags hang from the five lit buildings like ornaments, numbered "1" to "5".
-> - Rust autumn leaves drift down on the left and turn into snowflakes on the right.
+> DETAILS: a cream paper scroll of names unrolls across the foreground in front of the town; most names are struck through, one is circled in antique gold. Nothing seasonal.
 >
 > TEXT:
-> - Top 40%: "WHO SENT THE KILLERS?" in huge heavy condensed capitals on three lines, in cream, with "KILLERS?" in amber gold. The letters look cut from thick paper and cast a slight shadow on the sky layer.
-> - Small cream capitals under the title: "A FIND-THE-KILLER MURDER MYSTERY PUZZLE BOOK".
-> - A cream ribbon above the town: "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" in deep purple condensed capitals.
+> - Top 35–40%: "WHO SENT THE KILLERS?" in the chosen type style (section 4), cream, with "KILLERS?" in antique gold.
+> - Under it, small cream capitals: "A FIND-THE-KILLER MURDER MYSTERY PUZZLE BOOK".
+> - A cream ribbon between the title and the town: "18,000 SUSPECTS · 5 KILLERS · 1 MASTERMIND" in deep purple.
 > - At the bottom, modest cream capitals: "NORA CLEWES".
-> - Optional small line above the title: "A JUNIPER FALLS MYSTERY".
-> - No other text except the tag numerals.
 >
-> STYLE: as B2 and C2: a layered hand-cut paper diorama with depth, soft shadows, fine scissor detail and visible paper fibre. Cozy and ominous at once. No glossy digital look, no faces.
+> STYLE: layered hand-cut paper diorama with depth, fine scissor detail, visible paper fibre, soft shadows between layers, and atmospheric mist. Cozy and ominous at once, timeless, premium. No glossy digital look, no seasonal elements.
 
 ## 7. Technical
 
 - **Shape:** portrait 2:3, at the highest resolution available. The front panel prints at 6.125 × 9.25 in, including bleed.
-- **Safe area:**
-  - Keep all lettering at least 5% of the width away from every edge.
-  - Keep the bottom 4% free of anything important.
-- **Front only.** No spine or back cover yet.
+- **Safe area:** keep lettering at least 5% of the width from every edge, and keep the bottom 4% free of anything important.
+- **Front only.**
 
-## 8. Checking each cover before keeping it
+## 8. Checks before keeping a cover
 
-1. **Spelling:** read every word letter by letter against section 5. Any typo means regenerate or fix with a single-change edit.
-2. **Thumbnail test:** shrink the cover to 150 px wide. The title must be readable and the cover must still say "murder mystery puzzle".
-3. **Shelf test:** at 150 px, put it beside typical competitors (cream paper with black and red type, magnifying glasses, silhouettes). It should clearly stand out, but still look like it belongs on that shelf.
-4. **Rich, not cluttered:** the title must stay dominant. If the detail fights the title, simplify the background, not the title.
-5. **Hand-made, not AI:** look for layered paper with real shadows. Reject glossy 3D, plastic sheen, garbled micro-text, warped letters and extra words.
-6. **Palette:** purple, amber, cream and near-black only, with touches of rust and frost.
+1. **Spelling:** every word letter by letter against section 5.
+2. **Thumbnail:** at 150 px wide, the title is readable and it still says "murder mystery puzzle".
+3. **Evergreen:** no leaves, snow, frost, holiday or Halloween cues. It could be sold in any month.
+4. **Typography:** the title looks like a grown-up mystery jacket, not a comic: no drop shadow, no bevel, no bright yellow.
+5. **Calm, not cluttered:** the title is dominant and the eye knows where to go.
+6. **Hand-made, not AI:** layered paper with real shadows. Reject glossy 3D, garbled micro-text and extra words.
 
-## 9. What to hand back
+## 9. Hand back
 
-- **The covers:**
-  - `cover_B2.png`, `cover_C2.png`, `cover_D.png`: the best of each;
-  - any strong runner-ups.
-- **One comparison image:** the three winners side by side at full size, and again at 150 px wide.
-- **A short note:** for each cover, what works, what doesn't, and how it did in the tests; then which one you recommend and why.
+- **The covers:** `cover_B3_T1.png`, `cover_B3_T2.png`, `cover_D3_T1.png`, `cover_D3_T2.png`.
+- **One comparison image:** all four at full size and at 150 px wide.
+- **A short note:** what works and what doesn't in each, and which one you recommend and why.
