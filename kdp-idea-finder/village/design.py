@@ -54,6 +54,11 @@ HEAD_GREY = 0.30
 
 ART_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "books", "juniper-falls", "art")
 MIN_DPI = 300
+# Pictures lighter than this average grey (0 black, 255 white) have their mid-tones darkened to it, so a
+# washed-out drawing matches the others; whites stay white and blacks stay black. Darker ones are left alone:
+# printing darkens mid-greys a little anyway.
+TONE_TARGET = 140
+PREP_VERSION = 2                                 # bump when the preparation changes, to rebuild the cache
 
 
 class LayoutError(RuntimeError):
@@ -178,7 +183,7 @@ class Art:
 
     def prepared(self, key, src):
         os.makedirs(self.cache, exist_ok=True)
-        out = os.path.join(self.cache, key + ".png")
+        out = os.path.join(self.cache, "%s.v%d.png" % (key, PREP_VERSION))
         if not os.path.exists(out) or os.path.getmtime(out) < os.path.getmtime(src):
             im = Image.open(src)
             if im.mode in ("RGBA", "LA", "P"):
@@ -193,6 +198,7 @@ class Art:
                 pad = max(4, int(0.02 * max(im.size)))
                 im = im.crop((max(0, ink[0] - pad), max(0, ink[1] - pad),
                               min(im.width, ink[2] + pad), min(im.height, ink[3] + pad)))
+            im = even_tone(im)
             im.save(out)
         return out
 
@@ -226,6 +232,19 @@ class Art:
             self.low.append((key, round(dpi)))
         c.drawImage(self.prepared(key, src), x + (w - dw) / 2, y + (h - dh) / 2, dw, dh)
         return x + (w - dw) / 2, y + (h - dh) / 2, dw, dh
+
+
+def even_tone(im, target=TONE_TARGET):
+    """Darken the mid-tones of a light greyscale picture until its average grey reaches the target."""
+    from PIL import ImageStat
+    if ImageStat.Stat(im).mean[0] <= target:
+        return im
+    lo, hi = 1.0, 3.0
+    for _ in range(20):
+        g = (lo + hi) / 2
+        mean = ImageStat.Stat(im.point(lambda v, g=g: 255 * (v / 255) ** g)).mean[0]
+        lo, hi = (g, hi) if mean > target else (lo, g)
+    return im.point(lambda v, g=hi: round(255 * (v / 255) ** g))
 
 
 # ---------------------------------------------------------------- small pieces
