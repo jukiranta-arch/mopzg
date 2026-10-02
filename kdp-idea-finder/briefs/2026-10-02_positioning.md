@@ -58,7 +58,7 @@ It promises a story and a twist in seven words. It also answers the fear of a po
 
 **Subtitle** (title and subtitle together must be under 200 characters; this is 164):
 
-> Who Sent the Killers?: A Find-the-Killer Murder Mystery Puzzle Book for Adults. 18,000 Suspects, 5 Linked Murders, 1 Mastermind. Check Every Answer Without Spoilers
+> Who Sent the Killers?: A Find-the-Killer Murder Mystery Puzzle Book for Adults. 18,000 Suspects, 5 Linked Cases, 1 Mastermind. Check Every Answer Without Spoilers
 
 **Series:** if volume two comes, the series name is about the puzzle format, not the town.
 

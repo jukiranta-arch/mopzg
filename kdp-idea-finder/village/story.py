@@ -29,7 +29,7 @@ REVIEW = [
 ]
 REVIEW_HOW_QR = "Scan the code to go straight to the book's review page."
 REVIEW_HOW = "You can leave a review from the book's page on Amazon, or from Your Orders."
-SUBTITLE = ("A Find-the-Killer Murder Mystery Puzzle Book for Adults. {thousands} Suspects, 5 Linked Murders, "
+SUBTITLE = ("A Find-the-Killer Murder Mystery Puzzle Book for Adults. {thousands} Suspects, 5 Linked Cases, "
             "1 Mastermind. Check Every Answer Without Spoilers")
 
 COPYRIGHT = [
