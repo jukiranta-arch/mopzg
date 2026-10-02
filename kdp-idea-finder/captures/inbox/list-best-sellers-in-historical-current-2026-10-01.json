@@ -1,0 +1,1386 @@
+{
+ "tool": "kdp-capture",
+ "version": 1,
+ "store": "amazon.com",
+ "url": "https://www.amazon.com/Best-Sellers-Books-Historical-Mystery/zgbs/books/10470/ref=zg_bs_nav_books_3_10457",
+ "captured_at": "2026-10-01T22:57:43.887Z",
+ "type": "list",
+ "list": {
+  "kind": "bestsellers",
+  "name": "Best Sellers in Historical(Current)",
+  "category": "Historical(Current)",
+  "node": "10470",
+  "page": 1
+ },
+ "items": [
+  {
+   "asin": "B0GJM9YRPS",
+   "title": "Death by Misadventure: A Novel",
+   "reviews": "",
+   "position": 1,
+   "product": {
+    "asin": "B0GJM9YRPS",
+    "title": "Death by Misadventure: A Novel",
+    "author": "Jane Bitomsky",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(1,126)",
+    "rating_text": "4.0 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "261 pages",
+     "Language": "English",
+     "Publisher": "Lake Union Publishing",
+     "Accessibility": "Learn more",
+     "Publication date": "October 1, 2026",
+     "File size": "2.2 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FTGG8PT4",
+   "title": "The Last Templar (Last Templar Mysteries Book 1)",
+   "reviews": "",
+   "position": 2,
+   "product": {
+    "asin": "B0FTGG8PT4",
+    "title": "The Last Templar (Last Templar Mysteries Book 1)",
+    "author": "Michael Jecks",
+    "format_text": "Kindle",
+    "price_text": "$1.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(1,401)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 32": "The Last Templar Mysteries",
+     "Print length": "387 pages",
+     "Language": "English",
+     "Publisher": "Canelo",
+     "Accessibility": "Learn more",
+     "Publication date": "April 13, 2020",
+     "File size": "4.3 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0GGMGZR8M",
+   "title": "The Vanished Sister",
+   "reviews": "",
+   "position": 3,
+   "product": {
+    "asin": "B0GGMGZR8M",
+    "title": "The Vanished Sister",
+    "author": "Sherry Thomas",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(4)",
+    "rating_text": "4.1 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 9 of 9": "The Lady Sherlock Series",
+     "Listening Length": "13 hours and 31 minutes",
+     "Author": "Sherry Thomas",
+     "Narrator": "Kate Reading",
+     "Publication date": "September 29, 2026",
+     "Language": "English",
+     "Publisher": "Penguin Audio",
+     "ASIN": "B0GGMGZR8M",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook"
+    }
+   }
+  },
+  {
+   "asin": "B0GDS13WY8",
+   "title": "Murder on Threadneedle Street (A Wrexford & Sloane Mystery Book 10)",
+   "reviews": "",
+   "position": 4,
+   "product": {
+    "asin": "B0GDS13WY8",
+    "title": "Murder on Threadneedle Street (A Wrexford & Sloane Mystery Book 10)",
+    "author": "Andrea Penrose",
+    "format_text": "Kindle",
+    "price_text": "$9.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(22)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 10 of 10": "Wrexford & Sloane Mysteries",
+     "Print length": "365 pages",
+     "Language": "English",
+     "Publisher": "Kensington Books",
+     "Accessibility": "Learn more",
+     "Publication date": "September 29, 2026",
+     "File size": "2.8 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "0062073478",
+   "title": "And Then There Were None (Agatha Christie Mysteries Collection (Paperback))",
+   "reviews": "",
+   "position": 5,
+   "product": {
+    "asin": "0062073478",
+    "title": "And Then There Were None (Agatha Christie Mysteries Collection (Paperback))",
+    "author": "Agatha Christie",
+    "format_text": "Paperback",
+    "price_text": "$7.12",
+    "reviews_text": "(58,806)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Reading age": "17+ years, from customers",
+     "Print length": "247 pages",
+     "Language": "English",
+     "Dimensions": "8 x 5.36 x 0.7 inches",
+     "Publication date": "January 18, 2011",
+     "ISBN-10": "0062073478",
+     "ISBN-13": "978-0062073471"
+    }
+   }
+  },
+  {
+   "asin": "B0FBHPZ86W",
+   "title": "The Heir of Whitestone",
+   "reviews": "",
+   "position": 6,
+   "product": {
+    "asin": "B0FBHPZ86W",
+    "title": "The Heir of Whitestone",
+    "author": "Catherine Coulter",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(2,794)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "366 pages",
+     "Language": "English",
+     "Publisher": "A John Scognamiglio Book",
+     "Accessibility": "Learn more",
+     "Publication date": "February 24, 2026",
+     "File size": "1.1 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FHJXTBTZ",
+   "title": "Death Times Seven: A Daniel Pitt Novel",
+   "reviews": "",
+   "position": 7,
+   "product": {
+    "asin": "B0FHJXTBTZ",
+    "title": "Death Times Seven: A Daniel Pitt Novel",
+    "author": "Anne Perry",
+    "format_text": "Kindle",
+    "price_text": "$2.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(614)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 7 of 7": "Daniel Pitt",
+     "Print length": "281 pages",
+     "Language": "English",
+     "Publisher": "Ballantine Books",
+     "Accessibility": "Learn more",
+     "Publication date": "April 14, 2026",
+     "File size": "3.2 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0B9RNFT4S",
+   "title": "The Echo of Old Books: A Novel",
+   "reviews": "",
+   "position": 8,
+   "product": {
+    "asin": "B0B9RNFT4S",
+    "title": "The Echo of Old Books: A Novel",
+    "author": "Barbara Davis",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(77,561)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "413 pages",
+     "Language": "English",
+     "Publisher": "Lake Union Publishing",
+     "Accessibility": "Learn more",
+     "Publication date": "March 28, 2023",
+     "File size": "7.4 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FPCPGNBH",
+   "title": "The Secret Twins of Paris: An unputdownable and emotional WW2 novel (The Paris Sisters)",
+   "reviews": "",
+   "position": 9,
+   "product": {
+    "asin": "B0FPCPGNBH",
+    "title": "The Secret Twins of Paris: An unputdownable and emotional WW2 novel (The Paris Sisters)",
+    "author": "Suzanne Kelman",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(381)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 4 of 5": "The Paris Sisters",
+     "Print length": "402 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "January 20, 2026",
+     "File size": "3.0 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FN65QH5D",
+   "title": "Hemlock Bay (Rachel Savernake Golden Age Mysteries Book 5)",
+   "reviews": "",
+   "position": 10,
+   "product": {
+    "asin": "B0FN65QH5D",
+    "title": "Hemlock Bay (Rachel Savernake Golden Age Mysteries Book 5)",
+    "author": "Martin Edwards",
+    "format_text": "Kindle",
+    "price_text": "$9.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(204)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 5 of 5": "Rachel Savernake Golden Age Mystery",
+     "Print length": "361 pages",
+     "Language": "English",
+     "Publisher": "Poisoned Pen Press",
+     "Accessibility": "Learn more",
+     "Publication date": "June 16, 2026",
+     "File size": "3.5 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FV9ZWN41",
+   "title": "Murder on Black Tuesday: a 1920's cozy historical mystery (A Ginger Gold Mystery Book 31)",
+   "reviews": "",
+   "position": 11,
+   "product": {
+    "asin": "B0FV9ZWN41",
+    "title": "Murder on Black Tuesday: a 1920's cozy historical mystery (A Ginger Gold Mystery Book 31)",
+    "author": "Lee Strauss",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(233)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 31 of 31": "A Ginger Gold Mystery",
+     "Print length": "236 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 24, 2026",
+     "File size": "4.2 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B00E3D10ZO",
+   "title": "The Final Solution: A Story of Detection",
+   "reviews": "",
+   "position": 12,
+   "product": {
+    "asin": "B00E3D10ZO",
+    "title": "The Final Solution: A Story of Detection",
+    "author": "Michael Chabon",
+    "format_text": "Kindle",
+    "price_text": "$11.49 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(886)",
+    "rating_text": "4.1 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "156 pages",
+     "Language": "English",
+     "Publisher": "Harper Perennial",
+     "Accessibility": "Learn more",
+     "Publication date": "September 17, 2013",
+     "File size": "435 KB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0GY5X96DJ",
+   "title": "A Studious Heiress: An Historical Mystery (The Isabella Hartwell Society Mysteries Book 3)",
+   "reviews": "",
+   "position": 13,
+   "product": {
+    "asin": "B0GY5X96DJ",
+    "title": "A Studious Heiress: An Historical Mystery (The Isabella Hartwell Society Mysteries Book 3)",
+    "author": "Sarah F. Noel",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(43)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 3 of 4": "The Isabella Hartwell Society Mysteries",
+     "Print length": "289 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 26, 2026",
+     "File size": "1.8 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HJW47KBB",
+   "title": "The Medici Agenda: A Sean Wyatt Archaeological Thriller (Sean Wyatt Historical Mysteries Book 25)",
+   "reviews": "",
+   "position": 14,
+   "product": {
+    "asin": "B0HJW47KBB",
+    "title": "The Medici Agenda: A Sean Wyatt Archaeological Thriller (Sean Wyatt Historical Mysteries Book 25)",
+    "author": "Ernest Dempsey",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(39)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 25 of 25": "Sean Wyatt Historical Mysteries",
+     "Print length": "354 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 25, 2026",
+     "File size": "3.8 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0942QJFMR",
+   "title": "The Shadow of the Gods",
+   "reviews": "",
+   "position": 15,
+   "product": {
+    "asin": "B0942QJFMR",
+    "title": "The Shadow of the Gods",
+    "author": "John Gwynne",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(19,281)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 3": "The Bloodsworn Trilogy",
+     "Listening Length": "18 hours and 14 minutes",
+     "Author": "John Gwynne",
+     "Narrator": "Colin Mace",
+     "Publication date": "May 5, 2021",
+     "Language": "English",
+     "Publisher": "Orbit",
+     "ASIN": "B0942QJFMR",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook"
+    }
+   }
+  },
+  {
+   "asin": "B0GXJ1R6DR",
+   "title": "A Murder at Kew Gardens: A Victorian Historical Mystery (Rosalynd and Steele Mysteries Book 5)",
+   "reviews": "",
+   "position": 16,
+   "product": {
+    "asin": "B0GXJ1R6DR",
+    "title": "A Murder at Kew Gardens: A Victorian Historical Mystery (Rosalynd and Steele Mysteries Book 5)",
+    "author": "Magda Alexander",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(1,258)",
+    "rating_text": "4.8 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 5 of 6": "Rosalynd and Steele Mysteries",
+     "Print length": "321 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "August 28, 2026",
+     "File size": "2.6 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HGN2V94X",
+   "title": "The Case of the Curate (The Irreverent Clergyman Book 1)",
+   "reviews": "",
+   "position": 17,
+   "product": {
+    "asin": "B0HGN2V94X",
+    "title": "The Case of the Curate (The Irreverent Clergyman Book 1)",
+    "author": "Mary Lancaster",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(130)",
+    "rating_text": "4.7 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 1": "The Irreverent Clergyman",
+     "Print length": "287 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 25, 2026",
+     "File size": "5.3 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B000FC12Z0",
+   "title": "Murder on the Orient Express: A Hercule Poirot Mystery: The Official Authorized Edition (Hercule Poirot series Book 9)",
+   "reviews": "",
+   "position": 18,
+   "product": {
+    "asin": "B000FC12Z0",
+    "title": "Murder on the Orient Express: A Hercule Poirot Mystery: The Official Authorized Edition (Hercule Poirot series Book 9)",
+    "author": "Agatha Christie",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(36,747)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Reading age": "17+ years, from customers",
+     "Book 10 of 38": "Hercule Poirot",
+     "Print length": "256 pages",
+     "Language": "English",
+     "Publisher": "William Morrow Paperbacks",
+     "Accessibility": "Learn more",
+     "Publication date": "October 28, 2003",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled",
+     "ISBN-13": "978-0061753824"
+    }
+   }
+  },
+  {
+   "asin": "B0H6G7M8JG",
+   "title": "THE DETECTIVE WOODEND MYSTERIES BOOKS 1–10: ten gripping British crime thrillers",
+   "reviews": "",
+   "position": 19,
+   "product": {
+    "asin": "B0H6G7M8JG",
+    "title": "THE DETECTIVE WOODEND MYSTERIES BOOKS 1–10: ten gripping British crime thrillers",
+    "author": "SALLY SPENCER",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(338)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "2514 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "June 23, 2026",
+     "File size": "3.0 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0000D1BWY",
+   "title": "The Da Vinci Code: A Novel",
+   "reviews": "",
+   "position": 20,
+   "product": {
+    "asin": "B0000D1BWY",
+    "title": "The Da Vinci Code: A Novel",
+    "author": "Dan Brown",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(25,531)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 2 of 6": "Robert Langdon",
+     "Listening Length": "16 hours and 59 minutes",
+     "Author": "Dan Brown",
+     "Narrator": "Paul Michael",
+     "Publication date": "January 1, 2006",
+     "Language": "English",
+     "Publisher": "Random House Audio",
+     "ASIN": "B0000D1BWY",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook"
+    }
+   }
+  },
+  {
+   "asin": "B087JJ2K54",
+   "title": "The Lost Apothecary: A Captivating Historical Mystery Unveiling Secrets of Poison, Revenge, and Female Empowerment—Don't Miss Sarah Penner's Newest Spell-Binding Book, The Amalfi Curse",
+   "reviews": "",
+   "position": 21,
+   "product": {
+    "asin": "B087JJ2K54",
+    "title": "The Lost Apothecary: A Captivating Historical Mystery Unveiling Secrets of Poison, Revenge, and Female Empowerment—Don't Miss Sarah Penner's Newest Spell-Binding Book, The Amalfi Curse",
+    "author": "Sarah Penner",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(60,690)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "306 pages",
+     "Language": "English",
+     "Publisher": "Park Row",
+     "Accessibility": "Learn more",
+     "Publication date": "March 2, 2021",
+     "File size": "5.6 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0DR87QNPK",
+   "title": "The Secret Book Society: A Novel – A USA Today Bestselling Historical Gothic Mystery",
+   "reviews": "",
+   "position": 22,
+   "product": {
+    "asin": "B0DR87QNPK",
+    "title": "The Secret Book Society: A Novel – A USA Today Bestselling Historical Gothic Mystery",
+    "author": "Madeline Martin",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(9,286)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "331 pages",
+     "Language": "English",
+     "Publisher": "Hanover Square Press",
+     "Accessibility": "Learn more",
+     "Publication date": "August 26, 2025",
+     "File size": "3.4 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0H68GM4DK",
+   "title": "The Winter Witch: A Nicole Rayburn Historical Mystery Book 7 (Nicole Rayburn Historical Mysteries)",
+   "reviews": "",
+   "position": 23,
+   "product": {
+    "asin": "B0H68GM4DK",
+    "title": "The Winter Witch: A Nicole Rayburn Historical Mystery Book 7 (Nicole Rayburn Historical Mysteries)",
+    "author": "Irina Shapiro",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(129)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 7 of 7": "Nicole Rayburn Historical Mysteries",
+     "Print length": "417 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 22, 2026",
+     "File size": "679 KB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B000OVLINI",
+   "title": "The Shadow of the Wind (The Cemetery of Forgotten Books Book 1)",
+   "reviews": "",
+   "position": 24,
+   "product": {
+    "asin": "B000OVLINI",
+    "title": "The Shadow of the Wind (The Cemetery of Forgotten Books Book 1)",
+    "author": "Carlos Ruiz Zafon",
+    "format_text": "Kindle",
+    "price_text": "$10.99",
+    "reviews_text": "(26,876)",
+    "rating_text": "4.4 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "ISBN-13": "978-1101147061",
+     "Publisher": "Penguin Books",
+     "Accessibility": "Learn more",
+     "Publication date": "January 25, 2005",
+     "Book 1 of 4": "The Cemetery of Forgotten Books",
+     "Language": "English",
+     "File size": "4.4 MB"
+    }
+   }
+  },
+  {
+   "asin": "1451645856",
+   "title": "Ordinary Grace",
+   "reviews": "",
+   "position": 25,
+   "product": {
+    "asin": "1451645856",
+    "title": "Ordinary Grace",
+    "author": "William Kent Krueger",
+    "format_text": "Paperback",
+    "price_text": "$10.12",
+    "reviews_text": "(49,188)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "336 pages",
+     "Language": "English",
+     "Publisher": "Atria Books",
+     "Publication date": "March 4, 2014",
+     "Dimensions": "5.31 x 0.84 x 8.25 inches",
+     "ISBN-10": "1451645856",
+     "ISBN-13": "978-1451645859"
+    }
+   }
+  },
+  {
+   "asin": "B01N9X5YA9",
+   "title": "The Saboteur: A Novel",
+   "reviews": "",
+   "position": 26,
+   "product": {
+    "asin": "B01N9X5YA9",
+    "title": "The Saboteur: A Novel",
+    "author": "Andrew Gross",
+    "format_text": "Kindle",
+    "price_text": "$0.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(1,887)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "398 pages",
+     "Language": "English",
+     "Publisher": "Minotaur Books",
+     "Accessibility": "Learn more",
+     "Publication date": "August 22, 2017",
+     "File size": "4.5 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B082TKH2K7",
+   "title": "Mexican Gothic",
+   "reviews": "",
+   "position": 27,
+   "product": {
+    "asin": "B082TKH2K7",
+    "title": "Mexican Gothic",
+    "author": "Silvia Moreno-Garcia",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(35,490)",
+    "rating_text": "4.1 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Listening Length": "10 hours and 39 minutes",
+     "Author": "Silvia Moreno-Garcia",
+     "Narrator": "Frankie Corzo",
+     "Publication date": "June 30, 2020",
+     "Language": "English",
+     "Publisher": "Random House Audio",
+     "ASIN": "B082TKH2K7",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook"
+    }
+   }
+  },
+  {
+   "asin": "B003DYGNQA",
+   "title": "The Angel of Darkness: Book 2 of the Alienist: A Novel (Dr. Lazlo Kreizler)",
+   "reviews": "",
+   "position": 28,
+   "product": {
+    "asin": "B003DYGNQA",
+    "title": "The Angel of Darkness: Book 2 of the Alienist: A Novel (Dr. Lazlo Kreizler)",
+    "author": "Caleb Carr",
+    "format_text": "Kindle",
+    "price_text": "$1.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(3,947)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 2 of 2": "Dr. Lazlo Kreizler",
+     "Print length": "770 pages",
+     "Language": "English",
+     "Publisher": "Ballantine Books",
+     "Accessibility": "Learn more",
+     "Publication date": "March 25, 2010",
+     "File size": "4.5 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B01M1G8JQE",
+   "title": "Magpie Murders: A Novel",
+   "reviews": "",
+   "position": 29,
+   "product": {
+    "asin": "B01M1G8JQE",
+    "title": "Magpie Murders: A Novel",
+    "author": "Anthony Horowitz",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(36,975)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 3": "Susan Ryeland",
+     "Print length": "501 pages",
+     "Language": "English",
+     "Publisher": "Harper",
+     "Accessibility": "Learn more",
+     "Publication date": "June 6, 2017",
+     "File size": "3.0 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0GTMT2FCS",
+   "title": "The Lion’s Tusk (Magic & Mystery collection)",
+   "reviews": "",
+   "position": 30,
+   "product": {
+    "asin": "B0GTMT2FCS",
+    "title": "The Lion’s Tusk (Magic & Mystery collection)",
+    "author": "Robert Jackson Bennett",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(1,139)",
+    "rating_text": "3.9 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 3 of 7": "Magic & Mystery",
+     "Print length": "38 pages",
+     "Language": "English",
+     "Publisher": "Amazon Original Stories",
+     "Accessibility": "Learn more",
+     "Publication date": "July 28, 2026",
+     "File size": "4.5 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HL76T6G4",
+   "title": "Good Bones (Dr. Benjamin Bones Mysteries Book 5)",
+   "reviews": "",
+   "position": 31,
+   "product": {
+    "asin": "B0HL76T6G4",
+    "title": "Good Bones (Dr. Benjamin Bones Mysteries Book 5)",
+    "author": "Emma Jameson",
+    "format_text": "Kindle",
+    "price_text": "$2.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(10)",
+    "rating_text": "5.0 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 5 of 5": "Dr. Benjamin Bones Mysteries",
+     "Print length": "122 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 27, 2026",
+     "File size": "1.2 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FXQ3D8BC",
+   "title": "Adam and Eve: The new unforgettable final novel from the master storyteller – a gripping WWII historical fiction novel for 2026",
+   "reviews": "",
+   "position": 32,
+   "product": {
+    "asin": "B0FXQ3D8BC",
+    "title": "Adam and Eve: The new unforgettable final novel from the master storyteller – a gripping WWII historical fiction novel for 2026",
+    "author": "Jeffrey Archer",
+    "format_text": "Kindle",
+    "price_text": "$14.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "",
+    "details": {
+     "Print length": "467 pages",
+     "Language": "English",
+     "Publisher": "HarperCollins",
+     "Accessibility": "Learn more",
+     "Publication date": "October 6, 2026",
+     "File size": "3.6 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0GWF8XLY3",
+   "title": "A Christmas Guide to Family and Murder",
+   "reviews": "",
+   "position": 33,
+   "product": {
+    "asin": "B0GWF8XLY3",
+    "title": "A Christmas Guide to Family and Murder",
+    "author": "Dianne Freeman",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(16)",
+    "rating_text": "3.9 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 9 of 9": "Countess of Harleigh Mysteries",
+     "Listening Length": "8 hours and 21 minutes",
+     "Author": "Dianne Freeman",
+     "Narrator": "Sarah Zimmerman",
+     "Publication date": "September 29, 2026",
+     "Language": "English",
+     "Publisher": "Recorded Books",
+     "ASIN": "B0GWF8XLY3",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook"
+    }
+   }
+  },
+  {
+   "asin": "B0H9JX2MGV",
+   "title": "A Question of Worth: A Regency Romance (The Warrington Bequests Book 1)",
+   "reviews": "",
+   "position": 34,
+   "product": {
+    "asin": "B0H9JX2MGV",
+    "title": "A Question of Worth: A Regency Romance (The Warrington Bequests Book 1)",
+    "author": "Rose Pearson",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(485)",
+    "rating_text": "4.1 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 4": "The Warrington Bequests",
+     "Print length": "216 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "August 1, 2026",
+     "File size": "3.8 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "0062654195",
+   "title": "The Alice Network: A Novel – A New York Times Bestselling Historical Fiction of Female Spies, Courage, and Betrayal Across Two World Wars",
+   "reviews": "",
+   "position": 35,
+   "product": {
+    "asin": "0062654195",
+    "title": "The Alice Network: A Novel – A New York Times Bestselling Historical Fiction of Female Spies, Courage, and Betrayal Across Two World Wars",
+    "author": "Kate Quinn",
+    "format_text": "Paperback",
+    "price_text": "$8.60",
+    "reviews_text": "(100,135)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "560 pages",
+     "Language": "English",
+     "Publisher": "William Morrow Paperbacks",
+     "Publication date": "June 6, 2017",
+     "Dimensions": "5.31 x 0.89 x 8 inches",
+     "ISBN-10": "0062654195",
+     "ISBN-13": "978-0062654199"
+    }
+   }
+  },
+  {
+   "asin": "B0GP1GWY3P",
+   "title": "A Murder in Bloomsbury: A Victorian Historical Mystery (Lark and Everthorne Mysteries Book 1)",
+   "reviews": "",
+   "position": 36,
+   "product": {
+    "asin": "B0GP1GWY3P",
+    "title": "A Murder in Bloomsbury: A Victorian Historical Mystery (Lark and Everthorne Mysteries Book 1)",
+    "author": "Magda Alexander",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(1,282)",
+    "rating_text": "4.7 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 2": "Lark and Everthorne Mysteries",
+     "Print length": "293 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "July 31, 2026",
+     "File size": "2.9 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HJ934DC4",
+   "title": "THE AELF FEN HISTORICAL MYSTERIES BOOKS 1–6: six gripping medieval mysteries",
+   "reviews": "",
+   "position": 37,
+   "product": {
+    "asin": "B0HJ934DC4",
+    "title": "THE AELF FEN HISTORICAL MYSTERIES BOOKS 1–6: six gripping medieval mysteries",
+    "author": "ALYS CLARE",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(17)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "1674 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 9, 2026",
+     "File size": "3.8 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "1525805118",
+   "title": "The Story Keeper: A Gothic Mystery of Family Secrets Unveiled from the Author of The Things We Cannot Say",
+   "reviews": "",
+   "position": 38,
+   "product": {
+    "asin": "1525805118",
+    "title": "The Story Keeper: A Gothic Mystery of Family Secrets Unveiled from the Author of The Things We Cannot Say",
+    "author": "Kelly Rimmer",
+    "format_text": "Paperback",
+    "price_text": "$11.98",
+    "reviews_text": "(621)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "352 pages",
+     "Language": "English",
+     "Publisher": "MIRA",
+     "Publication date": "July 21, 2026",
+     "Dimensions": "5.32 x 0.85 x 8 inches",
+     "ISBN-10": "1525805118",
+     "ISBN-13": "978-1525805110"
+    }
+   }
+  },
+  {
+   "asin": "B0GG7YJJ37",
+   "title": "Queen of Lombard Street: A Novel – A Sweeping Victorian Novel of a Female Economist, Financial Crime, and the Courage to Change Society",
+   "reviews": "",
+   "position": 39,
+   "product": {
+    "asin": "B0GG7YJJ37",
+    "title": "Queen of Lombard Street: A Novel – A Sweeping Victorian Novel of a Female Economist, Financial Crime, and the Courage to Change Society",
+    "author": "Lisa Kleypas",
+    "format_text": "Kindle",
+    "price_text": "$14.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "",
+    "details": {
+     "Print length": "448 pages",
+     "Language": "English",
+     "Publisher": "Avon",
+     "Accessibility": "Learn more",
+     "Publication date": "October 20, 2026"
+    }
+   }
+  },
+  {
+   "asin": "B0GV3DKPS1",
+   "title": "Proof of Violence: A Spencer & Reid Mystery (Spencer & Reid Mysteries Book 7)",
+   "reviews": "",
+   "position": 40,
+   "product": {
+    "asin": "B0GV3DKPS1",
+    "title": "Proof of Violence: A Spencer & Reid Mystery (Spencer & Reid Mysteries Book 7)",
+    "author": "Cara Devlin",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(1,062)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 7 of 8": "Spencer & Reid Mysteries",
+     "Print length": "257 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "August 29, 2026",
+     "File size": "1.0 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0DCZMWWMP",
+   "title": "Marble Hall Murders: A Mindbending Metafictional Murder Mystery (Susan Ryeland Series Book 3)",
+   "reviews": "",
+   "position": 41,
+   "product": {
+    "asin": "B0DCZMWWMP",
+    "title": "Marble Hall Murders: A Mindbending Metafictional Murder Mystery (Susan Ryeland Series Book 3)",
+    "author": "Anthony Horowitz",
+    "format_text": "Kindle",
+    "price_text": "$2.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(12,438)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 3 of 3": "Susan Ryeland",
+     "Print length": "592 pages",
+     "Language": "English",
+     "Publisher": "Harper",
+     "Accessibility": "Learn more",
+     "Publication date": "May 13, 2025",
+     "File size": "1.9 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0FDCSVZQT",
+   "title": "Land of Dreams: A Novel",
+   "reviews": "",
+   "position": 42,
+   "product": {
+    "asin": "B0FDCSVZQT",
+    "title": "Land of Dreams: A Novel",
+    "author": "Gian Sardar",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(14,893)",
+    "rating_text": "4.1 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "297 pages",
+     "Language": "English",
+     "Publisher": "Lake Union Publishing",
+     "Accessibility": "Learn more",
+     "Publication date": "February 1, 2026",
+     "File size": "4.6 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B000FC122I",
+   "title": "Hallowe'en Party: Inspiration for the 20th Century Studios Major Motion Picture A Haunting in Venice (Hercule Poirot series Book 35)",
+   "reviews": "",
+   "position": 43,
+   "product": {
+    "asin": "B000FC122I",
+    "title": "Hallowe'en Party: Inspiration for the 20th Century Studios Major Motion Picture A Haunting in Venice (Hercule Poirot series Book 35)",
+    "author": "Agatha Christie",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(10,222)",
+    "rating_text": "4.3 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 35 of 38": "Hercule Poirot",
+     "Print length": "320 pages",
+     "Language": "English",
+     "Publisher": "William Morrow Paperbacks",
+     "Accessibility": "Learn more",
+     "Publication date": "October 3, 2006",
+     "File size": "4.4 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HFHNLM5W",
+   "title": "A Matter of Honor: A Regency Romance (The Warrington Bequests Book 2)",
+   "reviews": "",
+   "position": 44,
+   "product": {
+    "asin": "B0HFHNLM5W",
+    "title": "A Matter of Honor: A Regency Romance (The Warrington Bequests Book 2)",
+    "author": "Rose Pearson",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(292)",
+    "rating_text": "4.5 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 2 of 4": "The Warrington Bequests",
+     "Print length": "234 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 1, 2026",
+     "File size": "3.1 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HFVXCDFK",
+   "title": "A Whisper in Darkness: Raven and Wren, Book 6",
+   "reviews": "",
+   "position": 45,
+   "product": {
+    "asin": "B0HFVXCDFK",
+    "title": "A Whisper in Darkness: Raven and Wren, Book 6",
+    "author": "Darcy Burke",
+    "format_text": "Audiobook",
+    "price_text": "$0.99",
+    "reviews_text": "(1,655)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 6 of 7": "Raven & Wren",
+     "Listening Length": "11 hours and 52 minutes",
+     "Author": "Darcy Burke",
+     "Narrator": "Tamsin Kennard, see all",
+     "Publication date": "September 29, 2026",
+     "Language": "English",
+     "Publisher": "Podium Audio",
+     "ASIN": "B0HFVXCDFK",
+     "Version": "Unabridged",
+     "Program Type": "Audiobook"
+    }
+   }
+  },
+  {
+   "asin": "B0FVW874F9",
+   "title": "Lady Darling Vexes a Villain (Lady Darling Mysteries Book 2)",
+   "reviews": "",
+   "position": 46,
+   "product": {
+    "asin": "B0FVW874F9",
+    "title": "Lady Darling Vexes a Villain (Lady Darling Mysteries Book 2)",
+    "author": "Colleen Gleason",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(56)",
+    "rating_text": "4.6 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 2 of 2": "Lady Darling Mysteries",
+     "Print length": "289 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "September 22, 2026",
+     "File size": "4.5 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0DD5BRMVB",
+   "title": "Murder on a High Note (Music Shop Mysteries Book 1)",
+   "reviews": "",
+   "position": 47,
+   "product": {
+    "asin": "B0DD5BRMVB",
+    "title": "Murder on a High Note (Music Shop Mysteries Book 1)",
+    "author": "Jennifer Lamont Leo",
+    "format_text": "Kindle",
+    "price_text": "$2.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(47)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 4": "Music Shop Mysteries",
+     "Print length": "200 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "January 15, 2025",
+     "File size": "1.8 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0HFXR9RVR",
+   "title": "The Forged Broadside: A Printer's Boy Mystery",
+   "reviews": "",
+   "position": 48,
+   "product": {
+    "asin": "B0HFXR9RVR",
+    "title": "The Forged Broadside: A Printer's Boy Mystery",
+    "author": "James Thomson",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "",
+    "details": {
+     "Book 1 of 4": "A Printer's Boy Mystery",
+     "Print length": "33 pages",
+     "Language": "English",
+     "Accessibility": "Learn more",
+     "Publication date": "August 20, 2026",
+     "File size": "666 KB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B003WUYPTC",
+   "title": "The Name of the Rose: The Beloved Internationally Bestselling Medieval Historical Mystery Featuring Never-Before-Seen Sketches from the Author",
+   "reviews": "",
+   "position": 49,
+   "product": {
+    "asin": "B003WUYPTC",
+    "title": "The Name of the Rose: The Beloved Internationally Bestselling Medieval Historical Mystery Featuring Never-Before-Seen Sketches from the Author",
+    "author": "Umberto Eco",
+    "format_text": "Kindle",
+    "price_text": "$0.00",
+    "reviews_text": "(6,480)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Print length": "610 pages",
+     "Language": "English",
+     "Publisher": "HarperVia",
+     "Accessibility": "Learn more",
+     "Publication date": "September 28, 1994",
+     "File size": "9.6 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B00N6PD1ZW",
+   "title": "The Angel Court Affair: A Charlotte and Thomas Pitt Novel (Charlotte and Thomas Pitt Series Book 30)",
+   "reviews": "",
+   "position": 50,
+   "product": {
+    "asin": "B00N6PD1ZW",
+    "title": "The Angel Court Affair: A Charlotte and Thomas Pitt Novel (Charlotte and Thomas Pitt Series Book 30)",
+    "author": "Anne Perry",
+    "format_text": "Kindle",
+    "price_text": "$1.99 (function(f) {var _np=(window.P._namespace(\"TwisterAfterSavingsMessage\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A', 'jQuery', 'ready').execute(function(A, jQuery) { function updateYouPayPrice(isAAPIRefreshEnabled) { var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (yourSavingsBreakdown != null) { var ebookPrice = jQuery('.ebook-price-value'); var afterTwisterMessage = jQuery('.you-pay-after-twister-message'); var afterSavingsMessage = jQuery('.you-pay-twister-after-savings-message'); var afterSavingsPrice = A.$('#you-pay-twister-after-savings-price'); if (ebookPrice != null) { ebookPrice.addClass('aok-hidden'); } if (afterTwisterMessage != null) { afterTwisterMessage.addClass('aok-hidden'); } if (afterSavingsMessage != null) { if (isAAPIRefreshEnabled && afterSavingsPrice != null) { var updatedPrice = A.state(\"youPayRefreshPrice\"); var currencySymbol = afterSavingsPrice.text().trim().match(/^([^\\d]+)/)?.[1] || ''; afterSavingsPrice.text(currencySymbol + updatedPrice.amount.toFixed(2)); } afterSavingsMessage.removeClass('aok-hidden'); } } } A.on('Promotions:Redeem:Success', function() { var youPayPriceWithUnclaimedSavings = jQuery('.you-pay-price-with-unclaimed-savings-breakdown'); var yourSavingsBreakdown = jQuery('.your-savings-breakdown'); if (true && youPayPriceWithUnclaimedSavings != null && yourSavingsBreakdown != null && true) { updateYouPayPrice(false); } }); A.on('Promotions:YouPay:Refresh', function() { updateYouPayPrice(true); }); }); }));",
+    "reviews_text": "(2,001)",
+    "rating_text": "4.2 out of 5 stars",
+    "ranks_text": "",
+    "details": {
+     "Book 30 of 32": "The Charlotte and Thomas Pitt Novels",
+     "Print length": "275 pages",
+     "Language": "English",
+     "Publisher": "Ballantine Books",
+     "Accessibility": "Learn more",
+     "Publication date": "March 31, 2015",
+     "File size": "1.6 MB",
+     "Page Flip": "Enabled",
+     "Word Wise": "Enabled",
+     "Enhanced typesetting": "Enabled"
+    }
+   }
+  },
+  {
+   "asin": "B0DVBL912R",
+   "title": "Amazon Business Card",
+   "reviews": "",
+   "position": 51,
+   "product": {
+    "asin": "B0DVBL912R",
+    "title": "",
+    "author": "",
+    "format_text": "",
+    "price_text": "",
+    "reviews_text": "",
+    "rating_text": "",
+    "ranks_text": "",
+    "details": {}
+   }
+  }
+ ],
+ "books_read": 51
+}
