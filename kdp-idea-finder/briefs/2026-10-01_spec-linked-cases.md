@@ -234,3 +234,25 @@ Juho chose the American small town.
 - **One killer,** as in most winners. The clues read "The killer's…".
 - **At the back:** Your Answer, then the check line, then a Stop page with the solution upside down on its back.
 - **Verified:** `village/check_pdf.py` re-solves the PDF to the same single name under all 7 misreadings.
+
+## The full book, first build (2026-10-02)
+
+`python -m village.make_book books/juniper-falls/interior.pdf books/juniper-falls/qa.md` takes about 40 seconds.
+
+**Contents** (154 pages, 6 × 9 in):
+- front matter;
+- five cases, each with about 4,050 names on 20 pages;
+- the Town Meeting finale (1,566 names on 8 pages);
+- the solutions, upside down behind a Stop page.
+
+**The links between cases:**
+- from Case Two on, one clue uses the previous killer's last letter;
+- the killers' first letters spell the mastermind's first name;
+- the finale's clues call back to each case's recurring famous name.
+
+**Three checks:**
+1. The generator solves every case under all 7 readings.
+2. `village/check_book.py` re-solves the PDF from the printed clue sentences. It is written separately and never imports the generator. It also checks the check lines, the solutions page, the 6 × 9 page size, an even page count and embedded fonts.
+3. `qa.md` lists how many names are left after each clue.
+
+**Still to do before upload:** the final title, the pen name on the copyright page, the cover (Juho), and the KDP listing.
