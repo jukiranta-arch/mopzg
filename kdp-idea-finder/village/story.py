@@ -58,8 +58,7 @@ BEFORE = [
      "single name like Rosa has no surname, so any clue about a surname crosses it out."),
     ("Pages.", "\u201cWithin one page\u201d means the page before, the same page or the page after. In the open "
      "book an even page sits on the left and the odd page after it on the right: those two face each other."),
-    ("Within a page, within ten names.", "“Within one page” means the page before, the same page or "
-     "the page after. “Within 10 names” is counted in reading order, and the count carries on onto "
+    ("Counting names.", "“Within 8 names” is counted in reading order, and the count carries on onto "
      "the previous or next page."),
     ("A few tips.", "The clues don't need to be tackled in the order they're given; read them all first and start "
      "with the ones that give you the biggest head start. Work in pencil, in case you change your mind."),

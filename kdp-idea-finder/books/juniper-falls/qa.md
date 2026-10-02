@@ -1,6 +1,6 @@
 # QA report: Murder in Juniper Falls
 
-Generated in 62 s (seed 1). Interior: 154 pages, 6 x 9 in.
+Generated in 61 s (seed 1). Interior: 154 pages, 6 x 9 in.
 
 ## Each case
 
