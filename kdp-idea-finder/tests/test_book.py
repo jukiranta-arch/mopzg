@@ -200,6 +200,26 @@ class DesignTests(unittest.TestCase):
         self.assertEqual(three.getpixel((30 * INK_UPSCALE, 50 * INK_UPSCALE)), 0)
 
 
+class CoverTests(unittest.TestCase):
+    def test_spine_and_panels(self):
+        from PIL import Image
+        from village.make_cover import edge_profile, panel, spine_picture, spine_width
+        self.assertAlmostEqual(spine_width(142), 0.3198, places=4)       # KDP: pages x 0.002252 in
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, "p.png")
+            Image.new("RGB", (200, 300), (40, 20, 30)).save(path)
+            cut = panel(path, 6.125, 9.25)
+            self.assertEqual(cut.size, (round(300 * 6.125 / 9.25), 300))  # cropped evenly to the panel shape
+        back = Image.new("RGB", (60, 100), (30, 10, 20))
+        front = Image.new("RGB", (60, 100), (60, 30, 50))
+        self.assertEqual(tuple(edge_profile(back, "right")[0].round()), (30, 10, 20))
+        spine = spine_picture(back, front, 50, 100)
+        left, right = spine.getpixel((0, 50)), spine.getpixel((49, 50))
+        self.assertLess(abs(left[0] - 30), 10)                            # meets the back's purple...
+        self.assertLess(abs(right[0] - 60), 10)                           # ...and the front's
+
+
 @unittest.skipUnless(os.environ.get("BOOK_PDF"), "set BOOK_PDF to a rendered book to check it")
 class RenderedBookTests(unittest.TestCase):
     def test_book_pdf(self):
