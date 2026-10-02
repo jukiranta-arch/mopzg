@@ -5,7 +5,7 @@ import unittest
 from village import clues as C
 from village.book import (READINGS, Ledger, generate_case, landmark_risks, signature, solve, survivors_all_readings,
                           validate, verdicts)
-from village.design import Art, balance_rows, width
+from village.design import PREP_VERSION, TONE_TARGET, Art, balance_rows, even_tone, width
 from village.namepool import FIRST_NAMES, SURNAMES
 from village.plans import PLANS
 
@@ -171,7 +171,17 @@ class DesignTests(unittest.TestCase):
             art.draw(c, "small", 0, 0, 288, 192)            # 600 px over 4 inches = 150 DPI
             self.assertEqual(art.missing, ["nothing"])
             self.assertEqual(art.low, [("small", 150)])
-            self.assertEqual(Image.open(os.path.join(d, ".print", "small.png")).mode, "L")
+            self.assertEqual(Image.open(os.path.join(d, ".print", "small.v%d.png" % PREP_VERSION)).mode, "L")
+
+    def test_pale_pictures_are_darkened_to_the_target_and_whites_stay_white(self):
+        from PIL import Image, ImageStat
+        pale = Image.new("L", (100, 100), 255)
+        pale.paste(170, (0, 0, 100, 80))                   # light grey over most of it, white below
+        out = even_tone(pale)
+        self.assertAlmostEqual(ImageStat.Stat(out).mean[0], TONE_TARGET, delta=2)
+        self.assertEqual(out.getpixel((50, 90)), 255)
+        dark = Image.new("L", (10, 10), 90)
+        self.assertIs(even_tone(dark), dark)
 
 
 @unittest.skipUnless(os.environ.get("BOOK_PDF"), "set BOOK_PDF to a rendered book to check it")
