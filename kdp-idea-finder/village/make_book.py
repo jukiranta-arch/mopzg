@@ -1,6 +1,9 @@
 """Build, render and check the whole book, and write a QA report.
 
-    python -m village.make_book OUT.pdf [REPORT.md]
+    python -m village.make_book OUT.pdf [REPORT.md] [--final]
+
+Pictures come from books/juniper-falls/art; a missing one is drawn as a marked placeholder. --final refuses
+to finish while any picture is missing or prints below 300 DPI.
 
 1. generate: every case is solved by the generator under every misreading;
 2. render the print interior;
@@ -15,8 +18,7 @@ import time
 
 from .book import READINGS, generate_valid_book
 from .check_book import main as check_pdf
-from whodunit.render import LayoutError
-
+from .design import LayoutError
 from .render_book import render_book
 
 
@@ -42,11 +44,19 @@ def report(book, info, check_out, seconds):
               "least twice\u201d)." % len(READINGS), "",
               "Mastermind: %s (the killers' first letters: %s)." % (
                   book.mastermind, ", ".join(c.ledger.flat[c.killer][0] for c in book.cases)), "",
-              "## Independent check of the PDF", "", "```", check_out.strip(), "```", ""]
+              "## Pictures", ""]
+    if info["art_missing"]:
+        lines.append("Still to draw (placeholders in this build): %s." % ", ".join(info["art_missing"]))
+    for key, pw, ph, w, h, dpi in info["art_used"]:
+        lines.append("- %s: %d x %d px printed at %.2f x %.2f in = %d DPI%s" % (
+            key, pw, ph, w, h, dpi, "" if dpi >= 300 else " (below 300: needs a larger image)"))
+    lines += ["", "## Independent check of the PDF", "", "```", check_out.strip(), "```", ""]
     return "\n".join(lines)
 
 
 def main(argv):
+    final = "--final" in argv
+    argv = [a for a in argv if a != "--final"]
     out = argv[0]
     t = time.time()
     seed = 1
@@ -57,11 +67,17 @@ def main(argv):
             break
         except LayoutError as e:
             print("seed %d: %s; trying the next seed" % (book.seed, e), file=sys.stderr)
+            if book.seed >= 20:   # every seed failing means the layout is wrong, not the luck
+                raise
             seed = book.seed + 1
     buf = io.StringIO()
     with contextlib.redirect_stdout(buf):
         status = check_pdf(out)
     text = report(book, info, buf.getvalue(), time.time() - t)
+    if final and (info["art_missing"] or info["art_low"]):
+        print("not final: pictures missing %s, below 300 DPI %s" % (info["art_missing"], info["art_low"]),
+              file=sys.stderr)
+        status = 1
     if len(argv) > 1:
         with open(argv[1], "w", encoding="utf-8") as fh:
             fh.write(text)

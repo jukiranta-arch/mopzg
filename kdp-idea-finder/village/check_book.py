@@ -17,8 +17,10 @@ import sys
 
 import pymupdf
 
+# Where the book puts things is a fact about the layout, not about the puzzle, so the sizes come from the design.
+from .design import CHAPTER_SIZE, FOLIO_SIZE, NAME_SIZE, SOLUTION_HEAD_SIZE
+
 DOT = "·"
-NAME_SIZE = 10.5
 READINGS = [None, "y_vowel", "wide", "narrow", "inclusive", "page_only", "either", "pages_up", "pages_down",
             "facing_flip", "before_after_flip", "xor_inclusive", "at_least"]
 ORDER = ["bookstore", "bakery", "diner", "inn", "library"]
@@ -71,7 +73,7 @@ def read_book(path):
             continue
         if current is None:
             continue
-        heads = {s["text"].strip() for s in spans if abs(s["size"] - 16) < 0.01 and "Bold" in s["font"]}
+        heads = {s["text"].strip() for s in spans if abs(s["size"] - SOLUTION_HEAD_SIZE) < 0.01 and "Bold" in s["font"]}
         if heads & {"The Solutions", "The Mastermind"}:
             solutions += " " + text
             continue
@@ -83,10 +85,10 @@ def read_book(path):
             body.sort(key=lambda s: (round(s["bbox"][1]), s["bbox"][0]))
             joined = " ".join(s["text"] for s in body)
             current["pages"].append([" ".join(e.split()) for e in joined.split(DOT) if e.strip()])
-            title = [s["text"] for s in spans if abs(s["size"] - 16) < 0.01]
+            title = [s["text"] for s in spans if abs(s["size"] - CHAPTER_SIZE) < 0.01]
             if title:
                 current["chapters"].append((title[0], len(current["pages"]) - 1))
-            current["numbers"].append(int([s["text"] for s in spans if abs(s["size"] - 9) < 0.01][-1]))
+            current["numbers"].append(int([s["text"] for s in spans if abs(s["size"] - FOLIO_SIZE) < 0.01][-1]))
             continue
         m = re.search(r"name has (\d+) letters, and they add up to (\d+)", text)
         if m:

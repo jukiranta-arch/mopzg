@@ -40,8 +40,8 @@ HOW = [
      "move on, because later cases need earlier answers."),
     ("The mastermind.", "The five killers were all sent their orders by the same person. The last chapter, The "
      "Town Meeting, uses all five of your answers to find them."),
-    ("The solutions", "are at the very back of the book, upside down, on the back of the mastermind's "
-     "answer page."),
+    ("The solutions.", "Every answer is at the very back of the book, printed upside down on the back of "
+     "the mastermind's answer page."),
 ]
 
 BEFORE = [

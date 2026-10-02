@@ -5,6 +5,7 @@ import unittest
 from village import clues as C
 from village.book import (READINGS, Ledger, generate_case, landmark_risks, signature, solve, survivors_all_readings,
                           validate, verdicts)
+from village.design import Art, balance_rows, width
 from village.namepool import FIRST_NAMES, SURNAMES
 from village.plans import PLANS
 
@@ -138,6 +139,39 @@ class CaseTests(unittest.TestCase):
     def test_names_vary_like_the_winners(self):
         flat = self.case.ledger.flat
         self.assertGreater(len(set(flat)) / len(flat), 0.85)
+
+
+class DesignTests(unittest.TestCase):
+    def test_balanced_rows_keep_every_name_in_order_and_fit(self):
+        rng = random.Random(3)
+        names = [rng.choice(FIRST_NAMES) + (" " + rng.choice(SURNAMES) if rng.random() < 0.5 else "")
+                 for _ in range(190)]
+        rows = balance_rows(names, 330)
+        self.assertEqual([n for r in rows for n in r], names)
+        for r in rows:
+            self.assertLessEqual(sum(width(n, "Body", 10) for n in r), 330)
+        # no more rows than filling each row greedily would need
+        greedy, used = 1, 0
+        for n in names:
+            w = width(n, "Body", 10) + width(" \u00b7 ", "Body", 10) * 1.2
+            if used and used + w > 330:
+                greedy, used = greedy + 1, 0
+            used += w
+        self.assertLessEqual(len(rows), greedy)
+
+    def test_missing_picture_is_a_placeholder_and_low_resolution_is_caught(self):
+        import tempfile
+        from PIL import Image
+        from reportlab.pdfgen.canvas import Canvas
+        with tempfile.TemporaryDirectory() as d:
+            Image.new("RGBA", (600, 400), (0, 0, 0, 0)).save(os.path.join(d, "small.png"))
+            art = Art(d)
+            c = Canvas(os.path.join(d, "t.pdf"))
+            art.draw(c, "nothing", 0, 0, 200, 100)
+            art.draw(c, "small", 0, 0, 288, 192)            # 600 px over 4 inches = 150 DPI
+            self.assertEqual(art.missing, ["nothing"])
+            self.assertEqual(art.low, [("small", 150)])
+            self.assertEqual(Image.open(os.path.join(d, ".print", "small.png")).mode, "L")
 
 
 @unittest.skipUnless(os.environ.get("BOOK_PDF"), "set BOOK_PDF to a rendered book to check it")
