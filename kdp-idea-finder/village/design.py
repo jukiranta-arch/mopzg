@@ -315,22 +315,28 @@ def tracked(c, text, x, y, font, size, track=1.6, align="center", grey=0):
     return w
 
 
+SPRIG_W = 22                                     # the sprig between the divider's lines, about the diamond's size
+
+
 def ornament(c, cx, y, art=None, w=90):
-    """A divider under headings: the juniper sprig if it has been drawn, else a fine rule with a diamond."""
-    if art and art.path("ornament"):
-        art.draw(c, "ornament", cx - 0.45 * inch, y - 0.16 * inch, 0.9 * inch, 0.32 * inch)
-        return
+    """A divider under headings: two fine rules with the small juniper sprig between them (a diamond until the
+    sprig has been drawn)."""
     c.saveState()
+    sprig = bool(art and art.path("ornament"))
+    gap = SPRIG_W / 2 + 4 if sprig else 5
     c.setStrokeGray(RULE_GREY)
     c.setLineWidth(0.5)
-    c.line(cx - w / 2, y, cx - 5, y)
-    c.line(cx + 5, y, cx + w / 2, y)
-    c.setFillGray(RULE_GREY)
-    p = c.beginPath()
-    p.moveTo(cx, y + 2.6)
-    p.lineTo(cx + 2.6, y)
-    p.lineTo(cx, y - 2.6)
-    p.lineTo(cx - 2.6, y)
-    p.close()
-    c.drawPath(p, stroke=0, fill=1)
+    c.line(cx - w / 2, y, cx - gap, y)
+    c.line(cx + gap, y, cx + w / 2, y)
+    if sprig:
+        art.draw(c, "ornament", cx - SPRIG_W / 2, y - SPRIG_W / 2, SPRIG_W, SPRIG_W)
+    else:
+        c.setFillGray(RULE_GREY)
+        p = c.beginPath()
+        p.moveTo(cx, y + 2.6)
+        p.lineTo(cx + 2.6, y)
+        p.lineTo(cx, y - 2.6)
+        p.lineTo(cx - 2.6, y)
+        p.close()
+        c.drawPath(p, stroke=0, fill=1)
     c.restoreState()

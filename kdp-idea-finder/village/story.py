@@ -7,6 +7,20 @@ water.
 """
 
 TITLE = "Murder in Juniper Falls"
+AUTHOR = ""        # the pen name: on the title page and the copyright line; a final build refuses to run without it
+ISBN = ""          # printed on the copyright page when set, e.g. "979-8-1234-5678-9"
+ASIN = ""          # the paperback's ASIN, known after publishing: puts a QR code to its review page on the last page
+
+REVIEW_TITLE = "One Small Favor"
+REVIEW = [
+    "Thank you for solving Murder in Juniper Falls.",
+    "Whether you loved it or not, a short, honest review on Amazon helps other puzzle fans decide whether this "
+    "book is for them. It also helps a small independent publisher more than you might think.",
+    "One request: please keep the names of the killers and the mastermind out of your review, so the next "
+    "reader can catch them too.",
+]
+REVIEW_HOW_QR = "Scan the code to go straight to the book's review page."
+REVIEW_HOW = "You can leave a review from the book's page on Amazon, or from Your Orders."
 SUBTITLE = ("Over {thousands} Suspects · 5 Linked Cases · 1 Mastermind · A Find-the-Killer Murder Mystery "
             "Puzzle Book")
 

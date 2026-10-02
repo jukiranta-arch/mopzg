@@ -1,6 +1,6 @@
 # QA report: Murder in Juniper Falls
 
-Generated in 61 s (seed 1). Interior: 142 pages, 6 x 9 in; 1 blank (no notes pages).
+Generated in 63 s (seed 1). Interior: 142 pages, 6 x 9 in; 0 blank (no notes pages).
 
 ## Each case
 
@@ -17,11 +17,13 @@ Every case leaves exactly one name under each of 13 readings: the rules as print
 
 Mastermind: Clara (the killers' first letters: C, L, A, R, A).
 
+Last page: the review request (QR code added once story.ASIN is set).
+
 ## Pictures
 
 Pictures are pure black and white, re-cut at double size, so 200 DPI of source detail is enough.
 - title: 1536 x 731 px printed at 4.65 x 2.21 in = 330 DPI
-- ornament: 759 x 394 px printed at 0.62 x 0.32 in = 1231 DPI
+- ornament: 759 x 394 px printed at 0.31 x 0.16 in = 2484 DPI
 - map: 1024 x 1536 px printed at 4.65 x 6.97 in = 220 DPI
 - case_bookstore: 1462 x 844 px printed at 4.65 x 2.68 in = 314 DPI
 - evidence_bookstore: 723 x 1225 px printed at 1.24 x 2.10 in = 583 DPI

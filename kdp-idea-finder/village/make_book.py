@@ -19,6 +19,7 @@ import time
 from .book import READINGS, generate_valid_book
 from .check_book import main as check_pdf
 from .design import ART_INKS, MIN_DPI, MIN_DPI_INKED, LayoutError
+from . import story
 from .render_book import render_book
 
 
@@ -44,6 +45,9 @@ def report(book, info, check_out, seconds):
               "least twice\u201d)." % len(READINGS), "",
               "Mastermind: %s (the killers' first letters: %s)." % (
                   book.mastermind, ", ".join(c.ledger.flat[c.killer][0] for c in book.cases)), "",
+              "Last page: %s." % ("the review request, with a QR code to the review page" if info["review_qr"] else
+                                  "the review request (QR code added once story.ASIN is set)" if info["review_page"]
+                                  else "no room for the review request"), "",
               "## Pictures", ""]
     if info["art_missing"]:
         lines.append("Still to draw (placeholders in this build): %s." % ", ".join(info["art_missing"]))
@@ -82,6 +86,9 @@ def main(argv):
     with contextlib.redirect_stdout(buf):
         status = check_pdf(out)
     text = report(book, info, buf.getvalue(), time.time() - t)
+    if final and not story.AUTHOR:
+        print("not final: set story.AUTHOR (the pen name)", file=sys.stderr)
+        status = 1
     if final and (info["art_missing"] or info["art_low"]):
         print("not final: pictures missing %s, below 300 DPI %s" % (info["art_missing"], info["art_low"]),
               file=sys.stderr)

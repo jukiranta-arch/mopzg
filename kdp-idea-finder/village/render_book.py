@@ -64,6 +64,7 @@ class FullBook:
         self.art = art or Art()
         self.pdf_page = 1
         self.blanks = 0
+        self.reviewed = False
 
     # ------------------------------------------------------------ pages and furniture
 
@@ -117,6 +118,12 @@ class FullBook:
         n = len(wrap(text, x1 - x0, font, size, first_w=x1 - x0 - 3 * size, first_n=n_drop))
         return max(n, n_drop) * leading
 
+    @staticmethod
+    def drop(block_h):
+        """How far to lower a block of block_h points so it sits at the page's optical centre: two fifths of the
+        spare room above it, three fifths below."""
+        return max(0.0, 0.4 * ((H - TOP) - BOTTOM - block_h))
+
     def heading(self, title, y=None, size=22):
         """A page heading in the display face with the divider under it; returns where the text starts."""
         y = y if y is not None else H - TOP - 14
@@ -145,7 +152,7 @@ class FullBook:
             raise TextOverflow("text page %r overflows" % title)
         if section:
             self.running_head(section)
-        y = self.heading(title)
+        y = self.heading(title, y=H - TOP - 14 - self.drop(56 + need - g))
         for k, p in enumerate(paragraphs):
             if isinstance(p, tuple):
                 head, text = p
@@ -172,12 +179,20 @@ class FullBook:
         c.setFont(DISPLAY_I, 13.5)
         c.drawCentredString(cx, y - 90, subtitle)
         tracked(c, tagline.upper(), cx, y - 116, BODY, 8.5, track=1.4, grey=HEAD_GREY)
+        if story.AUTHOR:
+            c.setFont(DISPLAY, 14)
+            c.drawCentredString(cx, BOTTOM + 10, story.AUTHOR)
         self.next()
 
     def copyright_page(self):
         x0, x1 = self.margins()
         y = BOTTOM + 150
-        for p in story.COPYRIGHT + ["Typeset in Charis SIL and Playfair Display."]:
+        lines = list(story.COPYRIGHT)
+        if story.AUTHOR:
+            lines[0] = lines[0].replace("Copyright \u00a9 2026.", "Copyright \u00a9 2026 %s." % story.AUTHOR)
+        if story.ISBN:
+            lines.append("ISBN %s" % story.ISBN)
+        for p in lines + ["Typeset in Charis SIL and Playfair Display."]:
             y = self.para(x0, x1, y, p, size=8.5, leading=11.5) - 6
         self.next()
 
@@ -185,7 +200,8 @@ class FullBook:
         """entries: (title, text at the right, or ""); None as the title leaves a gap."""
         c = self.c
         x0, x1 = self.margins()
-        y = self.heading("Contents") - 6
+        block_h = 56 + 6 + sum(10 if t is None else 19 for t, _ in entries) + 14 + 12.5
+        y = self.heading("Contents", y=H - TOP - 14 - self.drop(block_h)) - 6
         for title, right in entries:
             if title is None:
                 y -= 10
@@ -209,6 +225,35 @@ class FullBook:
         self.para(x0, x1, y - 14, "Page numbers are the numbers printed at the foot of the list pages.",
                   font=BODY_I, size=9.5, leading=12.5)
         c.setFillGray(0)
+        self.next()
+
+    def review_page(self):
+        """The last page: a neutral request for an honest review (nothing offered, no rating asked for), with a QR
+        code to the review page once the paperback's ASIN is known."""
+        c = self.c
+        x0, x1 = self.margins()
+        cx = self.centre()
+        qr = 1.25 * inch if story.ASIN else 0
+        need = sum(self.para_height(x0, x1, p) + 9 for p in story.REVIEW) + (qr + 22 if qr else 0) + 30
+        y = self.heading(story.REVIEW_TITLE, y=H - TOP - 14 - self.drop(56 + need))
+        for p in story.REVIEW:
+            y = self.para(x0, x1, y, p) - 9
+        if story.ASIN:
+            from reportlab.graphics import renderPDF
+            from reportlab.graphics.barcode.qr import QrCodeWidget
+            from reportlab.graphics.shapes import Drawing
+            url = "https://www.amazon.com/review/create-review?asin=%s" % story.ASIN
+            w = QrCodeWidget(url, barLevel="M")
+            bx0, by0, bx1, by1 = w.getBounds()
+            dr = Drawing(qr, qr, transform=[qr / (bx1 - bx0), 0, 0, qr / (by1 - by0), 0, 0])
+            dr.add(w)
+            renderPDF.draw(dr, c, cx - qr / 2, y - qr - 4)
+            y -= qr + 22
+        c.setFont(BODY_I, 10)
+        c.setFillGray(HEAD_GREY)
+        c.drawCentredString(cx, y - 6, story.REVIEW_HOW_QR if story.ASIN else story.REVIEW_HOW)
+        c.setFillGray(0)
+        self.reviewed = True
         self.next()
 
     def map_page(self):
@@ -522,9 +567,9 @@ def render_book(book, path, seed=1, art=None):
 
     upside_down(answers)
     upside_down(finale)       # the mastermind's story, also upside down, facing the solutions
-    if (b.pdf_page - 1) % 2:  # the page count must be even
-        b.blanks += 1
-        b.next()
+    if (b.pdf_page - 1) % 2:  # the page count must be even: the last page asks for a review
+        b.review_page()
+    review = (b.pdf_page - 1) % 2 == 0 and b.reviewed
     c.save()
-    return dict(pages=b.pdf_page - 1, blanks=b.blanks, positions=positions, finale_positions=fpos,
+    return dict(pages=b.pdf_page - 1, blanks=b.blanks, review_page=review, review_qr=bool(story.ASIN), positions=positions, finale_positions=fpos,
                 art_missing=sorted(set(b.art.missing)), art_used=b.art.used, art_low=b.art.low)
