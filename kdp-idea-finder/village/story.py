@@ -15,7 +15,7 @@ CREEK = "Hollow Creek"            # dammed in 1996 for the reservoir
 TITLE = "Who Sent the Killers?"
 TITLE_LINES = ("Who Sent", "the Killers?")   # the title page sets the title large, on two lines
 TITLE_LABEL = "A " + TOWN + " Mystery"        # the small line above it
-AUTHOR = ""        # the pen name: on the title page and the copyright line; a final build refuses to run without it
+AUTHOR = "Nora Clewes"  # the pen name: on the title page and the copyright line; a final build refuses to run without it
 ISBN = ""          # printed on the copyright page when set, e.g. "979-8-1234-5678-9"
 ASIN = ""          # the paperback's ASIN, known after publishing: puts a QR code to its review page on the last page
 

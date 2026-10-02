@@ -1,6 +1,6 @@
 # QA report: Who Sent the Killers?
 
-Generated in 61 s (seed 1). Interior: 142 pages, 6 x 9 in; 0 blank (no notes pages).
+Generated in 68 s (seed 1). Interior: 142 pages, 6 x 9 in; 0 blank (no notes pages).
 
 ## Each case
 
