@@ -256,3 +256,33 @@ Juho chose the American small town.
 3. `qa.md` lists how many names are left after each clue.
 
 **Still to do before upload:** the final title, the pen name on the copyright page, the cover (Juho), and the KDP listing.
+
+## Second build (2026-10-02): varied clues, witness lines, varied names
+
+Juho's feedback:
+- the clues were too alike across cases (the same letter checks and "within one page" every time);
+- he liked the clues that came with a little story;
+- the names should vary as much as the competitors' do.
+
+**Clues**
+- New library `village/clues.py` with 40 kinds of clue taken from the samples (Mr Darcy, the Guest List, The Autumn Killer, Never Checked In):
+  - word clues on the whole name, the first name or the surname;
+  - page and chapter hunts: facing page, page before, within or beyond N pages, a chapter that opens and closes with a pair, exactly twice in a chapter, one but not both;
+  - clues about the killer's own spot: the first or last name on the page, the alphabetical neighbours.
+- Each case uses its own set (`village/plans.py`); no two cases share more than two kinds.
+- Every clue has a title and a witness line in the story's voice, then a plain rule and how to apply it, as in the Guest List and Never Checked In.
+- Each night is a costume night, so famous names in the lists make sense.
+- The links between cases vary too:
+  - Case Two: the last letter of the bookstore killer's name;
+  - Case Three: the first letter of the bakery killer's surname;
+  - Case Four: the same first-name length as the diner killer;
+  - Case Five: a surname sharing no letter with the inn killer's first name.
+
+**Names**
+- US Census first names (5,130) and surnames (20,000) replace the 724 + 250 pool (`village/data/`).
+- Each case is now 97–100% different names, like *The Autumn Killer* (98%); the *Mr Darcy* sample is 84%.
+
+**Checks**
+- 13 misreadings are solved for every case.
+- `check_book.py` parses every printed rule sentence and agrees.
+- The total is now about 18,000 names. Census names are longer, so pages hold fewer. The subtitle is computed from the real total.

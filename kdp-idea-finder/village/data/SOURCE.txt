@@ -1,0 +1,4 @@
+First names and surnames: US Census Bureau, 1990 census name frequency files
+(dist.female.first, dist.male.first, dist.all.last), public domain, as packaged in
+the MIT-licensed Python package `names` 0.3.0. Kept: alphabetic names of 3-11 letters;
+surnames: the 20,000 most common.

@@ -13,57 +13,29 @@ import re
 from whodunit.render import BOTTOM, INNER, OUTER, SERIF, SERIF_B, SERIF_I, TOP, H, W, LayoutError
 
 from . import story
-from .book import LETTER_BY_KEY, READINGS, Ledger, letters, verdicts
+from .book import verdicts
 from .render import REG_LEADING, REG_SIZE, Book, draw_row, layout_rows
 
 NUMBERS = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"]
 
 
-def _plain(led, landmarks, avoid):
-    return sorted({n for n in led.flat if n not in landmarks and n not in avoid})
-
-
-def example(clue, led, landmarks, avoid, rng):
-    """One printed example for a clue, from names in this ledger that are never the answer."""
-    k = clue.key
-    names = _plain(led, landmarks, avoid)
-    if k in LETTER_BY_KEY:
-        yes = [n for n in names if verdicts(clue, n) == {True}]
-        no = [n for n in names if verdicts(clue, n) == {False}]
-        if not yes or not no:
-            return ""
-        y, n = rng.choice(yes), rng.choice(no)
-        if k in ("odd_consonants", "even_consonants"):
-            cons = [c for c in letters(y) if c not in "AEIOU"]
-            return "%s has %d consonants: %s." % (y, len(cons), ", ".join(cons))
-        if k in ("even_vowels", "odd_vowels"):
-            vow = [c for c in letters(y) if c in "AEIOU"]
-            return "%s has %d vowel%s%s." % (y, len(vow), "" if len(vow) == 1 else "s",
-                                             (": " + ", ".join(vow)) if vow else "")
-        if k in ("ends_consonant", "ends_vowel"):
-            return "%s ends in “%s”, so it qualifies. %s ends in “%s”, so it doesn't." % (
-                y, y[-1], n, n[-1])
-        if k == "double_letter":
-            pair = next(m.group(0) for w in y.split() for m in [re.search(r"([a-z])\1", w.lower())] if m)
-            return "%s has a double letter: the “%s”." % (y, pair)
-        if k == "no_double_letter":
-            pair = next(m.group(0) for w in n.split() for m in [re.search(r"([a-z])\1", w.lower())] if m)
-            return "%s qualifies. %s doesn't: it has “%s”." % (y, n, pair)
-        if k in ("a_to_m", "n_to_z"):
-            return "%s begins with %s, so it qualifies. %s begins with %s, so it doesn't." % (y, y[0], n, n[0])
+def example(clue, led, avoid, rng):
+    """For a clue about the name itself: one name from this list that qualifies and one that doesn't."""
+    if not clue.word or clue.key == "mastermind_name":
         return ""
-    if k == "near_page":
-        return "If a match appears on page 10, the answer could be on page 9, 10 or 11."
-    if k == "scattered":
-        return "If one is the 30th name on a page, the 20th to 40th names on that page qualify, apart from itself."
-    return ""
+    names = sorted({n for n in led.flat if n not in avoid})
+    rng.shuffle(names)
+    yes = next((n for n in names if verdicts(clue, n) == {True}), None)
+    no = next((n for n in names if verdicts(clue, n) == {False}), None)
+    if not yes or not no:
+        return ""
+    return "%s qualifies; %s doesn't." % (yes, no)
 
 
 class FullBook(Book):
     def __init__(self, path):
         super().__init__(path)
         self.c.setTitle(story.TITLE)
-        self.c.setSubject(story.SUBTITLE)
 
     def blank(self):
         self.next()
@@ -103,9 +75,9 @@ class FullBook(Book):
         y = self.heading("The Clues")
         y = self.para(x0, x1, y, intro, font=SERIF_I) - 10
         for n, cl in enumerate(clues, 1):
-            parts = [(cl.text, SERIF_B, 10.5, 14), (cl.explain, SERIF, 10, 13)]
+            parts = [(cl.story, SERIF_I, 10, 13), ("Rule: " + cl.rule, SERIF_B, 10.5, 14), (cl.how, SERIF, 9.5, 12.5)]
             if examples.get(cl.key):
-                parts.append(("Example: " + examples[cl.key], SERIF_I, 10, 13))
+                parts.append(("Example: " + examples[cl.key], SERIF_I, 9.5, 12.5))
             need = 16 + sum(len(self.wrap(t, x1 - x0, f, s)) * l + 3 for t, f, s, l in parts) + 8
             if y - need < BOTTOM:
                 self.next()
@@ -113,6 +85,8 @@ class FullBook(Book):
                 y = H - TOP - 20
             self.c.setFont(SERIF_B, 10)
             self.c.drawString(x0, y, "CLUE %d" % n)
+            self.c.setFont(SERIF_B, 11)
+            self.c.drawString(x0 + 48, y, cl.title)
             y -= 15
             for t, f, s, l in parts:
                 y = self.para(x0, x1, y, t, font=f, size=s, leading=l) - 3
@@ -171,7 +145,10 @@ def render_book(book, path, seed=1):
     # Title page and its blank back
     c.setFont(SERIF_B, 26)
     c.drawCentredString(W / 2, H / 2 + 50, story.TITLE)
-    y = b.para(OUTER + 30, W - OUTER - 30, H / 2 + 10, story.SUBTITLE, size=12, leading=16, align="center")
+    total = sum(len(c.ledger.flat) for c in book.cases) + len(book.finale.ledger.flat)
+    subtitle = story.SUBTITLE.format(thousands=format(total // 1000 * 1000, ","))
+    c.setSubject(subtitle)
+    y = b.para(OUTER + 30, W - OUTER - 30, H / 2 + 10, subtitle, size=12, leading=16, align="center")
     b.next()
     x0, x1 = b.margins()
     y = BOTTOM + 120
@@ -186,7 +163,7 @@ def render_book(book, path, seed=1):
     page_no = 1
     positions = []
     for k, case in enumerate(book.cases):
-        t, s = case.theme, story.CASES[case.theme.key]
+        t, s = case.plan, story.CASES[case.plan.key]
         b.to_right(with_notes=True)
         # Case title page and the story on its back... the story faces the clues
         c.setFont(SERIF, 12)
@@ -199,8 +176,7 @@ def render_book(book, path, seed=1):
         b.text_page(t.place[0].upper() + t.place[1:], s["story"] + [
             "Your case file is %s: %s names. Somewhere inside is the killer." % (
                 s["list_name"], format(len(case.ledger.flat), ","))])
-        landmarks = t.landmark_names()
-        ex = {cl.key: example(cl, case.ledger, landmarks, {case.ledger.flat[case.killer]}, rng) for cl in case.clues}
+        ex = {cl.key: example(cl, case.ledger, {case.ledger.flat[case.killer]}, rng) for cl in case.clues}
         b.clue_pages(case.clues, ex, "The killer is hidden in %s. Every clue below is true of the killer." %
                      s["list_name"])
         b.to_right(with_notes=True)
@@ -219,7 +195,7 @@ def render_book(book, path, seed=1):
     b.text_page("The Town Meeting", story.FINALE["story"] + [
         "Your case file is the town register: %s names. Somewhere inside is the mastermind." %
         format(len(f.ledger.flat), ",")])
-    fex = {cl.key: example(cl, f.ledger, set(), {f.ledger.flat[f.killer]}, rng) for cl in f.clues}
+    fex = {}
     b.clue_pages(f.clues, fex, "The mastermind is hidden in the town register. Every clue below is true of the "
                  "mastermind.")
     b.to_right(with_notes=True)
@@ -254,9 +230,9 @@ def render_book(book, path, seed=1):
             row, at = pos[i]
             killer = led.flat[i]
             c.setFont(SERIF_B, 11)
-            c.drawString(x0, y, "Case %s, %s: %s" % (case.theme.number, case.theme.shop, killer))
+            c.drawString(x0, y, "Case %s, %s: %s" % (case.plan.number, case.plan.shop, killer))
             y = b.para(x0, x1, y - 14, "Page %d, row %d, name %d on the row. %s" % (
-                led.page_no(p), row, at, story.CASES[case.theme.key]["ending"].format(killer=killer)),
+                led.page_no(p), row, at, story.CASES[case.plan.key]["ending"].format(killer=killer)),
                 size=9.5, leading=12.5) - 8
         initials = "".join(case.ledger.flat[case.killer][0] for case in book.cases)
         y = b.para(x0, x1, y, "The first letters, %s, spell %s." % (", ".join(initials), book.mastermind),

@@ -7,7 +7,7 @@ water.
 """
 
 TITLE = "Murder in Juniper Falls"
-SUBTITLE = ("Over 20,000 Suspects · 5 Linked Cases · 1 Mastermind · A Find-the-Killer Murder Mystery "
+SUBTITLE = ("Over {thousands} Suspects · 5 Linked Cases · 1 Mastermind · A Find-the-Killer Murder Mystery "
             "Puzzle Book")
 
 COPYRIGHT = [
@@ -54,6 +54,10 @@ BEFORE = [
     ("Vowels and consonants.", "The vowels are A, E, I, O and U. Every other letter is a consonant, and Y is "
      "always a consonant."),
     ("Names don't break across rows.", "Every name sits whole on a row, as the dot at the end of each row shows."),
+    ("First name and surname.", "The first name is the first word of a name and the surname is the last. A "
+     "single name like Rosa has no surname, so any clue about a surname crosses it out."),
+    ("Pages.", "\u201cWithin one page\u201d means the page before, the same page or the page after. In the open "
+     "book an even page sits on the left and the odd page after it on the right: those two face each other."),
     ("Within a page, within ten names.", "“Within one page” means the page before, the same page or "
      "the page after. “Within 10 names” is counted in reading order, and the count carries on onto "
      "the previous or next page."),
@@ -69,7 +73,8 @@ CASES = {
         story=[
             "For thirty years the heart of Main Street has been Pell's Books. Every October it holds its Midnight "
             "Sale: hot cider, half-price hardcovers, and a raffle for anyone who signs the sale sheet in the "
-            "section where they shop. This year the whole town came.",
+            "section where they shop. This year it was a costume night: come as your favourite book character. "
+            "The whole town came, and plenty of them signed in costume.",
             "At five past midnight, Harriet Pell, who had owned the store since before most of her customers could "
             "read, was found slumped over the register. Doc Whitaker said it was her heart, until he smelled bitter "
             "almonds in her cup of cider.",
@@ -88,7 +93,7 @@ CASES = {
         story=[
             "Rosie's Bakery has hosted the Harvest Pie Contest every November since 1979. For one evening the whole "
             "town crowds between the bread shelves and the coffee bar, signing a tasting ticket at each table they "
-            "visit.",
+            "visit. The children's choir sang between rounds in nursery-rhyme costumes, and signed tickets too.",
             "The judge for twenty-five years was Walter Brandt, retired mayor and a man who could tell a lard crust "
             "from a butter crust with his eyes shut. At nine o'clock he tasted the last pie, said “remarkable”, "
             "and did not get up again.",
@@ -108,7 +113,8 @@ CASES = {
         story=[
             "Every December, Lou's Diner opens at dawn for the Pancake Breakfast. Every plate raises money for the "
             "fire department, and every diner writes their name on the sign-up sheet by their table so Lou can "
-            "thank them in the paper.",
+            "thank them in the paper. This year the history club came in costume as famous Americans, and signed "
+            "the sheets in character.",
             "Lou Castellano had flipped pancakes on that griddle for forty-one years. At half past seven, he poured "
             "himself his first coffee of the day. He never finished it.",
             "Clipped to the order wheel, among the tickets, was one nobody had written: no table, no order, just a "
@@ -125,8 +131,9 @@ CASES = {
         event="the New Year's Eve Ball",
         list_name="the ball's guest book",
         story=[
-            "The Juniper Inn has thrown a New Year's Eve Ball since the night it opened. Guests sign the guest book "
-            "in whichever room they ring in the new year, and the book goes back on the shelf with all the others.",
+            "The Juniper Inn has thrown a New Year's Eve Ball since the night it opened. This year it was a masked "
+            "ball, and the costumes ran to famous lovers and the gods of Olympus. Guests sign the guest book in "
+            "whichever room they ring in the new year, some under their own names and some in character.",
             "Margaret Ashby, the innkeeper, always watched the countdown from the top of the grand staircase. At "
             "midnight the room cheered, the band played, and Margaret was found at the bottom of the stairs.",
             "In her hand was a brass room key on a tag marked 4. The inn has no Room 4. It never has.",
@@ -143,7 +150,8 @@ CASES = {
         list_name="the library's sign-in sheets",
         story=[
             "On the second Saturday of February, the Juniper Falls Public Library wraps a thousand books in brown "
-            "paper for Blind Date with a Book night. Every reader signs in at the room where they pick their date.",
+            "paper for Blind Date with a Book night. Readers were invited to come as their favourite author, and "
+            "every reader signs in at the room where they pick their date.",
             "Arthur Quill, who had been town clerk for thirty years and a library volunteer for ten, went down to "
             "the local archive at eight o'clock to fetch more string. He did not come back up.",
             "On the archive table, beside him, lay a borrower's card with a single date stamp. Where the date "
