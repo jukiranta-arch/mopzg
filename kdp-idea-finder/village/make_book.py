@@ -18,7 +18,7 @@ import time
 
 from .book import READINGS, generate_valid_book
 from .check_book import main as check_pdf
-from .design import LayoutError
+from .design import ART_INKS, MIN_DPI, MIN_DPI_INKED, LayoutError
 from .render_book import render_book
 
 
@@ -47,9 +47,13 @@ def report(book, info, check_out, seconds):
               "## Pictures", ""]
     if info["art_missing"]:
         lines.append("Still to draw (placeholders in this build): %s." % ", ".join(info["art_missing"]))
+    floor = MIN_DPI_INKED if ART_INKS == 2 else MIN_DPI
+    if ART_INKS == 2:
+        lines.append("Pictures are pure black and white, re-cut at double size, so %d DPI of source detail is enough."
+                     % floor)
     for key, pw, ph, w, h, dpi in info["art_used"]:
         lines.append("- %s: %d x %d px printed at %.2f x %.2f in = %d DPI%s" % (
-            key, pw, ph, w, h, dpi, "" if dpi >= 300 else " (below 300: needs a larger image)"))
+            key, pw, ph, w, h, dpi, "" if dpi >= floor else " (below %d: needs a larger image)" % floor))
     lines += ["", "## Independent check of the PDF", "", "```", check_out.strip(), "```", ""]
     return "\n".join(lines)
 

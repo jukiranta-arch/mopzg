@@ -214,9 +214,7 @@ class FullBook:
     def map_page(self):
         x0, x1 = self.margins()
         c = self.c
-        c.setFont(DISPLAY_I, 13)
-        c.drawCentredString(self.centre(), H - TOP - 6, "Juniper Falls")
-        self.art.draw(c, "map", x0, BOTTOM, x1 - x0, H - TOP - 26 - BOTTOM, "the town map")
+        self.art.draw(c, "map", x0, BOTTOM, x1 - x0, H - TOP - BOTTOM, "the town map")   # the map has its own title
         self.next()
 
     # ------------------------------------------------------------ a case
