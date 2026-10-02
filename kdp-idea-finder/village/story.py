@@ -40,12 +40,13 @@ HOW = [
      "move on, because later cases need earlier answers."),
     ("The mastermind.", "The five killers were all sent their orders by the same person. The last chapter, The "
      "Town Meeting, uses all five of your answers to find them."),
-    ("The solutions", "are at the very back of the book, upside down, behind a Stop page."),
+    ("The solutions", "are at the very back of the book, upside down, on the back of the mastermind's "
+     "answer page."),
 ]
 
 BEFORE = [
-    ("What is a name.", "A name is everything between two dots in a list: a single name (Rosa), a full name "
-     "(Ada Finch), or a famous name (Oliver Twist). Each name is one person. Names repeat; each Rosa is a "
+    ("What is a name.", "A name is everything between two dots in a list: a single name (Rosa) or a full name "
+     "(Ada Finch). Each name is one person. Names repeat; each Rosa is a "
      "different Rosa."),
     ("Exact spelling only.", "When a clue names someone, only that exact name qualifies, on its own. Tom Sawyer "
      "is Tom Sawyer, not Tom Baker; Beth is Beth, not Beth Lowe; Juliet is Juliet, not Julie."),

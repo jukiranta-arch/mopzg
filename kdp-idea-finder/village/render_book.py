@@ -1,10 +1,11 @@
 """Render the whole book as a print-ready 6 x 9 inch interior PDF (needs reportlab).
 
-Layout per case follows Who Killed Mr Darcy?: a case title page, the story,
-the clues (each with how it works and an example), the ledger (names separated
-by dots, pages numbered), then an answer page with the check line. The rules
-are printed once, at the front. All solutions are at the very back, upside
-down on the back of a Stop page.
+Layout per case follows Who Killed Mr Darcy?: the story under the case
+heading, facing the clues (each with how it works and an example), the ledger
+(names separated by dots, pages numbered), then an answer page with the check
+line. The rules are printed once, at the front. There are no notes pages: none
+of the winners' samples has them between cases. All solutions are at the very
+back, upside down on the back of the last answer page, which says Stop.
 """
 
 import random
@@ -35,25 +36,36 @@ def example(clue, led, avoid, rng):
 class FullBook(Book):
     def __init__(self, path):
         super().__init__(path)
+        self.blanks = 0
         self.c.setTitle(story.TITLE)
 
     def blank(self):
         self.next()
 
-    def notes(self):
-        x0, x1 = self.margins()
-        y = self.heading("Notes") - 10
-        self.c.setLineWidth(0.4)
-        self.c.setStrokeGray(0.6)
-        while y > BOTTOM + 20:
-            self.c.line(x0, y, x1, y)
-            y -= 24
-        self.c.setStrokeGray(0)
-        self.next()
-
-    def to_right(self, with_notes=False):
+    def to_right(self):
+        """Start the next page on the right; the ledgers must, for the facing-page clues."""
         if self.pdf_page % 2 == 0:
-            self.notes() if with_notes else self.next()
+            self.blanks += 1
+            self.next()
+
+    def opening(self, label, title, when, paragraphs):
+        """The first page of a case: its heading, then the story, facing the first page of clues."""
+        x0, x1 = self.margins()
+        self.c.setFont(SERIF, 10)
+        self.c.drawCentredString(W / 2, H - TOP - 8, label)
+        self.c.setFont(SERIF_B, 20)
+        self.c.drawCentredString(W / 2, H - TOP - 32, title)
+        y = H - TOP - 50
+        if when:
+            self.c.setFont(SERIF_I, 11)
+            self.c.drawCentredString(W / 2, y, when)
+            y -= 14
+        y -= 16
+        for p in paragraphs:
+            y = self.para(x0, x1, y, p, size=10.5, leading=14.5) - 9
+            if y < BOTTOM:
+                raise LayoutError("opening page %r overflows" % title)
+        self.next()
 
     def text_page(self, title, paragraphs, size=10.5, leading=14.5, gap=9):
         x0, x1 = self.margins()
@@ -121,7 +133,7 @@ class FullBook(Book):
             self.next()
         return position
 
-    def answer_page(self, who, what, check):
+    def answer_page(self, who, what, check, stop=False):
         x0, x1 = self.margins()
         y = self.heading("Your Answer")
         y = self.para(x0, x1, y, "When you have used all the clues, one name is left.") - 18
@@ -134,6 +146,11 @@ class FullBook(Book):
                       "18 + 15 + 19 + 1 = 53." % (what, n_letters, total), size=10, leading=13.5) - 8
         self.para(x0, x1, y, "Plenty of names add up to %d, so this gives nothing away. If yours doesn't match, "
                   "recheck your clues before you go on." % total, size=10, leading=13.5)
+        if stop:
+            self.c.setFont(SERIF_B, 22)
+            self.c.drawCentredString(W / 2, BOTTOM + 150, "Stop!")
+            self.para(x0 + 20, x1 - 20, BOTTOM + 120, "The other side of this page gives every answer in the book, "
+                      "and the mastermind's story. Turn over only when you have finished.", size=11, align="center")
         self.next()
 
 
@@ -164,52 +181,30 @@ def render_book(book, path, seed=1):
     positions = []
     for k, case in enumerate(book.cases):
         t, s = case.plan, story.CASES[case.plan.key]
-        b.to_right(with_notes=True)
-        # Case title page and the story on its back... the story faces the clues
-        c.setFont(SERIF, 12)
-        c.drawCentredString(W / 2, H / 2 + 40, "CASE %s" % t.number.upper())
-        c.setFont(SERIF_B, 26)
-        c.drawCentredString(W / 2, H / 2, t.shop)
-        c.setFont(SERIF_I, 12)
-        c.drawCentredString(W / 2, H / 2 - 30, "%s, %s" % (s["when"], s["event"]))
-        b.next()
-        b.text_page(t.place[0].upper() + t.place[1:], s["story"] + [
+        b.opening("CASE %s" % t.number.upper(), t.shop, "%s, %s" % (s["when"], s["event"]), s["story"] + [
             "Your case file is %s: %s names. Somewhere inside is the killer." % (
                 s["list_name"], format(len(case.ledger.flat), ","))])
         ex = {cl.key: example(cl, case.ledger, {case.ledger.flat[case.killer]}, rng) for cl in case.clues}
         b.clue_pages(case.clues, ex, "The killer is hidden in %s. Every clue below is true of the killer." %
                      s["list_name"])
-        b.to_right(with_notes=True)
+        b.to_right()
         positions.append(b.ledger(case.ledger, page_no))
         page_no += len(case.ledger.pages)
         b.answer_page("The %s killer is" % t.shop[4:].lower(), "The killer's", case.check)
 
     # The finale
     f = book.finale
-    b.to_right(with_notes=True)
-    c.setFont(SERIF, 12)
-    c.drawCentredString(W / 2, H / 2 + 40, "THE FINALE")
-    c.setFont(SERIF_B, 26)
-    c.drawCentredString(W / 2, H / 2, "The Town Meeting")
-    b.next()
-    b.text_page("The Town Meeting", story.FINALE["story"] + [
+    b.opening("THE FINALE", "The Town Meeting", "", story.FINALE["story"] + [
         "Your case file is the town register: %s names. Somewhere inside is the mastermind." %
         format(len(f.ledger.flat), ",")])
     fex = {}
     b.clue_pages(f.clues, fex, "The mastermind is hidden in the town register. Every clue below is true of the "
                  "mastermind.")
-    b.to_right(with_notes=True)
+    b.to_right()
     fpos = b.ledger(f.ledger, page_no)
-    b.answer_page("The mastermind is", "The mastermind's", f.check)
-
-    # Stop, then the solutions upside down on its back
-    b.to_right(with_notes=True)
-    x0, x1 = b.margins()
-    c.setFont(SERIF_B, 22)
-    c.drawCentredString(W / 2, H / 2 + 30, "Stop!")
-    b.para(x0 + 20, x1 - 20, H / 2, "The other side of this page gives every answer in the book, and the "
-           "mastermind's story. Turn over only when you have finished.", size=11, align="center")
-    b.next()
+    # The last answer page says Stop, so it must be a right-hand page with the solutions on its back
+    b.to_right()
+    b.answer_page("The mastermind is", "The mastermind's", f.check, stop=True)
 
     def upside_down(draw):
         c.saveState()
@@ -253,9 +248,9 @@ def render_book(book, path, seed=1):
             who, f.ledger.page_no(p), row, at), font=SERIF_I, size=10)
 
     upside_down(answers)
-    # The mastermind's story is printed upside down too, on a right-hand page after a blank.
-    upside_down(finale)
-    if (b.pdf_page - 1) % 2:
-        b.notes()
+    upside_down(finale)       # the mastermind's story, also upside down, facing the solutions
+    if (b.pdf_page - 1) % 2:  # the back cover's inside: the page count must be even
+        b.blanks += 1
+        b.next()
     c.save()
-    return dict(pages=b.pdf_page - 1, positions=positions, finale_positions=fpos)
+    return dict(pages=b.pdf_page - 1, blanks=b.blanks, positions=positions, finale_positions=fpos)

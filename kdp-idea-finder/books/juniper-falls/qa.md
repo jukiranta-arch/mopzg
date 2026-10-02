@@ -1,6 +1,6 @@
 # QA report: Murder in Juniper Falls
 
-Generated in 61 s (seed 1). Interior: 154 pages, 6 x 9 in.
+Generated in 64 s (seed 1). Interior: 140 pages, 6 x 9 in; 1 blank (no notes pages).
 
 ## Each case
 
@@ -20,7 +20,7 @@ Mastermind: Clara (the killers' first letters: C, L, A, R, A).
 ## Independent check of the PDF
 
 ```
-154 PDF pages, (432, 648) pt; unembedded fonts: none
+140 PDF pages, (432, 648) pt; unembedded fonts: none
 bookstore  9 clues,  3727 names on 20 pages,   97% different: Contessa Clower        check fits: True; near-misses that fit: none; in solutions: True
 bakery     9 clues,  2781 names on 20 pages,  100% different: Lemuel Mauriello       check fits: True; near-misses that fit: none; in solutions: True
 diner      9 clues,  3731 names on 20 pages,  100% different: April Moten            check fits: True; near-misses that fit: none; in solutions: True

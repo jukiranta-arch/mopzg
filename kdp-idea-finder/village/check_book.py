@@ -65,7 +65,7 @@ def read_book(path):
     for page in doc:
         spans = spans_of(page)
         text = " ".join(s["text"] for s in spans)
-        if len(text) < 200 and (re.match(r"\s*CASE \w+\s+The \w+", text) or text.strip().startswith("THE FINALE")):
+        if re.match(r"\s*CASE \w+\s+The \w+", text) or text.strip().startswith("THE FINALE"):
             current = dict(title=text.strip(), lines=[], pages=[], chapters=[], numbers=[], check=None)
             sections.append(current)
             continue

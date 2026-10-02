@@ -22,7 +22,8 @@ from .render_book import render_book
 
 def report(book, info, check_out, seconds):
     lines = ["# QA report: %s" % "Murder in Juniper Falls", "",
-             "Generated in %d s (seed %d). Interior: %d pages, 6 x 9 in." % (seconds, book.seed, info["pages"]), "",
+             "Generated in %d s (seed %d). Interior: %d pages, 6 x 9 in; %d blank (no notes pages)." % (
+                 seconds, book.seed, info["pages"], info["blanks"]), "",
              "## Each case", "",
              "| Case | Names | Pages | Clues | Names left after each clue | Answer | Check line |",
              "|---|---|---|---|---|---|---|"]
