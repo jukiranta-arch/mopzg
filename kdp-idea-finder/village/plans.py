@@ -10,6 +10,7 @@ A plan's `chain` entry is filled in with the previous case's answer when the boo
 from dataclasses import dataclass, field
 
 from . import clues as C
+from . import story
 
 
 @dataclass
@@ -128,7 +129,7 @@ PLANS = [
          eggs=["Betsy Ross", "Paul Revere", "Davy Crockett", "Johnny Appleseed", "Amelia Earhart", "Daniel Boone",
                "Calamity Jane", "Pecos Bill", "Thomas Jefferson", "George Washington"]),
 
-    Plan("inn", "Four", "The Inn", "inn", "the Juniper Inn", "guest",
+    Plan("inn", "Four", "The Inn", "inn", story.INN.replace("The ", "the ", 1), "guest",
          ["The Ballroom", "The Bar", "The Grand Staircase", "The Garden Room", "The Library Lounge"], 1.0, [
              (C.one_not_both("Napoleon", "Josephine"), "Not Tonight",
               "It was a masked ball, and Napoleon and Josephine quarrelled at ten. On the killer's page of the guest "
@@ -160,7 +161,7 @@ PLANS = [
          eggs=["Lancelot", "Guinevere", "Tristan", "Isolde", "Orpheus", "Eurydice", "Antony", "Cleopatra",
                "Heathcliff", "Catherine Earnshaw"]),
 
-    Plan("library", "Five", "The Library", "library", "the Juniper Falls Public Library", "reader",
+    Plan("library", "Five", "The Library", "library", "the " + story.TOWN + " Public Library", "reader",
          ["The Reading Room", "The Stacks", "The Reference Desk", "The Children's Library", "The Local Archive"],
          0.45, [
              (C.not_on_page_with(("Charlotte", "Emily", "Anne"), "the Brontë sisters"), "Three Sisters",

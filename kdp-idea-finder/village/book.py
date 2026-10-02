@@ -1,4 +1,4 @@
-"""The full book: five linked cases in Juniper Falls and a mastermind finale
+"""The full book: five linked cases in one small town and a mastermind finale
 (spec: briefs/2026-10-01_spec-linked-cases.md; clues: village/clues.py; cases: village/plans.py).
 
 Each case is one shop's list of names, laid out like Who Killed Mr Darcy?: entries separated by dots, famous names

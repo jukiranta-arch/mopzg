@@ -169,12 +169,12 @@ class FullBook:
         c, cx = self.c, W / 2
         x0, x1 = self.margins()
         art_h = 3.3 * inch
-        self.art.draw(c, "title", x0, H - TOP - art_h, x1 - x0, art_h, "Main Street, Juniper Falls")
+        self.art.draw(c, "title", x0, H - TOP - art_h, x1 - x0, art_h, "Main Street, " + story.TOWN)
         y = H - TOP - art_h - 0.6 * inch
         c.setFont(DISPLAY, 21)
-        c.drawCentredString(cx, y, "Murder in")
+        c.drawCentredString(cx, y, story.TITLE_LINES[0])
         c.setFont(DISPLAY_B, 36)
-        c.drawCentredString(cx, y - 40, "Juniper Falls")
+        c.drawCentredString(cx, y - 40, story.TITLE_LINES[1])
         ornament(c, cx, y - 60, self.art, w=120)
         c.setFont(DISPLAY_I, 13.5)
         c.drawCentredString(cx, y - 90, subtitle)
@@ -481,14 +481,14 @@ def render_book(book, path, seed=1, art=None):
     b.title_page("Over %s Suspects · 5 Linked Cases · 1 Mastermind" % thousands,
                  "A Find-the-Killer Murder Mystery Puzzle Book")
     b.copyright_page()
-    entries = [("Juniper Falls", ""), ("How This Book Works", ""), ("Before You Start", ""), (None, "")]
+    entries = [(story.TOWN, ""), ("How This Book Works", ""), ("Before You Start", ""), (None, "")]
     for cs, (a, z) in zip(book.cases, ranges):
         entries.append(("Case %s · %s" % (cs.plan.number, cs.plan.shop), "list pages %d–%d" % (a, z)))
     entries += [("The Finale · The Town Meeting", "list pages %d–%d" % ranges[-1]), (None, ""),
                 ("The Solutions", "at the back, upside down")]
     b.contents_page(entries)
     b.map_page()                  # a left-hand page, facing the introduction
-    b.text_page("Juniper Falls", story.INTRO, section="Juniper Falls", dropcap=True)
+    b.text_page(story.TOWN, story.INTRO, section=story.TOWN, dropcap=True)
     b.text_page("How This Book Works", story.HOW, section="How This Book Works")
     b.text_page("Before You Start", story.BEFORE, section="Before You Start", size=10.3, leading=13.8, gap=7)
 

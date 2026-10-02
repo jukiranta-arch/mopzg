@@ -2,18 +2,25 @@
 
 {killer} and {mastermind} are filled in from the generated book. The victims
 are the five people who sat on the 1996 town council that voted to flood
-Hollow Creek for the reservoir; the mastermind's family farm went under the
+the creek for the reservoir; the mastermind's family farm went under the
 water.
 """
 
-TITLE = "Murder in Juniper Falls"
+# The town and its places: every mention in the book comes from these, so a rename is one line here (plus the
+# two pictures that letter them: the map and the inn).
+TOWN = "Juniper Falls"
+INN = "The Juniper Inn"
+CREEK = "Hollow Creek"            # dammed in 1996 for the reservoir
+
+TITLE = "Murder in " + TOWN
+TITLE_LINES = ("Murder in", TOWN)  # the title page: a small line over a big one
 AUTHOR = ""        # the pen name: on the title page and the copyright line; a final build refuses to run without it
 ISBN = ""          # printed on the copyright page when set, e.g. "979-8-1234-5678-9"
 ASIN = ""          # the paperback's ASIN, known after publishing: puts a QR code to its review page on the last page
 
 REVIEW_TITLE = "One Small Favor"
 REVIEW = [
-    "Thank you for solving Murder in Juniper Falls.",
+    "Thank you for solving " + TITLE + ".",
     "Whether you loved it or not, a short, honest review on Amazon helps other puzzle fans decide whether this "
     "book is for them. It also helps a small independent publisher more than you might think.",
     "One request: please keep the names of the killers and the mastermind out of your review, so the next "
@@ -28,12 +35,12 @@ COPYRIGHT = [
     "Copyright © 2026. All rights reserved.",
     "No part of this book may be reproduced in any form without written permission from the publisher, except "
     "for brief quotations in reviews.",
-    "This is a work of fiction. Juniper Falls and everyone who lives there are imaginary. Any resemblance to real "
+    "This is a work of fiction. " + TOWN + " and everyone who lives there are imaginary. Any resemblance to real "
     "people, places or events is coincidental. Famous names in the lists are used only as puzzle landmarks.",
 ]
 
 INTRO = [
-    "Juniper Falls is the kind of town where everybody knows your name, your order at the diner, and which "
+    TOWN + " is the kind of town where everybody knows your name, your order at the diner, and which "
     "library books you never returned. Nothing much happens here. That is the point of the place.",
     "This autumn, something happened five times.",
     "Five people died in five of the town's best-loved places: the bookstore, the bakery, the diner, the inn and "
@@ -145,7 +152,7 @@ CASES = {
         event="the New Year's Eve Ball",
         list_name="the ball's guest book",
         story=[
-            "The Juniper Inn has thrown a New Year's Eve Ball since the night it opened. This year it was a masked "
+            INN + " has thrown a New Year's Eve Ball since the night it opened. This year it was a masked "
             "ball, and the costumes ran to famous lovers and the gods of Olympus. Guests sign the guest book in "
             "whichever room they ring in the new year, some under their own names and some in character.",
             "Margaret Ashby, the innkeeper, always watched the countdown from the top of the grand staircase. At "
@@ -163,7 +170,7 @@ CASES = {
         event="Blind Date with a Book night",
         list_name="the library's sign-in sheets",
         story=[
-            "On the second Saturday of February, the Juniper Falls Public Library wraps a thousand books in brown "
+            "On the second Saturday of February, the " + TOWN + " Public Library wraps a thousand books in brown "
             "paper for Blind Date with a Book night. Readers were invited to come as their favourite author, and "
             "every reader signs in at the room where they pick their date.",
             "Arthur Quill, who had been town clerk for thirty years and a library volunteer for ten, went down to "
@@ -184,8 +191,8 @@ FINALE = dict(
     story=[
         "Five victims: a bookseller, a judge, a cook, an innkeeper and a clerk. Sheriff Ambrose spread their "
         "names across her desk and saw what they shared.",
-        "In 1996 they were the Juniper Falls town council. That spring they voted, five to none, to dam Hollow "
-        "Creek for the new reservoir. Eleven farms went under the water. One family never forgave them.",
+        "In 1996 they were the " + TOWN + " town council. That spring they voted, five to none, to dam " + CREEK + " "
+        "for the new reservoir. Eleven farms went under the water. One family never forgave them.",
         "Every killer had been sent a letter. Every letter knew a secret that only someone in town could know. "
         "The mastermind lives here still.",
         "The sheriff called a Town Meeting, and the whole town came. Everyone signed the town register by the "
@@ -194,12 +201,12 @@ FINALE = dict(
     ],
     ending=[
         "The mastermind is {mastermind}.",
-        "{mastermind} was nine years old when the water rose over Hollow Creek. The farmhouse is still down there, "
+        "{mastermind} was nine years old when the water rose over " + CREEK + ". The farmhouse is still down there, "
         "under forty feet of reservoir; on a dry summer you can see the top of the chimney.",
         "Thirty years is a long time to wait. Long enough to learn every secret in a small town, and to choose five "
         "people who would do anything to keep theirs.",
         "“I never touched any of them,” {mastermind} told Sheriff Ambrose. “I only wrote letters.”",
-        "The sheriff put the old council typewriter in an evidence bag. Juniper Falls is quiet again. It is the "
+        "The sheriff put the old council typewriter in an evidence bag. " + TOWN + " is quiet again. It is the "
         "kind of town where everybody knows your name, and now, everybody knows theirs.",
     ],
 )
