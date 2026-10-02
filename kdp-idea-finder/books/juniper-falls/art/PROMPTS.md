@@ -25,6 +25,12 @@ You don't need to crop or convert anything. The build:
 ## Style block (paste once, at the start)
 
 > I'm illustrating the interior of a black-and-white printed puzzle book, a cozy murder mystery set in Juniper Falls, a small American town. Every picture in this conversation must share one style: **black ink pen-and-ink drawing on a pure white background**, like a classic mid-century American book illustration. Use confident clean outlines and fine cross-hatching for shade. No grey wash, no colour, and no solid black area bigger than a coin, because it must print crisply in black ink on paper. Make the mood warm and quietly mysterious, never gory: no bodies and no blood. Use no lettering unless I ask for it, and no border or frame. Leave a plain white margin around the drawing.
+>
+> To look hand-drawn rather than computer-made:
+> - **Light:** use flat, even lighting. No glowing lamps, light rays, halos, bloom, sparkle or shiny wet reflections.
+> - **Detail:** vary it the way an illustrator does. Draw the focal point in detail, keep the edges sparse and simple, and leave plenty of untouched white paper. Don't fill every surface with texture.
+> - **People:** keep them few and small, seen from behind, in profile or at a distance, with simple faces and natural, varied expressions. No rows of identical grins.
+> - **Line:** draw with slightly loose, confident lines with natural variation, like ink from a dip pen, not a polished digital engraving.
 
 ## The pictures
 
@@ -76,3 +82,4 @@ The scenes are drawn **from outside or as a wide room view, without the victim**
 - **Lettering:** check the spelling on the map and signs letter by letter. Regenerate any that are wrong.
 - **Ink:** large dark areas print muddy. Ask for "lighter, more white space, thinner lines" if it looks heavy.
 - **People:** small background people are fine. If anyone looks like a real celebrity, regenerate.
+- **The usual AI tells:** look for glowing light, waxy identical faces, extra or melted fingers, objects cut off strangely at the edge (a car half out of frame), and garbled small lettering in the background. Regenerate or ask ChatGPT to remove them.

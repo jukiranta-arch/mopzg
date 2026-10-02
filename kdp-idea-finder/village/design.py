@@ -46,6 +46,7 @@ FOLIO_SIZE = 9.5                                 # list page numbers; the checke
 CHAPTER_SIZE = 19                                # chapter names on list pages
 SOLUTION_HEAD_SIZE = 21                          # the headings of the upside-down solution pages
 DOT = "·"
+CAP_HEIGHT = 0.671                               # Charis SIL's capitals, in ems
 DOT_GREY = 0.40
 BOX_GREY = 0.88                                  # 12% ink: KDP asks for at least 10% for a grey fill to print
 RULE_GREY = 0.55
@@ -133,20 +134,26 @@ def name_gap(size=NAME_SIZE, font=BODY):
 
 
 def draw_name_row(c, x0, x1, y, row, last, size=NAME_SIZE, font=BODY):
-    """Names with a grey dot after each; the spare space goes around the dots, never inside a name."""
+    """Names with a grey dot after each. A full row is justified: its first name starts at the left margin and
+    its last dot ends exactly at the right one, and the spare space goes to the gaps between names, around the
+    dots, never inside a name. The last row of a page is set loose."""
     gap = name_gap(size, font)
     ws = [stringWidth(n, font, size) for n in row]
     dot = stringWidth(DOT, font, size)
-    spare = (x1 - x0) - sum(ws) - len(row) * (dot + 2 * gap)
-    extra = 0 if last else spare / len(row)
+    between = len(row) - 1
+    fixed = sum(ws) + len(row) * dot + (2 * between + 1) * gap
+    extra = 0 if last or not between else ((x1 - x0) - fixed) / between
     x = x0
-    for n, wd in zip(row, ws):
+    for k, (n, wd) in enumerate(zip(row, ws)):
         c.setFont(font, size)
         c.setFillGray(0)
         c.drawString(x, y, n)
-        x += wd + gap + extra / 2
+        x += wd + gap + (extra / 2 if k < between else 0)
         c.setFillGray(DOT_GREY)
-        c.drawString(x, y, DOT)
+        if k == between and not last and between:
+            c.drawRightString(x1, y, DOT)
+        else:
+            c.drawString(x, y, DOT)
         x += dot + gap + extra / 2
     c.setFillGray(0)
 

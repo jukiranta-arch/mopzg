@@ -19,7 +19,7 @@ from .book import verdicts
 from .design import (BODY, BODY_B, BODY_I, BOTTOM, BOX_GREY, CHAPTER_SIZE, DISPLAY, DISPLAY_B, DISPLAY_I,
                      FOLIO_SIZE, FOLIO_Y, H, HEAD_GREY, HEAD_Y, INNER, NAME_LEADING, NAME_LEADING_MAX, NAME_SIZE, OUTER,
                      SOLUTION_HEAD_SIZE, TEXT_LEADING, TEXT_SIZE, TOP, W, Art, LayoutError, TextOverflow,
-                     balance_rows, draw_name_row, ornament, tracked, wrap)
+                     CAP_HEIGHT, balance_rows, draw_name_row, ornament, tracked, wrap)
 
 NUMBERS = ["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve"]
 
@@ -35,6 +35,26 @@ def example(clue, led, avoid, rng):
     if not yes or not no:
         return ""
     return "%s qualifies; %s doesn't." % (yes, no)
+
+
+CLUE_HEAD = 17          # from a clue's heading to its first line, past the rule under the heading
+BOX_PAD_X, BOX_PAD_Y = 7, 4
+
+
+def rule_box(n_lines, st):
+    """Where a clue's Rule box sits, measured down from the next line position under the witness line. The grey
+    runs from the top of the capitals to the last baseline (plus a little for descenders), with the same padding
+    above and below, so the words sit in the middle of it."""
+    rs, rl = st["rule"]
+    first = 3                                                # the first baseline of the rule
+    top = first - BOX_PAD_Y - CAP_HEIGHT * rs                # the top of the grey (above the line position)
+    bottom = first + (n_lines - 1) * rl + 0.16 * rs + BOX_PAD_Y
+    return dict(top=top, first=first, bottom=bottom, used=bottom + 4 + 0.72 * st["how"][0])
+
+
+def drop_lines(cap):
+    """Lines a drop capital spans: three, or four for capitals that hang below the line."""
+    return 4 if cap in "JQ" else 3
 
 
 class FullBook:
@@ -78,7 +98,7 @@ class FullBook:
             cap_size = (2 * leading + 0.66 * size) / 0.708          # Playfair's capitals are 0.708 em tall
             c.setFont(DISPLAY, cap_size)
             c.drawString(x0, y - 2 * leading, cap)
-            indent, n_drop = c.stringWidth(cap, DISPLAY, cap_size) + 4, 3
+            indent, n_drop = c.stringWidth(cap, DISPLAY, cap_size) + 4, drop_lines(cap)
         lines = wrap(text, x1 - x0, font, size, first_w=x1 - x0 - indent, first_n=n_drop)
         c.setFont(font, size)
         for k, ln in enumerate(lines):
@@ -93,8 +113,9 @@ class FullBook:
 
     @staticmethod
     def para_height(x0, x1, text, font=BODY, size=TEXT_SIZE, leading=TEXT_LEADING, dropcap=False):
-        n = len(wrap(text, x1 - x0, font, size, first_w=x1 - x0 - 3 * size, first_n=3 if dropcap else 0))
-        return max(n, 3 if dropcap else 0) * leading
+        n_drop = drop_lines(text[0]) if dropcap else 0
+        n = len(wrap(text, x1 - x0, font, size, first_w=x1 - x0 - 3 * size, first_n=n_drop))
+        return max(n, n_drop) * leading
 
     def heading(self, title, y=None, size=22):
         """A page heading in the display face with the divider under it; returns where the text starts."""
@@ -234,20 +255,21 @@ class FullBook:
         self.next()
 
     CLUE_STYLES = [  # story size and leading, rule size and leading, how size and leading, space after a clue
-        dict(story=(9.6, 12.6), rule=(10, 13.2), how=(9.4, 12.4), after=9),
-        dict(story=(9.4, 12.2), rule=(9.8, 12.8), how=(9.2, 12.0), after=7),
-        dict(story=(9.2, 11.8), rule=(9.6, 12.4), how=(9.0, 11.6), after=5),
+        dict(story=(9.6, 12.4), rule=(10, 13.0), how=(9.4, 12.2), after=13),
+        dict(story=(9.3, 11.9), rule=(9.8, 12.6), how=(9.1, 11.7), after=12),
+        dict(story=(9.1, 11.5), rule=(9.6, 12.2), how=(8.9, 11.3), after=11),
+        dict(story=(8.9, 11.1), rule=(9.4, 11.8), how=(8.7, 10.9), after=10),
     ]
 
     def _clue_blocks(self, clues, examples, width, st):
         """Each clue as its parts and height, in the given style."""
         blocks = []
         for cl in clues:
-            rule = wrap("Rule: " + cl.rule, width - 12, BODY_B, st["rule"][0])
+            rule = wrap("Rule: " + cl.rule, width - 2 * BOX_PAD_X, BODY_B, st["rule"][0])
             parts = [(cl.story, BODY_I) + st["story"], (cl.how, BODY) + st["how"]]
             if examples.get(cl.key):
                 parts.append(("Example: " + examples[cl.key], BODY_I) + st["how"])
-            h = (14.5 + 3 + len(rule) * st["rule"][1] + 5 +
+            h = (CLUE_HEAD + 3 + rule_box(len(rule), st)["used"] +
                  sum(len(wrap(t, width, f, s)) * l + 2 for t, f, s, l in parts) + st["after"])
             blocks.append((cl, rule, parts, h))
         return blocks
@@ -262,46 +284,51 @@ class FullBook:
             y -= h
         return breaks
 
-    def clue_pages(self, clues, examples, intro, section, pages=2):
+    def clue_pages(self, clues, examples, section, pages=2):
         """The clues, in the loosest style that fits them on `pages` pages (so the list starts on the right
         without a blank page)."""
         c = self.c
         x0, x1 = self.margins()
-        intro_h = self.para_height(x0, x1, intro, font=BODY_I, size=10, leading=13.5)
-        first_top = H - TOP - 14 - 42 - intro_h - 8
+        first_top = H - TOP - 14 - 42
         for st in self.CLUE_STYLES:
             blocks = self._clue_blocks(clues, examples, x1 - x0, st)
-            breaks = self._clue_breaks(blocks, first_top, H - TOP - 4)
+            breaks = self._clue_breaks(blocks, first_top, H - TOP + 6)
             if len(breaks) + 1 <= pages:
                 break
+        if len(breaks) + 1 < pages:           # fewer pages would put the list on a left-hand page: split evenly
+            breaks = {len(blocks) * k // pages for k in range(1, pages)}
         self.running_head(section)
         y = self.heading("The Clues")
-        y = self.para(x0, x1, y, intro, font=BODY_I, size=10, leading=13.5) - 8
+        y += 4
         for n, (cl, rule, parts, h) in enumerate(blocks, 1):
             if n - 1 in breaks:
                 self.next()
                 x0, x1 = self.margins()
                 self.running_head(section)
-                y = H - TOP - 4
+                y = H - TOP + 6
             c.setFont(BODY_B, 9)
             c.setFillGray(HEAD_GREY)
             c.drawString(x0, y, "CLUE %d" % n)
             c.setFillGray(0)
             c.setFont(DISPLAY_B, 12.5)
             c.drawString(x0 + 44, y, cl.title)
-            y -= 14.5
+            c.setStrokeGray(0.62)
+            c.setLineWidth(0.5)
+            c.line(x0, y - 5, x1, y - 5)
+            c.setStrokeGray(0)
+            y -= CLUE_HEAD
             t, f, s, l = parts[0]
             y = self.para(x0, x1, y, t, font=f, size=s, leading=l) - 3
-            rs, rl = st["rule"]
-            box_h = len(rule) * rl + 5
+            g = rule_box(len(rule), st)
             c.setFillGray(BOX_GREY)
-            c.roundRect(x0 - 2, y - box_h + rs, x1 - x0 + 4, box_h, 2.5, stroke=0, fill=1)
+            c.roundRect(x0, y - g["bottom"], x1 - x0, g["bottom"] - g["top"], 2.5, stroke=0, fill=1)
             c.setFillGray(0)
-            c.setFont(BODY_B, rs)
+            c.setFont(BODY_B, st["rule"][0])
+            yy = y - g["first"]
             for ln in rule:
-                c.drawString(x0 + 5, y, ln)
-                y -= rl
-            y -= 5
+                c.drawString(x0 + BOX_PAD_X, yy, ln)
+                yy -= st["rule"][1]
+            y -= g["used"]
             for t, f, s, l in parts[1:]:
                 y = self.para(x0, x1, y, t, font=f, size=s, leading=l) - 2
             y -= st["after"]
@@ -430,11 +457,11 @@ def render_book(book, path, seed=1, art=None):
         if b.pdf_page % 2 == 1:
             raise TextOverflow("case %s would open on a right-hand page, away from its clues" % t.key)
         b.opening("CASE %s" % t.number.upper(), t.shop, "%s, %s" % (s["when"], s["event"]), "case_" + t.key,
-                  s["story"] + ["Your case file is %s: %s names. Somewhere inside is the killer." % (
-                      s["list_name"], format(len(case.ledger.flat), ","))])
+                  s["story"] + ["Your case file is %s: %s names. Somewhere inside is the killer, and every "
+                                "clue that follows is true of the killer." % (
+                                    s["list_name"], format(len(case.ledger.flat), ","))])
         ex = {cl.key: example(cl, case.ledger, {case.ledger.flat[case.killer]}, rng) for cl in case.clues}
-        b.clue_pages(case.clues, ex, "The killer is hidden in %s. Every clue below is true of the killer." %
-                     s["list_name"], section)
+        b.clue_pages(case.clues, ex, section)
         b.to_right()
         positions.append(b.ledger(case.ledger, page_no, section))
         page_no += len(case.ledger.pages)
@@ -445,10 +472,9 @@ def render_book(book, path, seed=1, art=None):
     f = book.finale
     section = "The Finale · The Town Meeting"
     b.opening("THE FINALE", "The Town Meeting", "", "case_finale", story.FINALE["story"] + [
-        "Your case file is the town register: %s names. Somewhere inside is the mastermind." %
-        format(len(f.ledger.flat), ",")])
-    b.clue_pages(f.clues, {}, "The mastermind is hidden in the town register. Every clue below is true of the "
-                 "mastermind.", section)
+        "Your case file is the town register: %s names. Somewhere inside is the mastermind, and every clue "
+        "that follows is true of the mastermind." % format(len(f.ledger.flat), ",")])
+    b.clue_pages(f.clues, {}, section)
     b.to_right()
     fpos = b.ledger(f.ledger, page_no, section)
     # The last answer page says Stop, so it must be a right-hand page with the solutions on its back
