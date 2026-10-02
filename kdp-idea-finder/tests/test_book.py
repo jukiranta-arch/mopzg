@@ -5,7 +5,7 @@ import unittest
 from village import clues as C
 from village.book import (READINGS, Ledger, generate_case, landmark_risks, signature, solve, survivors_all_readings,
                           validate, verdicts)
-from village.design import PREP_VERSION, TONE_TARGET, Art, balance_rows, even_tone, width
+from village.design import GREY_INK, PREP_VERSION, TONE_TARGET, Art, balance_rows, even_tone, flatten_inks, width
 from village.namepool import FIRST_NAMES, SURNAMES
 from village.plans import PLANS
 
@@ -182,6 +182,21 @@ class DesignTests(unittest.TestCase):
         self.assertEqual(out.getpixel((50, 90)), 255)
         dark = Image.new("L", (10, 10), 90)
         self.assertIs(even_tone(dark), dark)
+
+    def test_flat_inks_leave_only_the_style_inks(self):
+        from PIL import Image, ImageDraw
+        im = Image.new("L", (200, 100), 250)
+        d = ImageDraw.Draw(im)
+        d.rectangle((0, 0, 60, 100), fill=20)                  # a black area
+        d.rectangle((70, 0, 130, 100), fill=150)               # a mid grey area
+        for x in range(140, 200, 4):                           # a soft gradient, the kind a generator leaves
+            d.rectangle((x, 0, x + 3, 100), fill=200 + (x - 140) // 2)
+        two = flatten_inks(im, 2)
+        three = flatten_inks(im, 3)
+        self.assertEqual({v for _, v in two.getcolors()}, {0, 255})
+        self.assertEqual({v for _, v in three.getcolors()}, {0, GREY_INK, 255})
+        self.assertEqual(three.getpixel((100, 50)), GREY_INK)
+        self.assertEqual(three.getpixel((30, 50)), 0)
 
 
 @unittest.skipUnless(os.environ.get("BOOK_PDF"), "set BOOK_PDF to a rendered book to check it")

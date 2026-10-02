@@ -58,7 +58,11 @@ MIN_DPI = 300
 # washed-out drawing matches the others; whites stay white and blacks stay black. Darker ones are left alone:
 # printing darkens mid-greys a little anyway.
 TONE_TARGET = 140
-PREP_VERSION = 2                                 # bump when the preparation changes, to rebuild the cache
+PREP_VERSION = 3                                 # bump when the preparation changes, to rebuild the cache
+# Flat inks: None keeps a picture's own tones; 2 snaps it to black and white (linocut, silhouette); 3 to black, one
+# grey and white (screen-printed poster). Set once the picture style is chosen.
+ART_INKS = None
+GREY_INK = 165                                   # the poster's grey: about 35% ink, well above KDP's 10% minimum
 
 
 class LayoutError(RuntimeError):
@@ -198,7 +202,7 @@ class Art:
                 pad = max(4, int(0.02 * max(im.size)))
                 im = im.crop((max(0, ink[0] - pad), max(0, ink[1] - pad),
                               min(im.width, ink[2] + pad), min(im.height, ink[3] + pad)))
-            im = even_tone(im)
+            im = flatten_inks(im, ART_INKS) if ART_INKS else even_tone(im)
             im.save(out)
         return out
 
@@ -232,6 +236,41 @@ class Art:
             self.low.append((key, round(dpi)))
         c.drawImage(self.prepared(key, src), x + (w - dw) / 2, y + (h - dh) / 2, dw, dh)
         return x + (w - dw) / 2, y + (h - dh) / 2, dw, dh
+
+
+def ink_thresholds(im, n):
+    """The n-1 grey levels that best split a picture's tones into n groups (Otsu's method)."""
+    hist = im.histogram()
+    total = sum(hist)
+    cum, cum_mean = [0] * 257, [0.0] * 257
+    for v in range(256):
+        cum[v + 1] = cum[v] + hist[v]
+        cum_mean[v + 1] = cum_mean[v] + v * hist[v]
+
+    def score(a, b):   # between-class variance contribution of tones a..b-1
+        w = cum[b] - cum[a]
+        return 0.0 if not w else (cum_mean[b] - cum_mean[a]) ** 2 / w
+
+    if n == 2:
+        return [max(range(1, 256), key=lambda t: score(0, t) + score(t, 256))]
+    best, cuts = -1.0, None
+    for t1 in range(1, 255, 2):
+        for t2 in range(t1 + 2, 256, 2):
+            v = score(0, t1) + score(t1, t2) + score(t2, 256)
+            if v > best:
+                best, cuts = v, [t1, t2]
+    return cuts
+
+
+def flatten_inks(im, n):
+    """Snap a greyscale picture to n flat inks (2: black and white; 3: black, GREY_INK and white), with the speckle
+    left by a generator's fine texture cleaned away."""
+    from PIL import ImageFilter
+    smooth = im.filter(ImageFilter.GaussianBlur(0.8))
+    cuts = ink_thresholds(smooth, n)
+    inks = [0, 255] if n == 2 else [0, GREY_INK, 255]
+    lut = [inks[sum(v >= c for c in cuts)] for v in range(256)]
+    return smooth.point(lut).filter(ImageFilter.ModeFilter(3))
 
 
 def even_tone(im, target=TONE_TARGET):
