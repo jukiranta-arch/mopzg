@@ -51,7 +51,11 @@ def report(book, info, check_out, seconds):
     if ART_INKS == 2:
         lines.append("Pictures are pure black and white, re-cut at double size, so %d DPI of source detail is enough."
                      % floor)
+    seen = set()
     for key, pw, ph, w, h, dpi in info["art_used"]:
+        if key in seen:      # the ornament is used on many pages: list each picture once
+            continue
+        seen.add(key)
         lines.append("- %s: %d x %d px printed at %.2f x %.2f in = %d DPI%s" % (
             key, pw, ph, w, h, dpi, "" if dpi >= floor else " (below %d: needs a larger image)" % floor))
     lines += ["", "## Independent check of the PDF", "", "```", check_out.strip(), "```", ""]
