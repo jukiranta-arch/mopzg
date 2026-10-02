@@ -65,3 +65,39 @@ The historical periods (Victorian, 1920s, WWII home front) are the next gap. Eac
 - `murder club puzzle book`
 - `victorian murder mystery puzzle book`
 - `1920s murder mystery puzzle book`
+
+## The confirming searches (2026-10-02)
+
+**`murder club puzzle book`.** Amazon mostly returned the general bestsellers, so the club concept has no clear winner in puzzles. The club books that do exist:
+
+| Book | Format | Sales |
+|---|---|---|
+| *The Murder Mystery Club Puzzle Book* (Gareth Moore, 2 books) | mixed puzzles | 3.9/day and 1.0/day, 224 and 59 reviews |
+| *Cross Out Club: A British Manor Murder Mystery Puzzle* | name list | not in the top 16; sales unknown |
+| *Murder at the Book Club* | large-print name list, 12,000 suspects | not in the top 16; sales unknown |
+| *Who Killed Grandma? (Large Print Mystery Club)* | name list | 0.8/day |
+| *Midnight Murder Club* | activity book | not in the top 16; sales unknown |
+| *Murder at the Blackthorn Club* | 1960s gangland | not in the top 16; sales unknown |
+
+None of them uses the retired-sleuths premise the novels sell on. "Club" is just a word in their titles.
+
+**`victorian murder mystery puzzle book`.** Plenty of Victorian puzzle books, and none sells:
+- *The Gaslight Files* and *The Raven Files* (Society of Curious Cases): 0.1/day.
+- *Forsaken Souls*: 0.1/day.
+- Unranked: *The Wickham Estate Murder* (elimination), *The Ripper Case Files*, two steampunk books, *Victorian Detective Puzzle Casebook*, *Murder at the Opera*.
+- The one seller is *31 Days of Murder* (Victorian case files) at 5.2/day, and that's in Halloween season. **Tried and failed.**
+
+**`1920s murder mystery puzzle book`.**
+- *Murdoku: Back in Time* sells 401/day, but on the Murdoku brand, not the period.
+- The rest are unranked: *Violet Hastings* (1920s word search), *Heistlogic*, *The Manor House Murders*, *All Hallows' Mischief*, and earlier *The Killer Signed the Register* (1920s name list). **Tried and failed.**
+
+## Conclusion
+
+In murder-mystery puzzle books, settings don't make winners. Every period and theme we tested has been tried, and the attempts sell little. The winners are first to a strong hook:
+- *Alice*: the first of its kind;
+- *Darcy*: famous names to spot;
+- *Never Checked In*: records with details;
+- *Kill Grid*: connected word-search cases;
+- *Eliminate*: categories that lead to suspects.
+
+**The setting's job** is to appeal to the buyer and not look like a copy. On that test, the cozy club of retired amateur sleuths (the #1 cozy-fiction trend) is the best fit: puzzle books use the word "club" only as branding, and none has a winner. The American small-town shops are second. The hotel, the ticket and the historical periods are crowded with failed attempts.
