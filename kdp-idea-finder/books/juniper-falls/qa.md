@@ -1,6 +1,6 @@
 # QA report: Murder in Juniper Falls
 
-Generated in 62 s (seed 1). Interior: 142 pages, 6 x 9 in; 1 blank (no notes pages).
+Generated in 70 s (seed 1). Interior: 142 pages, 6 x 9 in; 1 blank (no notes pages).
 
 ## Each case
 
@@ -19,8 +19,13 @@ Mastermind: Clara (the killers' first letters: C, L, A, R, A).
 
 ## Pictures
 
-Still to draw (placeholders in this build): case_bakery, case_diner, case_finale, case_inn, case_library, evidence_bakery, evidence_bookstore, evidence_diner, evidence_inn, evidence_library, map, title.
+Still to draw (placeholders in this build): evidence_bakery, evidence_bookstore, evidence_diner, evidence_inn, evidence_library, map, title.
 - case_bookstore: 1462 x 844 px printed at 4.65 x 2.68 in = 314 DPI
+- case_bakery: 1521 x 973 px printed at 4.53 x 2.90 in = 335 DPI
+- case_diner: 1536 x 889 px printed at 4.65 x 2.69 in = 330 DPI
+- case_inn: 1526 x 1007 px printed at 4.39 x 2.90 in = 347 DPI
+- case_library: 1536 x 1024 px printed at 4.35 x 2.90 in = 353 DPI
+- case_finale: 1536 x 1024 px printed at 4.35 x 2.90 in = 353 DPI
 
 ## Independent check of the PDF
 
