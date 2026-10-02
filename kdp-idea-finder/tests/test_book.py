@@ -5,7 +5,7 @@ import unittest
 from village import clues as C
 from village.book import (READINGS, Ledger, generate_case, landmark_risks, signature, solve, survivors_all_readings,
                           validate, verdicts)
-from village.design import GREY_INK, PREP_VERSION, TONE_TARGET, Art, balance_rows, even_tone, flatten_inks, width
+from village.design import GREY_INK, INK_UPSCALE, PREP_VERSION, TONE_TARGET, Art, balance_rows, even_tone, flatten_inks, width
 from village.namepool import FIRST_NAMES, SURNAMES
 from village.plans import PLANS
 
@@ -195,8 +195,9 @@ class DesignTests(unittest.TestCase):
         three = flatten_inks(im, 3)
         self.assertEqual({v for _, v in two.getcolors()}, {0, 255})
         self.assertEqual({v for _, v in three.getcolors()}, {0, GREY_INK, 255})
-        self.assertEqual(three.getpixel((100, 50)), GREY_INK)
-        self.assertEqual(three.getpixel((30, 50)), 0)
+        self.assertEqual(three.size, (200 * INK_UPSCALE, 100 * INK_UPSCALE))   # cut at double size
+        self.assertEqual(three.getpixel((100 * INK_UPSCALE, 50 * INK_UPSCALE)), GREY_INK)
+        self.assertEqual(three.getpixel((30 * INK_UPSCALE, 50 * INK_UPSCALE)), 0)
 
 
 @unittest.skipUnless(os.environ.get("BOOK_PDF"), "set BOOK_PDF to a rendered book to check it")

@@ -1,148 +1,117 @@
-# Pictures for Murder in Juniper Falls: ChatGPT prompts (version 2)
+# Pictures for Murder in Juniper Falls: the cut-paper silhouette prompts (final)
 
-**Why the first pictures looked like "ChatGPT art":**
-- "Pen and ink, mid-century book illustration" sends ChatGPT to its favourite black-and-white look: a finely cross-hatched digital engraving with every surface equally detailed. Readers now recognise it instantly.
-- The Guest List competitor uses exactly that look.
+The style is chosen: **Style C, cut-paper silhouette**. The reference picture is the bookstore (`bookstore-C-cut-paper.png`, saved in the book as `case_bookstore.png`). Every other picture must look like it was cut by the same hand from the same black paper.
 
-**What makes a picture look made by a person:**
-- the marks of a real **medium** (carved lines, cut paper, flat printed inks);
-- **simple, bold shapes** with one focal point;
-- **few or no faces**;
-- **no smooth grey gradients**.
+## Instructions for the image agent
 
-Simple styles also hide most AI mistakes, because those live in small details: hands, faces, background lettering.
+1. **Attach the reference:** use `bookstore-C-cut-paper.png` as the **style reference image** for every picture. Take its medium, line weight, level of detail and the way white cut-outs show light. Take nothing else from it: no shop, no figures, no signs.
+2. **Prompt:** for each picture, send the **style block** below plus that picture's **subject**.
+3. **Shape:** landscape 3:2 unless the subject says square or portrait. Use the largest size the tool returns.
+4. **Check before saving.** Regenerate if:
+   - a word is misspelled;
+   - there are extra words;
+   - there are grey tones;
+   - faces have features;
+   - lines are drawn on top of the black;
+   - it looks like smooth vector clip art.
 
-## Step 1: the style test (do this first)
+   One or two retries per picture is normal.
+5. **Save as PNG** with exactly the file name given, e.g. `case_bakery.png`, in `outputs/`. Don't upscale, crop, recolour or edit the files; the book's build does all of that.
+6. **Report:** list each file with its pixel size.
 
-1. Make the **same picture, the bookstore, in three styles**. Each style gets its own new ChatGPT conversation, so the styles don't mix.
-2. Turn on **Thinking** for images if your menu offers it (Plus has it); it follows instructions much better.
-3. Choose **landscape (3:2)** and the **highest resolution offered**.
-4. Make **2–3 tries** per style and keep the best one.
-5. Send me the three winners and say which is which. I'll put each into the real page and the print-ready colours, so we choose by looking at actual book pages.
+## Style block (send with every picture)
 
-The web version and the ChatGPT work app use the same image model (ChatGPT Images 2.5), so use whichever you like.
-
-### Style A: linocut print
-
-> Make a picture for the interior of a printed black-and-white mystery puzzle book set in Juniper Falls, a small American town. The mood is cozy and quietly mysterious, never gory.
+> A picture for the interior of a printed black-and-white mystery puzzle book set in Juniper Falls, a small American town. The mood is cozy and quietly mysterious, never gory: no bodies, no blood, no weapons in use.
 >
-> MEDIUM: a hand-carved linocut relief print, printed in black ink on white paper. Everything is made of flat solid black shapes and white carved lines. The white marks are cut with V and U gouges and follow the forms: rows of carved strokes for brick, wood grain, the night sky and the pavement. Edges are slightly irregular, and the black ink is a little uneven where the block printed lightly.
+> STYLE REFERENCE: the attached image. Match its medium exactly: a hand-cut black paper silhouette mounted on white paper. Match its line weight, its level of detail, its slightly irregular scissor edges, and the way lit windows and lettering are white openings cut out of the black. Take nothing else from the reference image.
 >
-> NOT ALLOWED: grey tones, gradients, glow, fine cross-hatching, engraving or etching lines, stippling, photographic detail, a digital-illustration look.
+> MEDIUM: everything is solid black paper. Detail is shown only by shapes cut out of the black, so the white paper shows through.
 >
-> SIMPLICITY: one focal point and big simple shapes. People are simple carved shapes; faces are suggested with one or two cuts or not at all. Leave a plain white margin around the print and no border.
+> NOT ALLOWED: grey, gradients, lines drawn on top, facial features, glow, smooth vector clip-art edges, a frame or border, any words other than the ones asked for.
 >
-> SUBJECT: [the subject text goes here]
+> SIMPLICITY: one focal point. People are pure profile silhouettes, recognisable only by their outlines. Leave a plain white margin around the silhouette.
+>
+> SUBJECT: …
 
-### Style B: 1950s screen-printed poster (three flat inks)
-
-> Make a picture for the interior of a printed black-and-white mystery puzzle book set in Juniper Falls, a small American town. The mood is cozy and quietly mysterious, never gory.
->
-> MEDIUM: a 1950s American screen-printed poster in exactly three flat inks: black, one medium grey, and the white of the paper. Shapes are flat with clean, hand-cut stencil edges, simplified and geometric, like a vintage National Park or travel poster. Shading uses only the flat grey or a coarse dot halftone. There is slight misregistration between the grey and the black, and a little ink texture.
->
-> NOT ALLOWED: gradients, airbrushing, glow, outlines around everything, cross-hatching, engraving lines, photographic detail, a digital-painting look.
->
-> SIMPLICITY: one focal point, strong silhouettes, large flat areas. People are simplified flat figures with no facial features. Leave a plain white margin around the poster image and no border.
->
-> SUBJECT: [the subject text goes here]
-
-### Style C: cut-paper silhouette
-
-> Make a picture for the interior of a printed black-and-white mystery puzzle book set in Juniper Falls, a small American town. The mood is cozy and quietly mysterious, never gory.
->
-> MEDIUM: a hand-cut black paper silhouette mounted on white paper, in the tradition of 1920s silhouette art. Everything is solid black paper. Detail is shown only by shapes cut out of the black, so white shows through: a lit window becomes a white opening with the black outlines of shelves and people inside it. The scissor edges are slightly irregular, with fine delicate cutting in places.
->
-> NOT ALLOWED: grey, gradients, lines drawn on top, facial features, glow, vector clip-art smoothness.
->
-> SIMPLICITY: people are pure profile silhouettes, recognisable only by their outlines (a straw hat, a plumed hat, a long skirt). One focal point. Leave a plain white margin around the silhouette and no border.
->
-> SUBJECT: [the subject text goes here]
-
-### The test subject (paste it in place of [the subject text goes here])
-
-> Pell's Books, a small independent bookstore on the Main Street of a small American town, seen from the sidewalk on an October night. The shop front fills the picture: one big window full of stacked books, a door, a sign above the window lettered "PELL'S BOOKS", and a sandwich board on the sidewalk lettered "MIDNIGHT SALE". In the window, three customers in book-character costumes: a boy in a straw hat, a musketeer with a plumed hat, a girl in a long 1860s dress. A streetlamp and a few fallen leaves. Landscape 3:2. Spell the lettering exactly: P-E-L-L-'-S B-O-O-K-S and M-I-D-N-I-G-H-T S-A-L-E. No other text.
-
-## Step 2: all the pictures, in the style we choose
-
-1. In **one new conversation**, paste the chosen style block with the first subject from the table below.
-2. When a picture is right, keep it as the **anchor**. For every later picture, write:
-   > Next picture, in exactly the same medium and style as the first picture. SUBJECT: …
-3. If a picture drifts, attach the anchor picture and say:
-   > Image 1 is the style reference: match its medium, marks and level of detail exactly; take nothing else from it.
-4. **Fix one thing at a time:** "keep everything the same, only make the sign smaller". Small single changes work better than rewriting the whole prompt.
+## The pictures
 
 | # | File | Shape | Where it goes |
 |---|---|---|---|
-| 1 | `case_bookstore.png` | landscape 3:2 | Case One opening page |
+| 1 | `case_bookstore.png` | done | Case One opening page |
 | 2 | `case_bakery.png` | landscape 3:2 | Case Two opening page |
 | 3 | `case_diner.png` | landscape 3:2 | Case Three opening page |
 | 4 | `case_inn.png` | landscape 3:2 | Case Four opening page |
 | 5 | `case_library.png` | landscape 3:2 | Case Five opening page |
 | 6 | `case_finale.png` | landscape 3:2 | The Town Meeting opening page |
 | 7 | `title.png` | landscape 3:2 | Title page, above the title |
-| 8 | `map.png` | portrait 2:3, highest resolution | Full page facing the introduction |
-| 9–13 | `evidence_bookstore.png` … `evidence_library.png` | square | Each case's answer page, under "Evidence No. 1" etc. |
-| 14 | `ornament.png` (optional) | landscape 3:2 | The small divider under headings |
+| 8 | `map.png` | portrait 2:3 | Full page facing the introduction |
+| 9–13 | `evidence_bookstore.png` … `evidence_library.png` | square | Each case's answer page |
+| 14 | `ornament.png` | landscape 3:2 | The small divider under headings |
 
-The subjects are kept deliberately simple: one place, a handful of figures, one or two signs.
+### Subjects
 
-**1. Bookstore.** The test subject above.
+**`case_bakery.png`.** Rosie's Bakery on a November evening, seen from the sidewalk. The shop front fills the picture:
+- **The window** is a big white cut-out showing a long table of pies on cake stands under paper bunting.
+- **Figures:** three children in nursery-rhyme costumes in profile: a shepherdess with a crook, a little queen with a crown carrying a tray of tarts, a boy holding a pie.
+- **Signs:** an awning over the window; a sign above it lettered "ROSIE'S BAKERY"; a chalkboard by the door lettered "HARVEST PIE CONTEST".
+- **Extras:** a bicycle leaning on the wall, a few fallen leaves.
+- **Lettering:** spell it exactly: R-O-S-I-E-'-S B-A-K-E-R-Y and H-A-R-V-E-S-T P-I-E C-O-N-T-E-S-T. No other words.
 
-**2. Bakery.** Rosie's Bakery on a November evening, seen through its big front window from the street: a long table of pies under paper bunting, and three children in nursery-rhyme costumes (a shepherdess with a crook, a little queen with a crown and a tray of tarts, a boy with a pie). A chalkboard by the door is lettered "HARVEST PIE CONTEST" and the window "ROSIE'S BAKERY". Landscape 3:2. No other text.
+**`case_diner.png`.** Lou's Diner at dawn in December: a classic American roadside diner car with rounded ends, seen from the side.
+- **Windows:** a row of white cut-out windows showing the counter, stools, a coffee pot, and two or three customers in profile, one in a tall stovepipe hat and one in a three-cornered hat.
+- **Signs:** a tall sign on the roof lettered "LOU'S DINER"; a window sign lettered "PANCAKE BREAKFAST".
+- **Extras:** snow on the roof and curb as white cut shapes; a curl of steam from a vent; a parked 1950s pickup truck.
+- **Lettering:** spell it exactly: L-O-U-'-S D-I-N-E-R and P-A-N-C-A-K-E B-R-E-A-K-F-A-S-T. No other words.
 
-**3. Diner.** Lou's Diner, a classic American roadside diner car with rounded corners, at dawn in December. Snow on the curb, steam from a vent, lit windows with two or three customers at the counter, one in a stovepipe hat. The roof sign is lettered "LOU'S DINER" and a window poster "PANCAKE BREAKFAST". Landscape 3:2. No other text.
+**`case_inn.png`.** The Juniper Inn on New Year's Eve: a big old wooden country inn with a wraparound porch and a steep roof.
+- **Snow:** falling snow as small white cut-out flakes against the black night.
+- **Windows:** tall white cut-out windows showing two masked dancers in profile, a figure with small wings (a Cupid), and the curve of a grand staircase.
+- **Porch:** lanterns, and a wreath on the door.
+- **Sign:** a hanging sign lettered "THE JUNIPER INN". Spell it exactly: T-H-E J-U-N-I-P-E-R I-N-N. No other words.
 
-**4. Inn.** The Juniper Inn, a big old wooden country inn with a wraparound porch, on New Year's Eve in falling snow. Lit tall windows; behind them, a couple of masked dancers and a grand staircase. Lanterns on the porch, a wreath on the door, a hanging sign lettered "THE JUNIPER INN". Landscape 3:2. No other text.
+**`case_library.png`.** The Juniper Falls Public Library on a February night: a small brick library with stone steps, two columns and a pediment.
+- **Window:** one large white cut-out window shows a long table of books wrapped in paper and tied with string, and a reader in profile choosing one.
+- **Lettering:** a banner over the door lettered "BLIND DATE WITH A BOOK"; the stone above the columns lettered "PUBLIC LIBRARY".
+- **Grounds:** bare trees, and old snow on the lawn as white cut shapes.
+- **Spelling:** B-L-I-N-D D-A-T-E W-I-T-H A B-O-O-K and P-U-B-L-I-C L-I-B-R-A-R-Y. No other words.
 
-**5. Library.** The Juniper Falls Public Library, a small brick library with stone steps and two columns, on a February night with old snow on the lawn. One lit window shows a table of books wrapped in brown paper and string. A banner over the door is lettered "BLIND DATE WITH A BOOK" and the stone above it "PUBLIC LIBRARY". Landscape 3:2. No other text.
+**`case_finale.png`.** Juniper Falls Town Hall on a winter evening: a white clapboard town hall with a clock tower, drawn as a black silhouette with white cut-out windows and clock face.
+- **People:** townspeople in coats and hats climb the steps, in profile and from behind.
+- **Notice board:** lettered "TOWN MEETING TONIGHT". Spell it exactly: T-O-W-N M-E-E-T-I-N-G T-O-N-I-G-H-T. No other words.
+- **Background:** a small dam and the flat line of a reservoir under a pale sky.
 
-**6. Town Meeting.** Juniper Falls Town Hall, a white clapboard town hall with a clock tower, on a winter evening. Townspeople climb the steps (simple figures, seen from behind). In the far background, a reservoir behind a small dam. A notice board is lettered "TOWN MEETING TONIGHT". Landscape 3:2. No other text.
+**`title.png`.** Juniper Falls seen from a hill, as a wide panoramic cut-paper silhouette:
+- a short Main Street of storefronts;
+- a church steeple, a water tower and the town hall clock tower;
+- wooded hills behind;
+- a small waterfall on the river at the edge of town, the falling water as white cut-out lines;
+- late autumn trees with a few leaves.
 
-**7. Title page.** Juniper Falls seen from a hill: a short Main Street of brick storefronts, a church steeple, a water tower and the town hall clock tower, wooded hills behind, and a small waterfall on the river at the edge of town. Late autumn. One lit window in an otherwise dark street. Landscape 3:2. No lettering.
+One single lit window, a white cut-out, in an otherwise dark street. No lettering at all.
 
-**8. Map.** An illustrated town map of Juniper Falls seen from above, in the same medium, kept simple and clear.
-- **Land and water:** a river down one side with a waterfall labelled "Juniper Falls"; upstream, a reservoir behind a dam labelled "Hollow Creek Reservoir".
-- **Streets:** "Main Street", "Maple Avenue", "Church Lane", "River Road".
-- **Buildings:** small buildings labelled "Pell's Books", "Rosie's Bakery" and "Lou's Diner" (all on Main Street), and "The Juniper Inn", "Public Library", "Town Hall" and "Sheriff's Office".
-- **Extras:** a compass rose, and the title "JUNIPER FALLS" at the top.
-- **Size:** portrait 2:3, highest resolution.
-- **Text:** spell every label exactly as given and add no other words.
+**`map.png`** (portrait 2:3). An illustrated town map of Juniper Falls seen from above, as a cut-paper silhouette.
+- **Ground and water:** the land is black paper; the river and the streets are white cut-outs. A small waterfall on the river is labelled "Juniper Falls". Upstream, a reservoir behind a dam is labelled "Hollow Creek Reservoir".
+- **Streets**, labelled along them: "Main Street", "Maple Avenue", "Church Lane", "River Road".
+- **Buildings:** small building silhouettes with labels: "Pell's Books", "Rosie's Bakery" and "Lou's Diner" (all on Main Street), and "The Juniper Inn", "Public Library", "Town Hall" and "Sheriff's Office".
+- **Extras:** a few trees, a church, a compass rose, and a cut-out title banner at the top lettered "JUNIPER FALLS".
+- **Lettering:** labels are white letters on small black banners, large enough to read. Spell every label exactly as given, and add no other words.
 
-**9. Evidence 1.** A single paper bookmark with a tassel, large and centred, stamped with a big numeral "1". Square. No other text.
+**`evidence_bookstore.png`** (square). A single paper bookmark with a tassel, large and centred, as a black silhouette, with a big numeral "1" cut out of it in white. No other words.
 
-**10. Evidence 2.** A single prize rosette with two ribbon tails, large and centred, with a big numeral "2" written on one tail. Square. No other text.
+**`evidence_bakery.png`** (square). A single prize rosette with two ribbon tails, large and centred, as a black silhouette, with a big numeral "2" cut out of the centre in white. No other words.
 
-**11. Evidence 3.** A single diner order ticket held in a metal clip, large and centred, blank except for a big handwritten numeral "3". Square. No other text.
+**`evidence_diner.png`** (square). A single diner order ticket held in a metal clip, large and centred, as a black silhouette, with a big numeral "3" cut out of the ticket in white. No other words.
 
-**12. Evidence 4.** A single old hotel room key on a teardrop key tag, large and centred; the tag shows a big numeral "4". Square. No other text.
+**`evidence_inn.png`** (square). A single old hotel room key on a teardrop key tag, large and centred, as a black silhouette, with a big numeral "4" cut out of the tag in white. No other words.
 
-**13. Evidence 5.** A single old library borrower's card with a date grid, large and centred, stamped with a big numeral "5". Square. No other text.
+**`evidence_library.png`** (square). A single old library borrower's card with a date grid cut into it, large and centred, as a black silhouette, with a big numeral "5" cut out in white where the date stamp would be. No other words.
 
-**14. Ornament (optional).** A small horizontal juniper sprig: a short twig with needles and three berries, as a tiny book ornament, centred with lots of white around it. Landscape 3:2.
+**`ornament.png`.** A small horizontal juniper sprig as a delicate black paper cut: a short twig with needles and three round berries, centred, with lots of white around it. No words.
 
-## What happens to each picture here
+## What happens to each picture in the book's build
 
-**You don't need to crop or convert anything.** The build:
 - trims white margins;
-- converts to greyscale;
-- checks 300 DPI (KDP's minimum).
+- snaps every picture to pure black and white, cut at double resolution so the edges stay smooth;
+- checks it prints at 300 DPI or more.
 
-**Flat inks:** once the style is chosen, the build will snap every picture to that style's inks:
-- linocut and silhouette: two inks, black and white;
-- poster: three inks, black, grey and white.
-
-That removes any leftover AI shading and makes all 14 pictures look printed with the same inks. It also prints very cleanly: KDP prints solid black and flat grey well, and it's the soft mid-grey gradients that come out muddy.
-
-## Checking a picture before you save it
-
-- **Lettering:** check the spelling letter by letter, and regenerate any that are wrong.
-- **The AI tells:** look for:
-  - glowing light;
-  - identical waxy faces;
-  - extra or melted fingers;
-  - garbled small lettering;
-  - objects cut off oddly at the edge;
-  - the same texture over every surface.
-
-  Ask ChatGPT to remove the tell ("keep everything else the same"), or regenerate.
-- **Real people:** if anyone looks like a real celebrity, regenerate.
+The map is the one tight spot: a full page needs about 1400 × 2100 px, and the tool returns 1024 × 1536. Because the map is pure black and white, re-cutting it at double size still prints crisp; only the smallest lettering would suffer, which is why the labels must be large.

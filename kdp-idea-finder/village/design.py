@@ -54,14 +54,17 @@ HEAD_GREY = 0.30
 
 ART_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "books", "juniper-falls", "art")
 MIN_DPI = 300
+# A two-ink picture is re-cut at INK_UPSCALE times its size, so its edges print at twice the source resolution:
+# 200 DPI of source detail is enough for paper cut-outs (KDP itself sees the enlarged image, well over 300).
+MIN_DPI_INKED = 200
 # Pictures lighter than this average grey (0 black, 255 white) have their mid-tones darkened to it, so a
 # washed-out drawing matches the others; whites stay white and blacks stay black. Darker ones are left alone:
 # printing darkens mid-greys a little anyway.
 TONE_TARGET = 140
-PREP_VERSION = 3                                 # bump when the preparation changes, to rebuild the cache
+PREP_VERSION = 4                                 # bump when the preparation changes, to rebuild the cache
 # Flat inks: None keeps a picture's own tones; 2 snaps it to black and white (linocut, silhouette); 3 to black, one
 # grey and white (screen-printed poster). Set once the picture style is chosen.
-ART_INKS = None
+ART_INKS = 2                                     # cut-paper silhouette: black and white
 GREY_INK = 165                                   # the poster's grey: about 35% ink, well above KDP's 10% minimum
 
 
@@ -207,8 +210,11 @@ class Art:
         return out
 
     def size(self, key, src):
-        """The pixel size of the picture as printed: after the white margin is trimmed."""
-        return Image.open(self.prepared(key, src)).size
+        """The picture's own pixel size after the white margin is trimmed (before any enlargement for flat inks:
+        enlarging adds no detail, so it must not count towards the DPI)."""
+        w, h = Image.open(self.prepared(key, src)).size
+        k = INK_UPSCALE if ART_INKS else 1
+        return w // k, h // k
 
     def draw(self, c, key, x, y, w, h, caption=""):
         """Fit picture `key` inside the box (x, y is the bottom left), centred; returns the box it used."""
@@ -232,7 +238,7 @@ class Art:
         dw, dh = pw * scale, ph * scale
         dpi = pw / (dw / inch)
         self.used.append((key, pw, ph, dw / inch, dh / inch, dpi))
-        if dpi < MIN_DPI:
+        if dpi < (MIN_DPI_INKED if ART_INKS == 2 else MIN_DPI):
             self.low.append((key, round(dpi)))
         c.drawImage(self.prepared(key, src), x + (w - dw) / 2, y + (h - dh) / 2, dw, dh)
         return x + (w - dw) / 2, y + (h - dh) / 2, dw, dh
@@ -262,11 +268,16 @@ def ink_thresholds(im, n):
     return cuts
 
 
+INK_UPSCALE = 2   # flat inks are cut at twice the picture's resolution, so the edges stay smooth, not stepped
+
+
 def flatten_inks(im, n):
     """Snap a greyscale picture to n flat inks (2: black and white; 3: black, GREY_INK and white), with the speckle
-    left by a generator's fine texture cleaned away."""
+    left by a generator's fine texture cleaned away. The result is INK_UPSCALE times larger, so the hard edges
+    between inks are finer than the printer can show."""
     from PIL import ImageFilter
-    smooth = im.filter(ImageFilter.GaussianBlur(0.8))
+    im = im.resize((im.width * INK_UPSCALE, im.height * INK_UPSCALE), Image.LANCZOS)
+    smooth = im.filter(ImageFilter.GaussianBlur(0.8 * INK_UPSCALE))
     cuts = ink_thresholds(smooth, n)
     inks = [0, 255] if n == 2 else [0, GREY_INK, 255]
     lut = [inks[sum(v >= c for c in cuts)] for v in range(256)]
