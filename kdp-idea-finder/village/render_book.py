@@ -170,15 +170,15 @@ class FullBook:
         x0, x1 = self.margins()
         art_h = 3.3 * inch
         self.art.draw(c, "title", x0, H - TOP - art_h, x1 - x0, art_h, "Main Street, " + story.TOWN)
-        y = H - TOP - art_h - 0.6 * inch
-        c.setFont(DISPLAY, 21)
-        c.drawCentredString(cx, y, story.TITLE_LINES[0])
-        c.setFont(DISPLAY_B, 36)
-        c.drawCentredString(cx, y - 40, story.TITLE_LINES[1])
-        ornament(c, cx, y - 60, self.art, w=120)
+        y = H - TOP - art_h - 0.5 * inch
+        tracked(c, story.TITLE_LABEL.upper(), cx, y, BODY, 9, track=1.6, grey=HEAD_GREY)
+        c.setFont(DISPLAY_B, 40)
+        c.drawCentredString(cx, y - 42, story.TITLE_LINES[0])
+        c.drawCentredString(cx, y - 86, story.TITLE_LINES[1])
+        ornament(c, cx, y - 108, self.art, w=120)
         c.setFont(DISPLAY_I, 13.5)
-        c.drawCentredString(cx, y - 90, subtitle)
-        tracked(c, tagline.upper(), cx, y - 116, BODY, 8.5, track=1.4, grey=HEAD_GREY)
+        c.drawCentredString(cx, y - 136, subtitle)
+        tracked(c, tagline.upper(), cx, y - 160, BODY, 8.5, track=1.4, grey=HEAD_GREY)
         if story.AUTHOR:
             c.setFont(DISPLAY, 14)
             c.drawCentredString(cx, BOTTOM + 10, story.AUTHOR)

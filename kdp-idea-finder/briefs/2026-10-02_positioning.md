@@ -45,21 +45,22 @@ It promises a story and a twist in seven words. It also answers the fear of a po
 
 ## Title
 
-**Recommendation: *Who Sent the Killers?***
+**Decided (2026-10-02): *Who Sent the Killers?***
 - It is the question the whole book answers.
 - It uses the "Who…?" form of *Who Killed Mr Darcy?* and keeps "Killers" for search.
-- No book with that title was found (web search, 2026-10-02).
-- **Juniper Falls is weaker as the main title.** At least five books and series already use the name, including a small-town mystery thriller. It also reads like a novel, not a puzzle book. Keep it inside the book, as the setting and the series name.
+- No book with that title was found.
+
+**The setting stays Juniper Falls,** inside the book only.
+- **Why it's safe:** an amazon.com search for "juniper falls" (109 results) shows four romance and historical-fiction series by that name and one thriller. There is no puzzle book and no murder-mystery puzzle book.
+- **What keeps it from clashing:**
+  - the name stays out of the title, subtitle and keywords;
+  - it is not the KDP series name (Amazon already has four "Juniper Falls" series pages).
 
 **Subtitle** (title and subtitle together must be under 200 characters; this is 164):
 
 > Who Sent the Killers?: A Find-the-Killer Murder Mystery Puzzle Book for Adults. 18,000 Suspects, 5 Linked Murders, 1 Mastermind. Check Every Answer Without Spoilers
 
-**Series:** "A Juniper Falls Puzzle Mystery", Book 1, so volume two links to it.
-
-**Alternatives:**
-- *The Killers Were Sent*
-- *Murder in Juniper Falls*: the current working title.
+**Series:** if volume two comes, the series name is about the puzzle format, not the town.
 
 ## Cover
 

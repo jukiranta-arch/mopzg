@@ -12,15 +12,16 @@ TOWN = "Juniper Falls"
 INN = "The Juniper Inn"
 CREEK = "Hollow Creek"            # dammed in 1996 for the reservoir
 
-TITLE = "Murder in " + TOWN
-TITLE_LINES = ("Murder in", TOWN)  # the title page: a small line over a big one
+TITLE = "Who Sent the Killers?"
+TITLE_LINES = ("Who Sent", "the Killers?")   # the title page sets the title large, on two lines
+TITLE_LABEL = "A " + TOWN + " Mystery"        # the small line above it
 AUTHOR = ""        # the pen name: on the title page and the copyright line; a final build refuses to run without it
 ISBN = ""          # printed on the copyright page when set, e.g. "979-8-1234-5678-9"
 ASIN = ""          # the paperback's ASIN, known after publishing: puts a QR code to its review page on the last page
 
 REVIEW_TITLE = "One Small Favor"
 REVIEW = [
-    "Thank you for solving " + TITLE + ".",
+    "Thank you for solving the " + TOWN + " murders.",
     "Whether you loved it or not, a short, honest review on Amazon helps other puzzle fans decide whether this "
     "book is for them. It also helps a small independent publisher more than you might think.",
     "One request: please keep the names of the killers and the mastermind out of your review, so the next "
@@ -28,8 +29,8 @@ REVIEW = [
 ]
 REVIEW_HOW_QR = "Scan the code to go straight to the book's review page."
 REVIEW_HOW = "You can leave a review from the book's page on Amazon, or from Your Orders."
-SUBTITLE = ("Over {thousands} Suspects · 5 Linked Cases · 1 Mastermind · A Find-the-Killer Murder Mystery "
-            "Puzzle Book")
+SUBTITLE = ("A Find-the-Killer Murder Mystery Puzzle Book for Adults. {thousands} Suspects, 5 Linked Murders, "
+            "1 Mastermind. Check Every Answer Without Spoilers")
 
 COPYRIGHT = [
     "Copyright © 2026. All rights reserved.",
