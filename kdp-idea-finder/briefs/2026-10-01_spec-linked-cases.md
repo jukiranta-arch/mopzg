@@ -218,3 +218,19 @@ Juho: "I have no clue what an Ashcombe Raffle or a summer fête is." Our buyers 
   - the library's borrowers.
 - These are exactly the shops the selling cozy books use.
 - The title keeps the name-list lane's words: suspects, killer, mastermind.
+
+## Prototype, third version (2026-10-02): American small town, one killer
+
+Juho chose the American small town.
+- **Town:** Juniper Falls, a working name.
+- **Case One:** the Midnight Sale at Pell's Books. The ledger is the sale sheets, one chapter per section of the store.
+- **Landmarks:** classic book characters, all public domain:
+  - Tom Sawyer appears throughout;
+  - the March sisters are hunted by chapter;
+  - Romeo and Juliet appear once each;
+  - Anne Shirley and Gilbert Blythe share pages;
+  - the Musketeers are scattered;
+  - Huck Finn, Ichabod Crane, Gatsby and others are unmarked extras.
+- **One killer,** as in most winners. The clues read "The killer's…".
+- **At the back:** Your Answer, then the check line, then a Stop page with the solution upside down on its back.
+- **Verified:** `village/check_pdf.py` re-solves the PDF to the same single name under all 7 misreadings.

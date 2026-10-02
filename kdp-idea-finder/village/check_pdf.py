@@ -3,8 +3,8 @@ from village/case.py, under the same misreadings. Needs pymupdf.
 
     python -m village.check_pdf CASE.pdf
 
-Prints the survivors under each reading, the final deduction, and whether the
-check line printed in the PDF fits the killer and no near-survivor.
+Prints the survivors under each reading, and whether the check line printed in
+the PDF fits the killer and no near-survivor.
 """
 
 import re
@@ -50,29 +50,30 @@ def tests_for(pages, chapters, reading):
     vowels = "AEIOUY" if reading == "y_vowel" else "AEIOU"
     letters = lambda n: re.sub("[^A-Z]", "", n.upper())
 
-    robin = pages_of("Robin Hood")
-    if reading != "robin_page_only":
-        robin = {q for p in robin for q in (p - 1, p, p + 1)}
+    tom = pages_of("Tom Sawyer")
+    if reading != "tom_page_only":
+        tom = {q for p in tom for q in (p - 1, p, p + 1)}
     seen = {}
     for i, n in enumerate(names):
-        if n in ("John", "Paul", "George", "Ringo"):
+        if n in ("Meg", "Jo", "Beth", "Amy"):
             seen.setdefault(chapter[page[i]], set()).add(n)
-    beatles = {ch for ch, s in seen.items() if len(s) == 4}
+    march = {ch for ch, s in seen.items() if len(s) == 4}
     window = 10 + {"wide": 1, "narrow": -1}.get(reading, 0)
     musk = [i for i, n in enumerate(names) if n in ("Athos", "Porthos", "Aramis")]
     (pr,), (pj,) = pages_of("Romeo"), pages_of("Juliet")
     lo, hi = sorted((pr, pj))
-    bc = (pages_of("Bonnie") | pages_of("Clyde")) if reading == "either" else (pages_of("Bonnie") & pages_of("Clyde"))
+    a, g = pages_of("Anne Shirley"), pages_of("Gilbert Blythe")
+    ag = (a | g) if reading == "either" else (a & g)
 
     tests = {
         "odd_consonants": lambda i: sum(c not in vowels for c in letters(names[i])) % 2 == 1,
-        "robin": lambda i: page[i] in robin,
+        "tom": lambda i: page[i] in tom,
         "ends_consonant": lambda i: letters(names[i])[-1] not in vowels,
-        "beatles": lambda i: chapter[page[i]] not in beatles,
+        "march": lambda i: chapter[page[i]] not in march,
         "musketeers": lambda i: any(0 < abs(i - j) <= window for j in musk),
         "romeo_juliet": lambda i: (lo <= page[i] <= hi) if reading == "inclusive" else (lo < page[i] < hi),
         "double_letter": lambda i: any(re.search(r"(.)\1", w.lower()) for w in names[i].split()),
-        "bonnie_clyde": lambda i: page[i] in bc,
+        "anne_gilbert": lambda i: page[i] in ag,
         "a_to_m": lambda i: letters(names[i])[0] <= "M",
     }
     return names, page, tests
@@ -83,26 +84,23 @@ def main(path):
     print("%d ledger pages, %d names, chapters %s, check %s" % (
         len(pages), sum(map(len, pages)), [c for c, _ in chapters], check))
     finals, near = set(), set()
-    for reading in [None, "y_vowel", "wide", "narrow", "inclusive", "robin_page_only", "either"]:
+    for reading in [None, "y_vowel", "wide", "narrow", "inclusive", "tom_page_only", "either"]:
         names, page, tests = tests_for(pages, chapters, reading)
         alive = [i for i in range(len(names)) if all(t(i) for t in tests.values())]
         print("%-16s %s" % (reading or "as printed", ["%s (p.%d)" % (names[i], numbers[page[i]]) for i in alive]))
         finals.add(tuple(alive))
         for skip in tests:
             near |= {i for i in range(len(names)) if all(t(i) for k, t in tests.items() if k != skip)}
-    if len(finals) != 1 or len(next(iter(finals))) != 2:
-        print("FAIL: the readings disagree, or don't leave exactly two suspects")
+    if len(finals) != 1 or len(next(iter(finals))) != 1:
+        print("FAIL: the readings disagree, or don't leave exactly one name")
         return 1
     names = tests_for(pages, chapters, None)[0]
-    pair = next(iter(finals))
-    length = lambda n: len(re.sub("[^A-Z]", "", n.upper()))
-    killer, other = sorted(pair, key=lambda i: -length(names[i]))
-    sig = lambda n: (length(n), sum(ord(c) - 64 for c in re.sub("[^A-Z]", "", n.upper())))
+    (killer,), = finals
+    sig = lambda n: (len(re.sub("[^A-Z]", "", n.upper())), sum(ord(c) - 64 for c in re.sub("[^A-Z]", "", n.upper())))
     clash = [names[i] for i in near if i != killer and sig(names[i]) == check]
-    print("final deduction: %s (%d letters) over %s (%d) | check fits killer: %s | other names that fit: %s" % (
-        names[killer], length(names[killer]), names[other], length(names[other]), sig(names[killer]) == check, clash))
-    ok = length(names[killer]) - length(names[other]) >= 2 and sig(names[killer]) == check and not clash
-    return 0 if ok else 1
+    print("killer: %s %s | check fits killer: %s | other near-survivors that fit: %s" % (
+        names[killer], sig(names[killer]), sig(names[killer]) == check, clash))
+    return 0 if sig(names[killer]) == check and not clash else 1
 
 
 if __name__ == "__main__":
