@@ -111,38 +111,48 @@ THE TEXT (left side, about 40%, on the purple desk, set like elegant book-jacket
 Spell every word exactly as written above. No arrows, no boxes around the steps, no badges.
 ```
 
-### Image 4: the names and the answer check, inside the real book (v2; replaces the mini case)
+### Image 4: cross out, then check (v3)
 
-Attach `pages/spread-p030-p031-case1-list-answer.png`.
+v2 was too plain, and the "dashes" read as stray lines. v3 sets it in the world: the sheriff's desk at night, with Juniper Falls outside the window. Attach `pages/spread-p030-p031-case1-list-answer.png`.
 
 ```
-IMAGE 4 OF 5. THE NAMES AND THE CHECK.
-Same goal and same photographic style as image 3: a professional publisher's product photo, not a template.
+IMAGE 4 OF 5. CROSS OUT. THEN CHECK.
+Goal: a rich, atmospheric, professional publisher's product photo, classy rather than busy.
 
-The attached image is another real two-page spread from the book (pages 30 and 31): on the left, the last page of Case One's names in clean, even rows; on the right, the "Your Answer" page with its "Check your answer" box and a small black-and-white cut-paper picture of a bookmark stamped 1.
+SCENE: Sheriff Ruth Ambrose's desk in Juniper Falls at night (no people). Upper right: a tall old window; through it, the misty town at night in the same layered cut-paper style as the book's front cover: dark evergreen pines, a few warm lit windows, and the town hall clock tower with one lit window. A brass desk lamp casts a warm pool of light on the desk. The desk is deep aubergine-purple leather and wood; the wall is dark purple.
 
-THE HERO (about 60% of the image, this time on the LEFT side): a realistic photograph of the same thin paperback (about 8 mm thick) lying open on the deep purple desk at exactly this spread, seen from slightly above at a gentle angle, the pages curving softly into the gutter. Reproduce both pages as faithfully as possible. On the left page, about a quarter of the names are neatly struck through in pencil by the reader. A pencil lies on the desk beside the book, and the brass room key with its purple teardrop tag "4" lies near the top corner. Soft natural daylight, matte paper, nothing glossy.
+HERO (lower half, about 55% of the width): the thin paperback (about 8 mm thick) lying open in the lamplight at exactly the attached spread (pages 30 and 31: the last page of names on the left, the "Your Answer" page with its "Check your answer" box on the right). Reproduce both pages as faithfully as possible. About a quarter of the names on the left page are neatly struck through in pencil. A pencil lies beside it, and the brass room key with its purple teardrop tag "4" lies near the book.
 
-THE TEXT (right side, about 40%, on the purple desk, the same elegant book-jacket typography as image 3):
+TEXT (upper left, on the dark wall, elegant book-jacket typography; plain lines of text only, with no dashes, bullets, icons, boxes or arrows):
 - Headline in cream condensed serif capitals: "CROSS OUT. THEN CHECK."
-- Then two short points, each with a bold antique-gold dash and a cream line:
+- Two lines of cream serif, one under the other:
   "Names in clean, even rows, well clear of the spine."
   "A quick check tells you if you're right, without showing the name."
-- At the bottom, smaller cream italic serif: "No QR codes. No websites. No spoilers."
+- Smaller cream italic serif: "No QR codes. No websites. No spoilers."
 
-Spell every word exactly as written above. No arrows, no boxes, no badges.
+Spell every word exactly as written. Matte, natural, not glossy.
 ```
 
-(The mini case is dropped: the real pages in images 3 and 4 do its job better.)
+### Image 5: the case board (v2; replaces the book in hands)
 
-### Image 5: the call to action
+This is the panel no competitor can make: our own town, art and linked cases. Attach `map.png`, `case_bookstore.png`, `case_bakery.png`, `case_diner.png`, `case_inn.png` and `case_library.png`.
 
 ```
-IMAGE 5 OF 5. THE CALL TO ACTION.
-RIGHT 55%: a real-looking photo of two hands holding the paperback towards the viewer, its front cover exactly as the attached front cover, over the purple desk, with a pencil beside it. Natural daylight, like a phone photo, not a glossy render.
-LEFT 45%:
-- Headline in condensed serif capitals, three lines: "CAN YOU FIND OUT" in cream, "WHO SENT" in cream, "THE KILLERS?" in antique gold.
-- Under it, four small flat badges in a 2×2 grid (simple outlined circles in muted gold, not shiny), each with a simple line icon and a short cream label: "BRING A PENCIL" (pencil), "SCREEN-FREE" (crossed-out phone), "ONE ANSWER PER CASE" (a single tick), "CHECK AS YOU GO" (magnifying glass).
+IMAGE 5 OF 5. THE CASE BOARD.
+Goal: the richest, most memorable panel of the set; classy, atmospheric, professional.
+
+SCENE: the corkboard on the wall of the sheriff's office in Juniper Falls, photographed straight on, lit by a warm desk lamp from below left. The board is framed in dark wood; the wall around it is deep purple.
+ON THE BOARD:
+- In the centre, pinned: the attached black-and-white cut-paper town map of Juniper Falls, printed on cream paper.
+- Around it, pinned in a loose ring: the five attached black-and-white cut-paper pictures (the bookstore, the bakery, the diner, the inn, the library), each printed on cream paper like an evidence photo, each with a small typed cream card under it: "1 · THE BOOKSTORE", "2 · THE BAKERY", "3 · THE DINER", "4 · THE INN", "5 · THE LIBRARY".
+- From each of the five pictures, a deep plum-red thread runs to a single cream card pinned at the top of the board, with a large question mark "?" drawn on it in pencil.
+- One or two of the evidence tokens pinned beside their pictures (the bookmark tag "1", the room key and tag "4").
+BOTTOM, on a dark wood ledge under the board: the thin paperback (about 8 mm thick) lying face up, its cover exactly as the attached front cover from the first message.
+TEXT (top, above the board, or on a cream strip across the bottom of the board; your choice of the most elegant placement):
+- Headline in condensed serif capitals: "CAN YOU FIND OUT" in cream, "WHO SENT THE KILLERS?" in antique gold.
+- Under it, a cream paper strip with deep purple condensed capitals: "18,000 SUSPECTS · 5 CASES · 1 MASTERMIND"
+
+Spell every word exactly as written. Matte, natural, not glossy; the pictures are black-and-white cut paper, as attached.
 ```
 
 ## Text under each image (KDP module headline + body)
