@@ -88,17 +88,22 @@ MIDDLE: six plain manila case files lying flat side by side on the purple desk, 
 BOTTOM, centred, cream serif: "Solve one. Check it. Close the file. Then open the next."
 ```
 
-### Image 3: how it works
+### Image 3: how it works, with real pages (option 2: ChatGPT draws the attached pages)
+
+Attach `pages/page008-case1-opening.png`, `pages/page009-case1-clues.png` and `pages/page011-case1-list.png` with this prompt.
 
 ```
-IMAGE 3 OF 5. HOW IT WORKS.
+IMAGE 3 OF 5. HOW IT WORKS, SHOWN WITH REAL PAGES.
+The three attached images are real pages from the book: (A) the opening page of Case One, (B) the clue page, (C) a page of names. Show them as real printed pages, reproduced as faithfully as you can: same layout, same headings, same black-and-white cut-paper picture, same thin rules and grey clue boxes. Do not redesign them.
+
 TOP, centred: headline in cream condensed serif capitals: "HOW TO CRACK A CASE"
-Four steps left to right, laid out like a clean printed page: each with a simple numbered circle, a short bold title in cream capitals, one small line of cream serif text, and one small flat paper prop below it. Plain thin arrows between the steps. Lots of empty purple space.
-1. "READ THE CASE": "A chapter of the story: who died, where, and who was there." Prop: an open cream case file with a small black-and-white cut-paper silhouette picture of a bookstore.
-2. "CROSS OUT": "8 or 9 clues. Strike every name they rule out." Prop: a typed page of names with most of them neatly struck through in pencil.
-3. "CHECK YOUR ANSWER": "A quick check tells you if you're right, without showing the name." Prop: a small cream card with a gold tick in a circle.
-4. "UNLOCK THE MASTERMIND": "Your five answers open the final case." Prop: the sealed envelope with the wax seal.
+MIDDLE: the three pages lying flat on the purple desk side by side, each slightly rotated (a few degrees), with soft natural shadows, photographed from straight above in daylight. Above each page, a simple numbered circle and a short title in cream capitals, with one small line of cream serif under it:
+1. Above page A: "READ THE CASE" / "Who died, where, and who was there."
+2. Above page B: "WORK THE CLUES" / "8 or 9 clues per case."
+3. Above page C: "CROSS OUT NAMES" / "Strike every name a clue rules out." On page C, about a third of the names are neatly struck through in pencil, and a pencil lies across the corner of the page.
+To the right of page C, a small cream card with a gold tick in a circle and the words "CHECK YOUR ANSWER" and, under it, "without seeing the name".
 BOTTOM, a cream paper strip with deep purple condensed capitals: "18,000 SUSPECTS · 5 CASES · 1 MASTERMIND"
+The headings on the pages must read exactly: page A "CASE ONE", "The Bookstore", "October, the Midnight Sale"; page B "The Clues"; page C "Chapter One", "Mystery & Crime". Keep the pages' small text tidy and realistic: no smudged or melted letters.
 ```
 
 ### Image 4: try a mini case
