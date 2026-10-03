@@ -47,6 +47,8 @@ PRODUCT = """<!doctype html><html><body>
 <span id="acrPopover" title="4.7 out of 5 stars"><span class="a-icon-alt">4.7 out of 5 stars</span></span>
 <span id="acrCustomerReviewText">{reviews:,} ratings</span>
 </div>
+<div id="bookDescription_feature_div"><div class="a-expander-container"><div class="a-expander-content"><span><b>One killer.</b> 48 suspects.<br><br>Can you solve it?</span><ul><li>Clue one</li><li>Clue two</li></ul></div><a class="a-expander-prompt">Read more</a></div></div>
+<div id="aplus_feature_div"><div class="aplus-v2"><img alt=""></div></div>
 <div id="tmmSwatches"><ul><li><span class="a-button a-button-selected"><span class="slot-title">Paperback</span>
 <span class="slot-price"><span>{price}</span></span></span></li></ul></div>
 <div id="detailBulletsWrapper_feature_div">
@@ -363,6 +365,9 @@ class BookmarkletBrowserTest(unittest.TestCase):
         self.assertEqual(cap["type"], "product")
         p = importer.parse_product(cap["product"])
         self.assertEqual((p["asin"], p["bsr"], p["pub_date"]), ("B0AAAAAAA3", 150321, "2026-08-20"))
+        self.assertEqual(cap["product"]["description"], "One killer. 48 suspects.\nCan you solve it?\nClue one\nClue two")
+        self.assertIn("<b>One killer.</b>", cap["product"]["description_html"])
+        self.assertTrue(cap["product"]["has_aplus"])
 
     def test_review_page_capture(self):
         cap = self.capture("/product-reviews/B0AAAAAAA1/?filterByStar=critical")
