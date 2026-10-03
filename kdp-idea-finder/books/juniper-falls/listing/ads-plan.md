@@ -18,7 +18,8 @@
 - Move to **$10.99 at about 10 reviews**, and to **$11.99 at about 20**.
 - After each step, wait two weeks and compare the conversion rate (orders ÷ clicks) with the two weeks before.
 - If it drops by more than a quarter, go back down.
-- **Budget:** $10 a day in all, in three campaigns. Run them two weeks without touching anything: the first days' data is noise.
+
+**Budget:** $10 a day in all, in three campaigns. Run them two weeks without touching anything: the first days' data is noise.
 
 ## Campaign 1: Auto (Amazon finds the searches): $4/day
 
@@ -45,7 +46,7 @@ The competitors in this table sell the same game to the same buyer. The ASINs co
 | B0H6TW12GP | Murder City | $14.99 |
 | B0H5FJMLPT | The Sealed Verdict | $12.99 |
 
-**Where we stand:** at $11.99 we are cheaper than most. On their pages we are the lower-priced alternative with a story.
+**Where we stand:** at $9.99 we are cheaper than all of these except *Never Checked In* ($6.99). On their pages we are the lower-priced alternative with a story.
 
 ## Campaign 3: Keywords (manual): $3/day, bid $0.30
 
@@ -73,5 +74,5 @@ Leave "brain teaser books for adults" and "puzzle books for adults gift" to the 
 
 1. **Turn off what doesn't sell:** any keyword or ASIN with 15 or more clicks and no sales.
 2. **Harvest the auto campaign:** copy each search term that made a sale into Campaign 3 as an exact keyword, and add it as a negative exact in Campaign 1.
-3. **Raise winners:** a target with ACOS under 30% gets a bid 10–15% higher.
+3. **Raise winners:** a target with ACOS under 25% gets a bid 10–15% higher.
 4. **The first month is for reviews and ranking.** An overall ACOS up to about 50% is acceptable then. After that, aim for under the break-even ACOS of the current price (33% at $9.99).
