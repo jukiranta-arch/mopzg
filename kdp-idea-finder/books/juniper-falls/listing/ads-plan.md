@@ -2,17 +2,30 @@
 
 ## The numbers that set the limits
 
-- **Price and royalty:** $11.99 list price, $4.49 royalty per sale.
-- **Break-even ACOS** (ad spend ÷ ad sales): 4.49 ÷ 11.99 = **37%**. Above that, every ad sale loses money on its own, though it still buys ranking and reviews.
-- **Break-even cost per click** = royalty × conversion rate. If 1 in 10 clicks buys, that is $0.45. So start bids **under $0.45**, and raise one only where it is proven to sell.
+**Launch price:** $9.99, chosen to win early sales and reviews.
+- Royalty = 60% of the list price − $2.70 print cost = **$3.29** per sale.
+- **Break-even ACOS** (ad spend ÷ ad sales) = 3.29 ÷ 9.99 = **33%**. Above that, every ad sale loses money on its own, though it still buys ranking and reviews.
+- **Break-even cost per click** = royalty × conversion rate. If 1 in 10 clicks buys, that is $0.33. So start bids at **$0.30**, and raise one only where it is proven to sell.
+
+**At the later prices:**
+
+| Price | Royalty | Break-even ACOS | Break-even CPC (1 in 10 clicks buys) |
+|---|---|---|---|
+| $10.99 | $3.89 | 35% | $0.39 |
+| $11.99 | $4.49 | 37% | $0.45 |
+
+**Price steps:**
+- Move to **$10.99 at about 10 reviews**, and to **$11.99 at about 20**.
+- After each step, wait two weeks and compare the conversion rate (orders ÷ clicks) with the two weeks before.
+- If it drops by more than a quarter, go back down.
 - **Budget:** $10 a day in all, in three campaigns. Run them two weeks without touching anything: the first days' data is noise.
 
 ## Campaign 1: Auto (Amazon finds the searches): $4/day
 
-- Sponsored Products, automatic targeting, default bid **$0.40**.
+- Sponsored Products, automatic targeting, default bid **$0.30**.
 - Negative keywords (phrase), to keep out buyers this book doesn't suit: `kids`, `children`, `word search`, `jigsaw`, `coloring`, `party game`, `kit`.
 
-## Campaign 2: Competitor books (product targeting): $3/day, bid $0.40
+## Campaign 2: Competitor books (product targeting): $3/day, bid $0.30
 
 The competitors in this table sell the same game to the same buyer. The ASINs come from our 2026-10-03 capture.
 
@@ -34,7 +47,7 @@ The competitors in this table sell the same game to the same buyer. The ASINs co
 
 **Where we stand:** at $11.99 we are cheaper than most. On their pages we are the lower-priced alternative with a story.
 
-## Campaign 3: Keywords (manual): $3/day, bid $0.40
+## Campaign 3: Keywords (manual): $3/day, bid $0.30
 
 The searches come from the 2026-10-03 capture. Each one shows our kind of book in its top 16.
 
@@ -61,4 +74,4 @@ Leave "brain teaser books for adults" and "puzzle books for adults gift" to the 
 1. **Turn off what doesn't sell:** any keyword or ASIN with 15 or more clicks and no sales.
 2. **Harvest the auto campaign:** copy each search term that made a sale into Campaign 3 as an exact keyword, and add it as a negative exact in Campaign 1.
 3. **Raise winners:** a target with ACOS under 30% gets a bid 10–15% higher.
-4. **The first month is for reviews and ranking.** An overall ACOS up to about 50% is acceptable then. After that, aim for under 37%.
+4. **The first month is for reviews and ranking.** An overall ACOS up to about 50% is acceptable then. After that, aim for under the break-even ACOS of the current price (33% at $9.99).
