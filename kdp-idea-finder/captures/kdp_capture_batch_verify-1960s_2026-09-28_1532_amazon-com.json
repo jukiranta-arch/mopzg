@@ -1,0 +1,813 @@
+{
+ "tool": "kdp-capture",
+ "version": 1,
+ "type": "batch",
+ "store": "amazon.com",
+ "captured_at": "2026-09-28T15:32:41.584Z",
+ "captures": [
+  {
+   "tool": "kdp-capture",
+   "version": 1,
+   "store": "amazon.com",
+   "url": "https://www.amazon.com/s?k=1960s+word+search+large+print&i=stripbooks",
+   "captured_at": "2026-09-28T15:43:57.811Z",
+   "type": "search",
+   "keyword": "1960s word search large print",
+   "items": [
+    {
+     "position": 1,
+     "asin": "B09TMZ3741",
+     "sponsored": false,
+     "title": "1960s Word Search Large Print: 111 Wordsearch Puzzles for Seniors, Adults, Teens and Kids. Relive The Swinging Sixties With This Groovy Word Search (Retro Word Searches)",
+     "reviews": "66 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B09TMZ3741",
+      "title": "1960s Word Search Large Print: 111 Wordsearch Puzzles for Seniors, Adults, Teens and Kids. Relive The Swinging Sixties With This Groovy Word Search (Retro Word Searches)",
+      "author": "Brian Smith",
+      "format_text": "Paperback",
+      "price_text": "$9.95",
+      "reviews_text": "(66)",
+      "rating_text": "4.7 out of 5 stars",
+      "ranks_text": "#1,630,569 in Books (See Top 100 in Books) #8,638 in Word Search Games #9,454 in Word Games (Books) #52,143 in United States History (Books)",
+      "details": {
+       "ASIN": "B09TMZ3741",
+       "Publisher": "Independently published",
+       "Publication date": "March 4, 2022",
+       "Language": "English",
+       "Print length": "142 pages",
+       "ISBN-13": "979-8426659537",
+       "Item Weight": "13.9 ounces",
+       "Dimensions": "8.5 x 0.32 x 11 inches",
+       "Book 2 of 3": "Retro Word Searches",
+       "Best Sellers Rank": "#1,630,569 in Books (See Top 100 in Books) #8,638 in Word Search Games #9,454 in Word Games (Books) #52,143 in United States History (Books)",
+       "Customer Reviews": "4.7 4.7 out of 5 stars (66)"
+      }
+     }
+    },
+    {
+     "position": 2,
+     "asin": "1647901065",
+     "sponsored": false,
+     "title": "1960s Word Search: Sixties Word Games with 101 Large-Print Puzzles",
+     "reviews": "109 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "1647901065",
+      "title": "1960s Word Search: Sixties Word Games with 101 Large-Print Puzzles",
+      "author": "Dylanna Press",
+      "format_text": "Paperback",
+      "price_text": "$10.99",
+      "reviews_text": "(109)",
+      "rating_text": "4.7 out of 5 stars",
+      "ranks_text": "#3,023,464 in Books (See Top 100 in Books) #16,571 in Word Search Games #17,864 in Word Games (Books)",
+      "details": {
+       "Publisher": "Dylanna Publishing",
+       "Publication date": "March 6, 2021",
+       "Language": "English",
+       "Print length": "117 pages",
+       "ISBN-10": "1647901065",
+       "ISBN-13": "978-1647901066",
+       "Item Weight": "11.3 ounces",
+       "Dimensions": "8.5 x 0.27 x 11 inches",
+       "Best Sellers Rank": "#3,023,464 in Books (See Top 100 in Books) #16,571 in Word Search Games #17,864 in Word Games (Books)",
+       "Customer Reviews": "4.7 4.7 out of 5 stars (109)"
+      }
+     }
+    },
+    {
+     "position": 3,
+     "asin": "B0GV83X2WC",
+     "sponsored": false,
+     "title": "Good Old Days Large Print Word Search for Adults & Seniors: 100 Easy Nostalgic Puzzles from the 50s & 60s (GOOD OLD DAYS WORD SEARCH)",
+     "reviews": "46 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0GV83X2WC",
+      "title": "Good Old Days Large Print Word Search for Adults & Seniors: 100 Easy Nostalgic Puzzles from the 50s & 60s (GOOD OLD DAYS WORD SEARCH)",
+      "author": "June Holloway",
+      "format_text": "Paperback",
+      "price_text": "$12.99",
+      "reviews_text": "(46)",
+      "rating_text": "4.6 out of 5 stars",
+      "ranks_text": "#27,962 in Books (See Top 100 in Books) #207 in Word Search Games #247 in Word Games (Books) #295 in Puzzles (Books)",
+      "details": {
+       "ASIN": "B0GV83X2WC",
+       "Publisher": "Independently published",
+       "Publication date": "March 25, 2026",
+       "Language": "English",
+       "Print length": "154 pages",
+       "ISBN-13": "979-8253727614",
+       "Item Weight": "1.03 pounds",
+       "Dimensions": "8.5 x 0.35 x 11 inches",
+       "Part of series": "GOOD OLD DAYS WORD SEARCH",
+       "Best Sellers Rank": "#27,962 in Books (See Top 100 in Books) #207 in Word Search Games #247 in Word Games (Books) #295 in Puzzles (Books)",
+       "Customer Reviews": "4.6 4.6 out of 5 stars (46)"
+      }
+     }
+    },
+    {
+     "position": 4,
+     "asin": "B0DP25VG31",
+     "sponsored": false,
+     "title": "The Swinging 1960’s Nostalgic Word Search Large Print: Big Wordfind Puzzle Book for Seniors and Adults With Fun Trivia and Games (Nostalgic Book Gifts for Women and Men)",
+     "reviews": "88 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0DP25VG31",
+      "title": "The Swinging 1960’s Nostalgic Word Search Large Print: Big Wordfind Puzzle Book for Seniors and Adults With Fun Trivia and Games (Nostalgic Book Gifts for Women and Men)",
+      "author": "BIG PRINT BOOKS",
+      "format_text": "Hardcover",
+      "price_text": "$25.95",
+      "reviews_text": "(88)",
+      "rating_text": "4.7 out of 5 stars",
+      "ranks_text": "#4,309,225 in Books (See Top 100 in Books) #458 in History Humor #5,320 in Word Search Games #5,864 in Word Games (Books)",
+      "details": {
+       "ASIN": "B0DP25VG31",
+       "Publisher": "Independently published",
+       "Publication date": "November 24, 2024",
+       "Language": "English",
+       "Print length": "140 pages",
+       "ISBN-13": "979-8301181634",
+       "Item Weight": "14.7 ounces",
+       "Dimensions": "8.49 x 0.54 x 11.24 inches",
+       "Part of series": "Nostalgic Book Gifts for Women and Men",
+       "Best Sellers Rank": "#4,309,225 in Books (See Top 100 in Books) #458 in History Humor #5,320 in Word Search Games #5,864 in Word Games (Books)",
+       "Customer Reviews": "4.7 4.7 out of 5 stars (88)"
+      }
+     }
+    },
+    {
+     "position": 5,
+     "asin": "1991402058",
+     "sponsored": false,
+     "title": "Decades to Remember Word Search for Senior Women: Large Print Nostalgic Puzzles from the 50s, 60s & 70s to Relax, Reminisce & Sharpen the Mind — A ... (Large Print Word Find for Senior Women)",
+     "reviews": "37 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "1991402058",
+      "title": "Decades to Remember Word Search for Senior Women: Large Print Nostalgic Puzzles from the 50s, 60s & 70s to Relax, Reminisce & Sharpen the Mind — A ... (Large Print Word Find for Senior Women)",
+      "author": "Rita Dennison",
+      "format_text": "Paperback",
+      "price_text": "$14.99",
+      "reviews_text": "(37)",
+      "rating_text": "4.6 out of 5 stars",
+      "ranks_text": "#25,411 in Books (See Top 100 in Books) #186 in Word Search Games #223 in Word Games (Books) #267 in Puzzles (Books)",
+      "details": {
+       "Publisher": "Stoneburn Media",
+       "Publication date": "April 28, 2026",
+       "Language": "English",
+       "Print length": "136 pages",
+       "ISBN-10": "1991402058",
+       "ISBN-13": "978-1991402059",
+       "Item Weight": "14.7 ounces",
+       "Dimensions": "8.5 x 0.31 x 11 inches",
+       "Part of series": "Large Print Word Find for Senior Women",
+       "Best Sellers Rank": "#25,411 in Books (See Top 100 in Books) #186 in Word Search Games #223 in Word Games (Books) #267 in Puzzles (Books)",
+       "Customer Reviews": "4.6 4.6 out of 5 stars (37)"
+      }
+     }
+    },
+    {
+     "position": 6,
+     "asin": "B08NDF4WWS",
+     "sponsored": false,
+     "title": "Word Search Puzzle Book 1960's: Large Print Word Search Books for Seniors, Adults, and Teens. 100 Easy, Entertaining, Fun Puzzles!",
+     "reviews": "211 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B08NDF4WWS",
+      "title": "Word Search Puzzle Book 1960's: Large Print Word Search Books for Seniors, Adults, and Teens. 100 Easy, Entertaining, Fun Puzzles!",
+      "author": "Sharper Mind Press",
+      "format_text": "Paperback",
+      "price_text": "$9.99",
+      "reviews_text": "(211)",
+      "rating_text": "4.6 out of 5 stars",
+      "ranks_text": "#1,515,814 in Books (See Top 100 in Books) #7,992 in Word Search Games #8,594 in Puzzles (Books) #8,745 in Word Games (Books)",
+      "details": {
+       "ASIN": "B08NDF4WWS",
+       "Publisher": "Independently published",
+       "Publication date": "November 12, 2020",
+       "Language": "English",
+       "Print length": "127 pages",
+       "ISBN-13": "979-8563485976",
+       "Item Weight": "12 ounces",
+       "Dimensions": "8.5 x 0.29 x 11 inches",
+       "Best Sellers Rank": "#1,515,814 in Books (See Top 100 in Books) #7,992 in Word Search Games #8,594 in Puzzles (Books) #8,745 in Word Games (Books)",
+       "Customer Reviews": "4.6 4.6 out of 5 stars (211)"
+      }
+     }
+    },
+    {
+     "position": 7,
+     "asin": "B0H7SV94WG",
+     "sponsored": false,
+     "title": "Large Print Word Search: Remember the 1960s: A Groovy Nostalgia Trip Through Classic TV Shows, Hit Songs, Muscle Cars, Toys, Fads & Slang - 100 Puzzles for Adults & Seniors",
+     "reviews": "",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0H7SV94WG",
+      "title": "Large Print Word Search: Remember the 1960s: A Groovy Nostalgia Trip Through Classic TV Shows, Hit Songs, Muscle Cars, Toys, Fads & Slang - 100 Puzzles for Adults & Seniors",
+      "author": "L. M. Lamplight",
+      "format_text": "Paperback",
+      "price_text": "$9.99",
+      "reviews_text": "",
+      "rating_text": "",
+      "ranks_text": "#1,163,133 in Books (See Top 100 in Books) #6,138 in Word Search Games #6,751 in Word Games (Books) #9,125 in Aging & Longevity (Books)",
+      "details": {
+       "ASIN": "B0H7SV94WG",
+       "Publisher": "Independently published",
+       "Publication date": "July 3, 2026",
+       "Language": "English",
+       "Print length": "127 pages",
+       "ISBN-13": "979-8185847732",
+       "Item Weight": "13.9 ounces",
+       "Dimensions": "8.5 x 0.29 x 11 inches",
+       "Best Sellers Rank": "#1,163,133 in Books (See Top 100 in Books) #6,138 in Word Search Games #6,751 in Word Games (Books) #9,125 in Aging & Longevity (Books)"
+      }
+     }
+    },
+    {
+     "position": 8,
+     "asin": "B0FLXFC9VK",
+     "sponsored": false,
+     "title": "Being a Kid in the 1960s - Nostalgic Word Search Puzzle - Large Print: 101 Large Print Word Searches and Trivia from a Childhood in the 1960s",
+     "reviews": "",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0FLXFC9VK",
+      "title": "Being a Kid in the 1960s - Nostalgic Word Search Puzzle - Large Print: 101 Large Print Word Searches and Trivia from a Childhood in the 1960s",
+      "author": "Word Riders Puzzles",
+      "format_text": "Paperback",
+      "price_text": "$7.99",
+      "reviews_text": "",
+      "rating_text": "",
+      "ranks_text": "#1,489,270 in Books (See Top 100 in Books) #3,038 in Trivia (Books) #7,866 in Word Search Games #8,607 in Word Games (Books)",
+      "details": {
+       "ASIN": "B0FLXFC9VK",
+       "Publisher": "Independently published",
+       "Publication date": "August 8, 2025",
+       "Language": "English",
+       "Print length": "102 pages",
+       "ISBN-13": "979-8291190180",
+       "Item Weight": "7.4 ounces",
+       "Dimensions": "6 x 0.23 x 9 inches",
+       "Best Sellers Rank": "#1,489,270 in Books (See Top 100 in Books) #3,038 in Trivia (Books) #7,866 in Word Search Games #8,607 in Word Games (Books)"
+      }
+     }
+    },
+    {
+     "position": 9,
+     "asin": "B0GVRTHNZ9",
+     "sponsored": false,
+     "title": "1960s Nostalgia Word Search: 102 Large Print Themed Puzzles for Adults and Seniors | Hippies, Moon Landing, Civil Rights, Rock and Roll and Groovy ... Solutions Included (The Nostalgia Collection)",
+     "reviews": "1 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0GVRTHNZ9",
+      "title": "1960s Nostalgia Word Search: 102 Large Print Themed Puzzles for Adults and Seniors | Hippies, Moon Landing, Civil Rights, Rock and Roll and Groovy ... Solutions Included (The Nostalgia Collection)",
+      "author": "Sandra Sims",
+      "format_text": "Paperback",
+      "price_text": "$9.99",
+      "reviews_text": "(1)",
+      "rating_text": "5.0 out of 5 stars",
+      "ranks_text": "#1,350,043 in Books (See Top 100 in Books) #1,419 in Memory Improvement Self-Help #7,120 in Word Search Games #7,810 in Word Games (Books)",
+      "details": {
+       "ASIN": "B0GVRTHNZ9",
+       "Publisher": "Independently published",
+       "Publication date": "March 30, 2026",
+       "Language": "English",
+       "Print length": "135 pages",
+       "ISBN-13": "979-8254310136",
+       "Item Weight": "14.7 ounces",
+       "Dimensions": "8.5 x 0.31 x 11 inches",
+       "Part of series": "The Nostalgia Collection",
+       "Best Sellers Rank": "#1,350,043 in Books (See Top 100 in Books) #1,419 in Memory Improvement Self-Help #7,120 in Word Search Games #7,810 in Word Games (Books)",
+       "Customer Reviews": "5.0 5.0 out of 5 stars (1)"
+      }
+     }
+    },
+    {
+     "position": 10,
+     "asin": "B0CK3PWD36",
+     "sponsored": false,
+     "title": "The Groovy 1960s Word Search - Large Print",
+     "reviews": "3 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0CK3PWD36",
+      "title": "The Groovy 1960s Word Search - Large Print",
+      "author": "Faith Moreno Zapata",
+      "format_text": "Paperback",
+      "price_text": "$7.99",
+      "reviews_text": "(3)",
+      "rating_text": "4.2 out of 5 stars",
+      "ranks_text": "#8,489,152 in Books (See Top 100 in Books) #50,056 in Word Search Games #52,941 in Word Games (Books) #88,669 in Words, Language & Grammar (Books)",
+      "details": {
+       "ASIN": "B0CK3PWD36",
+       "Publisher": "Independently published",
+       "Publication date": "September 27, 2023",
+       "Language": "English",
+       "Print length": "136 pages",
+       "ISBN-13": "979-8862701968",
+       "Item Weight": "14.7 ounces",
+       "Dimensions": "8.5 x 0.31 x 11 inches",
+       "Best Sellers Rank": "#8,489,152 in Books (See Top 100 in Books) #50,056 in Word Search Games #52,941 in Word Games (Books) #88,669 in Words, Language & Grammar (Books)",
+       "Customer Reviews": "4.2 4.2 out of 5 stars (3)"
+      }
+     }
+    },
+    {
+     "position": 11,
+     "asin": "B0CY4ZMJH1",
+     "sponsored": false,
+     "title": "1950s Word Search for Adults: Large Print (85 Themed Puzzles) Wordfind Puzzle Book for Seniors, Parents, & Grandparents to Remember the Good Ol' Days",
+     "reviews": "53 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0CY4ZMJH1",
+      "title": "1950s Word Search for Adults: Large Print (85 Themed Puzzles) Wordfind Puzzle Book for Seniors, Parents, & Grandparents to Remember the Good Ol' Days",
+      "author": "KRW Media Publishing",
+      "format_text": "Paperback",
+      "price_text": "$3.99",
+      "reviews_text": "(53)",
+      "rating_text": "4.7 out of 5 stars",
+      "ranks_text": "#26,411 in Books (See Top 100 in Books) #196 in Word Search Games #235 in Word Games (Books) #280 in Puzzles (Books)",
+      "details": {
+       "ASIN": "B0CY4ZMJH1",
+       "Publisher": "Independently published",
+       "Publication date": "March 13, 2024",
+       "Language": "English",
+       "Print length": "109 pages",
+       "ISBN-13": "979-8884769984",
+       "Item Weight": "7.8 ounces",
+       "Dimensions": "6 x 0.25 x 9 inches",
+       "Best Sellers Rank": "#26,411 in Books (See Top 100 in Books) #196 in Word Search Games #235 in Word Games (Books) #280 in Puzzles (Books)",
+       "Customer Reviews": "4.7 4.7 out of 5 stars (53)"
+      }
+     }
+    },
+    {
+     "position": 12,
+     "asin": "1997718421",
+     "sponsored": false,
+     "title": "Nostalgic Word Search Book for Adults & Seniors: VOL 1: 100 Large Print Puzzles to Spark Memories of the Good Old Days | Relaxing Word Finds on ... '50s to the '90s (Word Find Books For Adults)",
+     "reviews": "9 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "1997718421",
+      "title": "Nostalgic Word Search Book for Adults & Seniors: VOL 1: 100 Large Print Puzzles to Spark Memories of the Good Old Days | Relaxing Word Finds on ... '50s to the '90s (Word Find Books For Adults)",
+      "author": "Daniel Bulmez",
+      "format_text": "Paperback",
+      "price_text": "$14.99",
+      "reviews_text": "(9)",
+      "rating_text": "4.8 out of 5 stars",
+      "ranks_text": "#20,827 in Books (See Top 100 in Books) #107 in Popular Culture in Social Sciences #161 in Word Search Games #192 in Word Games (Books)",
+      "details": {
+       "Publisher": "The Activity Book",
+       "Publication date": "June 2, 2026",
+       "Language": "English",
+       "Print length": "130 pages",
+       "ISBN-10": "1997718421",
+       "ISBN-13": "978-1997718420",
+       "Item Weight": "14.1 ounces",
+       "Dimensions": "8.5 x 0.3 x 11 inches",
+       "Book 1 of 13": "Word Find Books For Adults",
+       "Best Sellers Rank": "#20,827 in Books (See Top 100 in Books) #107 in Popular Culture in Social Sciences #161 in Word Search Games #192 in Word Games (Books)",
+       "Customer Reviews": "4.8 4.8 out of 5 stars (9)"
+      }
+     }
+    },
+    {
+     "position": 13,
+     "asin": "B0FYD78W8G",
+     "sponsored": false,
+     "title": "Nostalgic Word Search Large Print: 120 Retro Puzzles with 2000+ Vintage Words from the 60s, 70s, 80s, 90s & 2000s — Relaxing Large Print Word Finds for Adults and Seniors (Words of Wonder!)",
+     "reviews": "6 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0FYD78W8G",
+      "title": "Nostalgic Word Search Large Print: 120 Retro Puzzles with 2000+ Vintage Words from the 60s, 70s, 80s, 90s & 2000s — Relaxing Large Print Word Finds for Adults and Seniors (Words of Wonder!)",
+      "author": "Cotoperix",
+      "format_text": "Paperback",
+      "price_text": "$11.99",
+      "reviews_text": "(6)",
+      "rating_text": "5.0 out of 5 stars",
+      "ranks_text": "#282,808 in Books (See Top 100 in Books) #1,608 in Word Search Games #1,840 in Word Games (Books) #2,066 in Puzzles (Books)",
+      "details": {
+       "ASIN": "B0FYD78W8G",
+       "Publisher": "Independently published",
+       "Publication date": "October 28, 2025",
+       "Language": "English",
+       "Print length": "162 pages",
+       "ISBN-13": "979-8271040924",
+       "Item Weight": "14.9 ounces",
+       "Dimensions": "8.5 x 0.37 x 11 inches",
+       "Best Sellers Rank": "#282,808 in Books (See Top 100 in Books) #1,608 in Word Search Games #1,840 in Word Games (Books) #2,066 in Puzzles (Books)",
+       "Customer Reviews": "5.0 5.0 out of 5 stars (6)"
+      }
+     }
+    },
+    {
+     "position": 14,
+     "asin": "B0H36FNPQB",
+     "sponsored": false,
+     "title": "1960s Nostalgia Large Print Word Search: A Trip Down Memory Lane — 100+ Easy-to-Read Puzzles, Fun Facts, and Full Answer Key for Adults and Seniors (Discover & Solve Word Search Series)",
+     "reviews": "19 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0H36FNPQB",
+      "title": "1960s Nostalgia Large Print Word Search: A Trip Down Memory Lane — 100+ Easy-to-Read Puzzles, Fun Facts, and Full Answer Key for Adults and Seniors (Discover & Solve Word Search Series)",
+      "author": "David O'Brien",
+      "format_text": "Hardcover",
+      "price_text": "$26.99",
+      "reviews_text": "(19)",
+      "rating_text": "5.0 out of 5 stars",
+      "ranks_text": "#4,084,598 in Books (See Top 100 in Books) #9,439 in Word Search Games #10,321 in Word Games (Books) #126,771 in Crafts, Hobbies & Home (Books)",
+      "details": {
+       "ASIN": "B0H36FNPQB",
+       "Publisher": "Independently published",
+       "Publication date": "May 24, 2026",
+       "Language": "English",
+       "Print length": "179 pages",
+       "ISBN-13": "979-8198414921",
+       "Item Weight": "1.15 pounds",
+       "Dimensions": "8.49 x 0.64 x 11.24 inches",
+       "Book 7 of 38": "Discover & Solve Word Search Series",
+       "Best Sellers Rank": "#4,084,598 in Books (See Top 100 in Books) #9,439 in Word Search Games #10,321 in Word Games (Books) #126,771 in Crafts, Hobbies & Home (Books)",
+       "Customer Reviews": "5.0 5.0 out of 5 stars (19)"
+      }
+     }
+    },
+    {
+     "position": 15,
+     "asin": "1967716102",
+     "sponsored": false,
+     "title": "The Ultimate 1960s Word Search: Large Print Vintage Puzzle Book for Adults and Seniors: Groovy Challenges Featuring 1960s Music, TV Shows, Slang, ... Vintage & Nostalgia Word Search Collection)",
+     "reviews": "97 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "1967716102",
+      "title": "The Ultimate 1960s Word Search: Large Print Vintage Puzzle Book for Adults and Seniors: Groovy Challenges Featuring 1960s Music, TV Shows, Slang, ... Vintage & Nostalgia Word Search Collection)",
+      "author": "Ink Storm Media",
+      "format_text": "Paperback",
+      "price_text": "$12.99",
+      "reviews_text": "(97)",
+      "rating_text": "4.8 out of 5 stars",
+      "ranks_text": "#1,001,336 in Books (See Top 100 in Books) #2,182 in Trivia (Books) #5,310 in Word Search Games #5,854 in Word Games (Books)",
+      "details": {
+       "Publisher": "Ink Storm Media",
+       "Publication date": "April 27, 2025",
+       "Language": "English",
+       "Print length": "130 pages",
+       "ISBN-10": "1967716102",
+       "ISBN-13": "978-1967716104",
+       "Item Weight": "11.7 ounces",
+       "Dimensions": "8.5 x 0.3 x 11 inches",
+       "Part of series": "Ink Storm Vintage & Nostalgia Word Search Collection",
+       "Best Sellers Rank": "#1,001,336 in Books (See Top 100 in Books) #2,182 in Trivia (Books) #5,310 in Word Search Games #5,854 in Word Games (Books)",
+       "Customer Reviews": "4.8 4.8 out of 5 stars (97)"
+      }
+     }
+    },
+    {
+     "position": 16,
+     "asin": "B0D93WXY13",
+     "sponsored": false,
+     "title": "100 Puzzle Large Print Word Search 1950s 1960s 1970s 1980s 1990s for Adults and Seniors: A Hundred Themed Puzzles to Spark Memories Discussion and ... Print Word Search for Fun and Relaxation)",
+     "reviews": "18 ratings",
+     "bought_text": "",
+     "page": 1,
+     "product": {
+      "asin": "B0D93WXY13",
+      "title": "100 Puzzle Large Print Word Search 1950s 1960s 1970s 1980s 1990s for Adults and Seniors: A Hundred Themed Puzzles to Spark Memories Discussion and ... Print Word Search for Fun and Relaxation)",
+      "author": "InNotevative Press",
+      "format_text": "Paperback",
+      "price_text": "$9.99",
+      "reviews_text": "(18)",
+      "rating_text": "4.9 out of 5 stars",
+      "ranks_text": "#1,041,441 in Books (See Top 100 in Books) #5,533 in Word Search Games #6,098 in Word Games (Books) #12,248 in Words, Language & Grammar (Books)",
+      "details": {
+       "ASIN": "B0D93WXY13",
+       "Publisher": "Independently published",
+       "Publication date": "July 7, 2024",
+       "Language": "English",
+       "Print length": "127 pages",
+       "ISBN-13": "979-8332540783",
+       "Item Weight": "13.9 ounces",
+       "Dimensions": "8.5 x 0.29 x 11 inches",
+       "Part of series": "Large Print Word Search for Fun and Relaxation",
+       "Best Sellers Rank": "#1,041,441 in Books (See Top 100 in Books) #5,533 in Word Search Games #6,098 in Word Games (Books) #12,248 in Words, Language & Grammar (Books)",
+       "Customer Reviews": "4.9 4.9 out of 5 stars (18)"
+      }
+     }
+    },
+    {
+     "position": 17,
+     "asin": "B0H4FDFQ5J",
+     "sponsored": false,
+     "title": "Giant Font Nostalgia Word Search: Extra Large Print Word Puzzles for Adults & Seniors | 100+ Easy-to-Read Puzzles from the 50s, 60s, 70s & 80s (Discover & Solve Word Search Series)",
+     "reviews": "61 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 18,
+     "asin": "B0FQ3Z9SXF",
+     "sponsored": false,
+     "title": "Past Times 60's Word Search and Trivia for Adults: Relaxing Large Print Word Find Puzzles Celebrating the Events that Shaped the 60's (Past Times Puzzle Series)",
+     "reviews": "78 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 19,
+     "asin": "B0D8K8TZRZ",
+     "sponsored": false,
+     "title": "100 Puzzle Large Print Word Search 1950s 1960s 1970s 1980s 1990s for Adults and Seniors: Over a Hundred Themed Puzzles to Spark Memories Discussion ... Print Word Search for Fun and Relaxation)",
+     "reviews": "11 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 20,
+     "asin": "9819453089",
+     "sponsored": false,
+     "title": "Memory Lane 1960s: Large Print Word Search Puzzle & Colouring Book for Seniors: 60 Nostalgic Word Search Puzzles with Relaxing Colouring Pages for ... & Colouring Books for Adults and Seniors)",
+     "reviews": "47 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 21,
+     "asin": "164845092X",
+     "sponsored": false,
+     "title": "Large Print Word Search Puzzles for Seniors: Over 100 Puzzles With Nostalgia From The 50s, 60s, 70s And The 80s for Older Adults and Seniors (Perfect ... Citizens) (Cognitive Games for Seniors)",
+     "reviews": "624 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 22,
+     "asin": "B0H9B1J4MV",
+     "sponsored": false,
+     "title": "The Good Old Days Large Print Word Search: 100 Nostalgic Large Print Puzzles for Seniors, Adults & People with Dementia | Easy Straight-Line Words, No ... Days (Large Print Word Search for Seniors)",
+     "reviews": "",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 23,
+     "asin": "B0GV4TZ8C9",
+     "sponsored": false,
+     "title": "Large Print Word Search for Seniors: Nostalgic Music Puzzles for Baby Boomers - 1950s - 1980s Hits & Legends (Memory Lane Series)",
+     "reviews": "2 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 24,
+     "asin": "B0D7NBDDV7",
+     "sponsored": false,
+     "title": "Nostalgic Large Print Word Search: Fun Retro Wordfind Puzzle Games for Adults & Seniors with Nostalgic Trivia from the 50s, 60s, 70s, & 80s (Wordsearch Book)",
+     "reviews": "162 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 25,
+     "asin": "B0H1J8T54R",
+     "sponsored": false,
+     "title": "Large Print Word Search for Seniors: Vintage America Puzzle Book: 100 Easy Puzzles with Classic Cars, Brands, Toys & 50s–80s Nostalgia (Memory Lane Series)",
+     "reviews": "1 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 26,
+     "asin": "B0DP4RJ647",
+     "sponsored": false,
+     "title": "Ole Days Word Search For Adults Large Print: Full Of Nostalgic Fun Wordfind Puzzle Book For Seniors, 85 Themed Nostalgic Adult Activity Books To Keep Brain Active",
+     "reviews": "15 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 27,
+     "asin": "B0FX2Q8NSN",
+     "sponsored": false,
+     "title": "Large Print Word Search for Seniors – A Nostalgic Journey Through the 1950s, 1960s & 1970s: Relax Your Mind, Spark Happy Memories, and Keep Your Brain ... (Esther & John’s Word Search for Seniors)",
+     "reviews": "43 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 28,
+     "asin": "1991402163",
+     "sponsored": false,
+     "title": "TV to Remember Word Search for Senior Women: 100 Large Print Nostalgic Puzzles Featuring Classic Television from the 50s, 60s, 70s & 80s to Relax, ... Mind (Large Print Word Find for Senior Women)",
+     "reviews": "20 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 29,
+     "asin": "B0H6W2SQSR",
+     "sponsored": false,
+     "title": "Large Print Nostalgic Word Search for Adults & Seniors: 100 Memory Lane Puzzles from the 50s, 60s, 70s & 80s with Fun Facts and Full Solutions — A ... Puzzles & Activities for Adults & Seniors)",
+     "reviews": "45 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 30,
+     "asin": "B0BYB6BFW2",
+     "sponsored": false,
+     "title": "The Golden Age Word Search Large Print: Relaxing Retro Word Search Book for Adults and Seniors Memorable Events from The Amazing 50s, 60s, 70s, and ... Word Find Puzzles with Inspirational Quotes",
+     "reviews": "551 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 31,
+     "asin": "B0H5HVMBL7",
+     "sponsored": false,
+     "title": "The Way We Were: Mom's Large Print Word Search: 100 Nostalgic Word Search Puzzles from the 50s & 60s | A Gift for Mom & Grandma (The Way We Remember: Nostalgic Word Search Series)",
+     "reviews": "5 ratings",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 32,
+     "asin": "B0HHY2R43W",
+     "sponsored": false,
+     "title": "Large Print Word Search: 1960s Nostalgia Volume 2: The Everyday Sights, Sounds & Sensations of the Swinging Sixties - 100 Puzzles for Seniors",
+     "reviews": "",
+     "bought_text": "",
+     "page": 2
+    },
+    {
+     "position": 33,
+     "asin": "1068410736",
+     "sponsored": false,
+     "title": "Growing Up in The 1960s: Large Print Nostalgic Word Search Puzzle Book for Adults Who Lived Through The Sixties (Includes Prompts to Spark Memories & Conversation) (US Edition)",
+     "reviews": "1 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 34,
+     "asin": "B0FWYDRP4R",
+     "sponsored": false,
+     "title": "Nostalgic Vibes Large Print Word Search 1960's Edition (Nostalgic Vibes Large Print Word Search Collection)",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 35,
+     "asin": "B0DGJY8C33",
+     "sponsored": false,
+     "title": "A Century of Nostalgia Large Print Word Search: 100 Retro Wordfind Brain Game Puzzles for Adults & Seniors: 1940s, 50s, 60s, 70s & 80s to Today - Improve Memory & Relieve Anxiety (Classic Gifts)",
+     "reviews": "255 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 36,
+     "asin": "B0GT95L178",
+     "sponsored": false,
+     "title": "1960s Nostalgia Word Search Puzzles - Large Print: 1960s-Themed Puzzles Featuring Music, TV, Movies, Food, Fashion, School, News Headlines, and Pop Culture",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 37,
+     "asin": "B0FXGYVRBP",
+     "sponsored": false,
+     "title": "1960s Large Print Word Search for Seniors: Fun & Nostalgic Puzzles to Boost Memory, Relax, and Keep Your Mind Sharp: Relive the Groovy Sixties with ... Sharpen Focus & Bring Back Happy Memories",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 38,
+     "asin": "B0FQ4STLDF",
+     "sponsored": false,
+     "title": "Nostalgic Word Search: 100 Retro Wordfind Themed Puzzles for Adults & Seniors: 1960’s, 70’s, 80’s & 90’s with Fun Facts | 8.5x 11 inches, 128 pages, Large Print | Gift for Holidays & Relaxation.",
+     "reviews": "41 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 39,
+     "asin": "B0H5VCB3BF",
+     "sponsored": false,
+     "title": "The Swinging 1960s Large Print Word Search for Adults: Deliciously Nostalgic Wordfind Puzzle Book for Adults & Seniors - Easy, Relaxing & Big Font Puzzles All About the 1960s! (Gifts for Women & Men)",
+     "reviews": "9 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 40,
+     "asin": "B0HJ637D7L",
+     "sponsored": false,
+     "title": "Ponder Word Search: Classic TV Trivia of the 50s & 60s: 50 Extra-Large Print Word Search Puzzles for Seniors & Adults, with Fun TV Trivia Facts and a Full Answer Key",
+     "reviews": "3 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 41,
+     "asin": "B0DV99119B",
+     "sponsored": false,
+     "title": "Nostalgia Word Search: A Journey Through the ‘60s, ‘70s, and ‘80s: Large Print Word Search Puzzles for Adults and Seniors | 8.5X11 Inches | 100 ... Time (Emily Sterling Word Search Puzzles)",
+     "reviews": "12 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 42,
+     "asin": "B0HJ5ZCH4G",
+     "sponsored": false,
+     "title": "’60s Rock Legends & Hit Songs Word Search Puzzles: Large Print Word Search Puzzles",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 43,
+     "asin": "B0B1DJCXYK",
+     "sponsored": false,
+     "title": "Large Print 1950s & 1960s Word Search Puzzles for Adults and Seniors: Large Print Memory Word Search Puzzle Book, The Fifties & Sixties Relaxing ... (1950’s & 1960’s Word Search Puzzle Book)",
+     "reviews": "14 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 44,
+     "asin": "B0GJ3XJLWF",
+     "sponsored": false,
+     "title": "The 1960s Word Search: Large Print Puzzles Inspired by Music, Movies, Everyday Life, and Culture (Classic Memories Puzzle Collection)",
+     "reviews": "4 ratings",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 45,
+     "asin": "B0GVJSPNFY",
+     "sponsored": false,
+     "title": "1960s Word Search Large Print: Relaxing Nostalgia Puzzles for Seniors – Solutions Included (American Nostalgia Series)",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 46,
+     "asin": "B0HFKLTWVC",
+     "sponsored": false,
+     "title": "Extra Large Print Nostalgic Word Search for Seniors",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 47,
+     "asin": "B0H96J9YN5",
+     "sponsored": false,
+     "title": "1960s Nostalgia Word Search: Large Print Puzzle Book for Seniors & Adults: 100+ Easy To Read Relaxing Word Search Puzzles.",
+     "reviews": "",
+     "bought_text": "",
+     "page": 3
+    },
+    {
+     "position": 48,
+     "asin": "1539618994",
+     "sponsored": false,
+     "title": "Large Print Wordsearches Puzzles Popular Songs of 60s: Giant Print Word Searches for Adults & Seniors",
+     "reviews": "31 ratings",
+     "bought_text": "",
+     "page": 3
+    }
+   ],
+   "pages": 3,
+   "books_read": 16
+  }
+ ]
+}

@@ -1,0 +1,284 @@
+"""Load capture files written by the browser bookmarklet into the database."""
+
+import glob
+import hashlib
+import json
+import os
+import re
+from datetime import date
+
+from .text import normalize, parse_bought, parse_currency, parse_date, parse_float, parse_int
+
+OVERALL_CATEGORIES = ("books", "bucher", "bücher", "livres", "libros", "libri",
+                      "kindle store", "kindle-shop", "boutique kindle", "tienda kindle")
+
+_RANK_RE = re.compile(
+    r"(?:#|Nr\.?\s?|n\.?\s?[°º]\s?)\s?(\d[\d,.  ]*)\s+(?:in|en|dans)\s+"
+    r"(.+?)(?=\s*\((?:See|Siehe|Voir|Ver|Visualizza)|\s*#\d|\s*Nr\.|\s*n\.?\s?[°º]|$)",
+    re.IGNORECASE)
+
+
+class CaptureError(ValueError):
+    pass
+
+
+def parse_ranks(text):
+    """'#12,345 in Books (See Top 100 in Books) #7 in Grief' -> [(12345, 'Books'), (7, 'Grief')]."""
+    text = re.sub(r"[‎‏]", "", text or "")
+    text = re.sub(r"\s+", " ", text)
+    ranks = []
+    for num, cat in _RANK_RE.findall(text):
+        n = parse_int(num)
+        if n:
+            ranks.append((n, cat.strip(" :")))
+    return ranks
+
+
+def overall_rank(ranks):
+    for n, cat in ranks:
+        if cat.lower().startswith(OVERALL_CATEGORIES):
+            return n, cat
+    return ranks[0] if ranks else (None, None)
+
+
+def _detail(details, *labels):
+    """Find a product-detail value by (partial, case-insensitive) label."""
+    for key, value in (details or {}).items():
+        k = re.sub(r"[^a-z ]", "", key.lower()).strip()
+        for label in labels:
+            if k.startswith(label):
+                return value
+    return None
+
+
+def parse_product(p):
+    """Turn the raw fields the bookmarklet grabbed into clean book + snapshot fields."""
+    details = {k: re.sub(r"[‎‏]", "", v or "").strip(" :") for k, v in (p.get("details") or {}).items()}
+    ranks_text = p.get("ranks_text") or _detail(details, "best sellers rank", "amazon bestseller",
+                                                 "classement des meilleures", "clasificacion",
+                                                 "posizione nella classifica") or ""
+    ranks = parse_ranks(ranks_text)
+    bsr, bsr_cat = overall_rank(ranks)
+
+    publisher = _detail(details, "publisher", "verlag", "editeur", "diteur", "editorial", "editore") or ""
+    pub_date = parse_date(_detail(details, "publication date", "erscheinungstermin",
+                                  "date de publication", "fecha de publicacion", "data di pubblicazione"))
+    if not pub_date:
+        m = re.search(r"\(([^()]*\d{4}[^()]*)\)", publisher)
+        pub_date = parse_date(m.group(1)) if m else None
+    if not pub_date:
+        pub_date = parse_date(p.get("format_text"))
+    publisher_name = re.sub(r"\s*[;(].*$", "", publisher).strip()
+
+    pages = None
+    for value in details.values():
+        m = re.search(r"(\d+)\s*(?:pages|seiten|pagine|paginas|páginas)\b", value or "", re.IGNORECASE)
+        if m:
+            pages = int(m.group(1))
+            break
+
+    fmt = (p.get("format_text") or "").split("–")[0].split(" - ")[0].strip() or None
+    return {
+        "asin": p["asin"],
+        "title": re.sub(r"^Sponsored Ad\s*[-\u2013\u2014]\s*", "", (p.get("title") or "").strip()) or None,
+        "author": (p.get("author") or "").strip() or None,
+        "format": fmt,
+        "pages": pages,
+        "pub_date": pub_date,
+        "publisher": publisher_name or None,
+        "indie": 1 if re.search(r"independently published", publisher, re.IGNORECASE) else 0,
+        "bsr": bsr,
+        "bsr_category": bsr_cat,
+        "category_ranks": json.dumps(ranks),
+        "price": parse_float(p.get("price_text")),
+        "price_currency": parse_currency(p.get("price_text")),
+        "bought_month": parse_bought(p.get("bought_text")),
+        "reviews": parse_int(p.get("reviews_text")) or 0,
+        "rating": parse_float(p.get("rating_text")),
+    }
+
+
+def _upsert_book(conn, store, b):
+    old = conn.execute("SELECT * FROM books WHERE asin = ? AND store = ?", (b["asin"], store)).fetchone()
+    fields = ("title", "author", "format", "pages", "pub_date", "publisher", "indie")
+    if old:
+        merged = {f: b.get(f) if b.get(f) is not None else old[f] for f in fields}
+        conn.execute("UPDATE books SET title=?, author=?, format=?, pages=?, pub_date=?, publisher=?, indie=? "
+                     "WHERE asin=? AND store=?", tuple(merged[f] for f in fields) + (b["asin"], store))
+    else:
+        conn.execute("INSERT INTO books (asin, store, title, author, format, pages, pub_date, publisher, indie) "
+                     "VALUES (?,?,?,?,?,?,?,?,?)", (b["asin"], store) + tuple(b.get(f) for f in fields))
+
+
+def _save_product(conn, store, day, raw, source):
+    b = parse_product(raw)
+    _upsert_book(conn, store, b)
+    if b["bsr"] is None:
+        same_day = conn.execute("SELECT bsr FROM snapshots WHERE asin=? AND store=? AND taken_at=?",
+                                (b["asin"], store, day)).fetchone()
+        if (same_day and same_day["bsr"]) or (not b["reviews"] and b["price"] is None and not b["bought_month"]):
+            return b    # don't replace a real snapshot with an empty one
+    conn.execute(
+        "INSERT OR REPLACE INTO snapshots (asin, store, taken_at, bsr, bsr_category, category_ranks, "
+        "price, price_currency, reviews, rating, bought_month, source) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+        (b["asin"], store, day, b["bsr"], b["bsr_category"], b["category_ranks"], b["price"],
+         b["price_currency"], b["reviews"], b["rating"], b["bought_month"], source))
+    return b
+
+
+_READER_PHRASES = re.compile(r"(?:Brief|Full) content visible, double tap to read (?:full|brief) content\.?")
+
+
+def _tidy_review(text):
+    """Drop the screen-reader phrases Amazon wraps around review text."""
+    text = _READER_PHRASES.sub(" ", text or "")
+    text = re.sub(r"(?:\s*Read (?:more|less))+\s*$", "", text, flags=re.IGNORECASE)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _save_reviews(conn, store, day, asin, rows, default_source):
+    for r in rows:
+        r = dict(r, body=_tidy_review(r.get("body")))
+        key = r.get("id") or hashlib.sha256(((r.get("title") or "") + "|" + (r.get("body") or "")).encode()).hexdigest()[:16]
+        conn.execute("INSERT OR REPLACE INTO reviews (asin, store, review_key, stars, title, body, review_date, "
+                     "verified, helpful, source, taken_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                     (asin, store, key, r.get("stars"), r.get("title"), r.get("body"), r.get("date"),
+                      1 if r.get("verified") else 0, r.get("helpful"), r.get("source") or default_source, day))
+
+
+def import_capture(conn, capture):
+    """Import one capture dict. Returns a short summary string."""
+    if capture.get("tool") != "kdp-capture":
+        raise CaptureError("not a kdp-capture file")
+    store = capture.get("store") or "amazon.com"
+    day = (capture.get("captured_at") or date.today().isoformat())[:10]
+    kind = capture.get("type")
+
+    if kind == "batch":
+        results = [import_capture(conn, c) for c in capture.get("captures", [])]
+        if capture.get("suggestions"):
+            results.append(import_capture(conn, {"tool": "kdp-capture", "type": "suggestions", "store": store,
+                                                 "captured_at": capture.get("captured_at"),
+                                                 "rows": capture["suggestions"]}))
+        return "batch of %d captures:\n    " % len(capture.get("captures", [])) + "\n    ".join(results)
+
+    if kind == "suggestions":
+        rows = capture.get("rows", [])
+        for r in rows:
+            conn.execute("INSERT OR REPLACE INTO suggestions (seed, store, suggestion, taken_at) VALUES (?,?,?,?)",
+                         (normalize(r["seed"]), store, normalize(r["suggestion"]), day))
+        return "%d autocomplete suggestions" % len(rows)
+
+    if kind == "product":
+        b = _save_product(conn, store, day, capture["product"], "product")
+        rows = capture["product"].get("reviews") or []
+        _save_reviews(conn, store, day, b["asin"], rows, "product page")
+        return "product %s  BSR %s%s" % (b["asin"], b["bsr"], "  %d reviews" % len(rows) if rows else "")
+
+    if kind == "search":
+        keyword = normalize(capture.get("keyword") or "")
+        if not keyword:
+            raise CaptureError("search capture has no keyword")
+        old = conn.execute("SELECT id FROM searches WHERE keyword=? AND store=? AND taken_at=?",
+                           (keyword, store, day)).fetchone()
+        if old:
+            conn.execute("DELETE FROM search_results WHERE search_id = ?", (old["id"],))
+            search_id = old["id"]
+        else:
+            search_id = conn.execute("INSERT INTO searches (keyword, store, taken_at, url) VALUES (?,?,?,?)",
+                                     (keyword, store, day, capture.get("url"))).lastrowid
+        with_bsr = 0
+        for item in capture.get("items", []):
+            sponsored = item.get("sponsored") or re.match(r"Sponsored\b", item.get("title") or "")
+            conn.execute("INSERT OR REPLACE INTO search_results (search_id, position, asin, sponsored) "
+                         "VALUES (?,?,?,?)", (search_id, item["position"], item["asin"], 1 if sponsored else 0))
+            product = item.get("product") or {"asin": item["asin"], "title": item.get("title"),
+                                              "reviews_text": item.get("reviews")}
+            product.setdefault("asin", item["asin"])
+            product.setdefault("bought_text", item.get("bought_text"))
+            if not product.get("title"):
+                product["title"] = item.get("title")
+            b = _save_product(conn, store, day, product, "search")
+            with_bsr += 1 if b["bsr"] else 0
+        return "search '%s' on %s: %d results, %d with BSR" % (
+            keyword, store, len(capture.get("items", [])), with_bsr)
+
+    if kind == "list":
+        info = capture.get("list") or {}
+        old = conn.execute("SELECT id FROM lists WHERE url=? AND taken_at=?",
+                           (capture.get("url"), day)).fetchone()
+        if old:
+            conn.execute("DELETE FROM list_items WHERE list_id = ?", (old["id"],))
+            list_id = old["id"]
+        else:
+            list_id = conn.execute("INSERT INTO lists (kind, name, store, taken_at, url) VALUES (?,?,?,?,?)",
+                                   (info.get("kind"), info.get("name"), store, day,
+                                    capture.get("url"))).lastrowid
+        read = 0
+        for item in capture.get("items", []):
+            product = item.get("product")
+            b = _save_product(conn, store, day, dict(product, asin=item["asin"]), "list") if product else None
+            reviews = (b or {}).get("reviews") or parse_int(item.get("reviews"))
+            conn.execute("INSERT OR REPLACE INTO list_items (list_id, rank, asin, title, reviews) "
+                         "VALUES (?,?,?,?,?)", (list_id, item["position"], item["asin"], item.get("title"), reviews))
+            if not b:
+                _upsert_book(conn, store, {"asin": item["asin"], "title": item.get("title")})
+            read += 1 if b else 0
+        return "list '%s' on %s: %d books, %d book pages" % (info.get("name"), store,
+                                                             len(capture.get("items", [])), read)
+
+    if kind == "reviews":
+        asin = capture.get("asin")
+        if not asin:
+            raise CaptureError("reviews capture has no asin")
+        if capture.get("product") and not capture.get("not_found"):
+            _save_product(conn, store, day, capture["product"], "product")
+        else:
+            _upsert_book(conn, store, {"asin": asin})
+        rows = capture.get("reviews", [])
+        _save_reviews(conn, store, day, asin, rows, None)
+        if capture.get("not_found"):
+            return "reviews %s: not sold on %s" % (asin, store)
+        note = " (signed out: product-page reviews only)" if capture.get("signed_out") else ""
+        return "reviews %s: %d%s" % (asin, len(rows), note)
+
+    raise CaptureError("unknown capture type %r" % kind)
+
+
+def _first_json(text):
+    """The first JSON document in text. Hand-pasted files (Copy data -> GitHub
+    editor) sometimes pick up a stray character after the data; ignore it.
+    Capture Inbox documents carry the capture as a string in their `json` field."""
+    data = json.JSONDecoder().raw_decode(text.lstrip())[0]
+    if isinstance(data, dict) and "tool" not in data and isinstance(data.get("json"), str):
+        data = json.loads(data["json"])
+    return data
+
+
+def import_paths(conn, paths):
+    """Import capture files (globs allowed). Already-imported files are skipped."""
+    results = []
+    files = []
+    for p in paths:
+        p = os.path.expanduser(p)
+        if os.path.isdir(p):
+            files.extend(sorted(glob.glob(os.path.join(p, "**", "*.json"), recursive=True)))
+        else:
+            files.extend(sorted(glob.glob(p)) if any(c in p for c in "*?[") else [p])
+    for path in files:
+        with open(path, "rb") as fh:
+            raw = fh.read()
+        digest = hashlib.sha256(raw).hexdigest()
+        if conn.execute("SELECT 1 FROM imports WHERE sha256 = ?", (digest,)).fetchone():
+            results.append((path, "already imported"))
+            continue
+        try:
+            summary = import_capture(conn, _first_json(raw.decode("utf-8-sig")))
+        except (CaptureError, KeyError, json.JSONDecodeError) as exc:
+            results.append((path, "skipped: %s" % exc))
+            continue
+        conn.execute("INSERT INTO imports (sha256, path, imported_at) VALUES (?,?,?)",
+                     (digest, path, date.today().isoformat()))
+        conn.commit()
+        results.append((path, summary))
+    return results

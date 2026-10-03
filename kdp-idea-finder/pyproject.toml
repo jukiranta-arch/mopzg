@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kdp-idea-finder"
+version = "0.1.0"
+description = "Find Amazon KDP book ideas with proven demand and weak or no direct competition."
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+kdp = "kdpfinder.cli:main"
+
+[tool.setuptools]
+packages = ["kdpfinder"]
+
+[tool.setuptools.package-data]
+kdpfinder = ["capture.js"]
