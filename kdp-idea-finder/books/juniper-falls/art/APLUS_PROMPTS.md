@@ -14,6 +14,10 @@
 | Reassurance | – | "checkpoints", "only one false guest remains" | "no trivia, no guessing" | "no guessing, no tricks", cipher answer key | – |
 | Gift / audience | – | a text list (mom, dad, teens) | – | badges | – |
 
+**Look: follow *Mr Darcy*, not *Guest List*.** The person's call (2026-10-04): *Darcy* feels the least AI-made, and *Guest List* the most.
+- **Darcy:** a flat, bright, matte background; few props; real typeset clue text; photographic hands holding the real cover; one panel that is pure typography.
+- **Guest List:** glossy marble, chandeliers, cinematic glow, ornate gold frames and crowded props. Avoid all of it.
+
 **Patterns:**
 - one idea per panel;
 - a big headline in the cover's type;
@@ -48,6 +52,8 @@ You'll make 5 images for the A+ content ("From the Publisher" section) of the pa
 
 Match their world exactly: the deep aubergine-purple desk seen from straight above, worn cream case-file paper, antique gold accents, soft even light from above, layered hand-made paper textures, and the covers' typefaces (tall condensed high-contrast serif capitals for headlines, a classic readable book serif for small text). Don't copy the covers' layouts.
 
+Look: like a real photograph taken on a desk in daylight, or a cleanly designed printed layout. Matte paper, natural soft light, only a few props, and generous empty space. Avoid anything that looks AI-made: no glossy shine, no glow or light rays, no ornate gold frames or filigree, no chandeliers or candles, no cinematic drama, no floating shiny 3D objects, no clutter.
+
 Rules for every image:
 - Landscape 3:2. Keep the top 6% and bottom 6% plain purple background with nothing important in it (the image will be cropped).
 - Text must be big and readable on a phone. Spell every word exactly as given, letter by letter, and add no other words anywhere.
@@ -72,7 +78,7 @@ RIGHT 55%: the paperback book, its front cover exactly as the attached front cov
 ```
 IMAGE 2 OF 5. FIVE CASES, NOT ONE ENDLESS LIST.
 TOP, centred: headline in condensed serif capitals: "FIVE CASES." in cream, then "NOT ONE ENDLESS LIST." in antique gold.
-MIDDLE: six worn cream manila case files laid in a neat fanned row across the purple desk, slightly overlapping. Each has a typed cream label, and five of them have their matching token clipped to them:
+MIDDLE: six plain manila case files lying flat side by side on the purple desk, slightly overlapping, photographed from straight above. Each has a typed cream label, and five of them have their matching token resting on them (simple, matte, no shine):
 1. "CASE 1 · THE BOOKSTORE" with the bookmark tag "1"
 2. "CASE 2 · THE BAKERY" with the rosette "2"
 3. "CASE 3 · THE DINER" with the order ticket "3"
@@ -87,7 +93,7 @@ BOTTOM, centred, cream serif: "Solve one. Check it. Close the file. Then open th
 ```
 IMAGE 3 OF 5. HOW IT WORKS.
 TOP, centred: headline in cream condensed serif capitals: "HOW TO CRACK A CASE"
-Four steps left to right, each with a gold numbered circle, a short bold title in cream capitals, one small line of cream serif text, and a paper prop on the desk below it. Thin gold arrows between the steps.
+Four steps left to right, laid out like a clean printed page: each with a simple numbered circle, a short bold title in cream capitals, one small line of cream serif text, and one small flat paper prop below it. Plain thin arrows between the steps. Lots of empty purple space.
 1. "READ THE CASE": "A chapter of the story: who died, where, and who was there." Prop: an open cream case file with a small black-and-white cut-paper silhouette picture of a bookstore.
 2. "CROSS OUT": "8 or 9 clues. Strike every name they rule out." Prop: a typed page of names with most of them neatly struck through in pencil.
 3. "CHECK YOUR ANSWER": "A quick check tells you if you're right, without showing the name." Prop: a small cream card with a gold tick in a circle.
@@ -119,10 +125,10 @@ Spell all nine names exactly as written. Nothing is circled or crossed out: the 
 
 ```
 IMAGE 5 OF 5. THE CALL TO ACTION.
-RIGHT 55%: two hands holding the paperback open towards the viewer just enough to show its front cover (exactly as the attached front cover), over the purple desk, with a pencil and a cream page of struck-through names under it. Warm, cozy, real-photo feel.
+RIGHT 55%: a real-looking photo of two hands holding the paperback towards the viewer, its front cover exactly as the attached front cover, over the purple desk, with a pencil beside it. Natural daylight, like a phone photo, not a glossy render.
 LEFT 45%:
 - Headline in condensed serif capitals, three lines: "CAN YOU FIND OUT" in cream, "WHO SENT" in cream, "THE KILLERS?" in antique gold.
-- Under it, four small round antique-gold badges in a 2×2 grid, each with a simple line icon and a short cream label: "BRING A PENCIL" (pencil), "SCREEN-FREE" (crossed-out phone), "ONE ANSWER PER CASE" (a single tick), "CHECK AS YOU GO" (magnifying glass).
+- Under it, four small flat badges in a 2×2 grid (simple outlined circles in muted gold, not shiny), each with a simple line icon and a short cream label: "BRING A PENCIL" (pencil), "SCREEN-FREE" (crossed-out phone), "ONE ANSWER PER CASE" (a single tick), "CHECK AS YOU GO" (magnifying glass).
 ```
 
 ## Text under each image (KDP module headline + body)
