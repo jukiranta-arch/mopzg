@@ -111,26 +111,24 @@ THE TEXT (left side, about 40%, on the purple desk, set like elegant book-jacket
 Spell every word exactly as written above. No arrows, no boxes around the steps, no badges.
 ```
 
-### Image 4: cross out, then check (v3)
+### Image 4: cross out, then check (v4)
 
-v2 was too plain, and the "dashes" read as stray lines. v3 sets it in the world: the sheriff's desk at night, with Juniper Falls outside the window. Attach `pages/spread-p030-p031-case1-list-answer.png`.
+v3 (desk lamp, window, moon) went straight to the AI look. Our approved style is images 1–3: product photography on the plain purple desk in even daylight. v4 adds life the way *Mr Darcy* does, with a real hand at work, not with scenery. Attach `pages/spread-p030-p031-case1-list-answer.png`.
 
 ```
 IMAGE 4 OF 5. CROSS OUT. THEN CHECK.
-Goal: a rich, atmospheric, professional publisher's product photo, classy rather than busy.
+Style: exactly like image 3, which was right: professional product photography on the plain deep purple desk, soft even daylight from above, matte paper. No lamp, no window, no moon, no vignette, no dramatic lighting, no glow.
 
-SCENE: Sheriff Ruth Ambrose's desk in Juniper Falls at night (no people). Upper right: a tall old window; through it, the misty town at night in the same layered cut-paper style as the book's front cover: dark evergreen pines, a few warm lit windows, and the town hall clock tower with one lit window. A brass desk lamp casts a warm pool of light on the desk. The desk is deep aubergine-purple leather and wood; the wall is dark purple.
+HERO (left 60%): a close, realistic photo of the thin paperback (about 8 mm thick) lying open at exactly the attached spread (pages 30 and 31: names on the left, the "Your Answer" page with its "Check your answer" box on the right), seen from slightly above. Reproduce both pages as faithfully as possible. A woman's relaxed, natural hand holds a pencil and is striking through one name on the left page; a few other names there are already neatly struck through. A real camera's shallow depth of field: the hand and the left page are sharp, the far corner of the book slightly soft.
 
-HERO (lower half, about 55% of the width): the thin paperback (about 8 mm thick) lying open in the lamplight at exactly the attached spread (pages 30 and 31: the last page of names on the left, the "Your Answer" page with its "Check your answer" box on the right). Reproduce both pages as faithfully as possible. About a quarter of the names on the left page are neatly struck through in pencil. A pencil lies beside it, and the brass room key with its purple teardrop tag "4" lies near the book.
-
-TEXT (upper left, on the dark wall, elegant book-jacket typography; plain lines of text only, with no dashes, bullets, icons, boxes or arrows):
-- Headline in cream condensed serif capitals: "CROSS OUT. THEN CHECK."
-- Two lines of cream serif, one under the other:
+TEXT (right 40%, on the purple desk, the same elegant typography as image 3; plain lines only, with no dashes, bullets, icons, boxes or arrows):
+- Headline in cream condensed serif capitals, two lines: "CROSS OUT." / "THEN CHECK."
+- Two short paragraphs of cream serif:
   "Names in clean, even rows, well clear of the spine."
   "A quick check tells you if you're right, without showing the name."
 - Smaller cream italic serif: "No QR codes. No websites. No spoilers."
 
-Spell every word exactly as written. Matte, natural, not glossy.
+Spell every word exactly as written.
 ```
 
 ### Image 5: the case board (v2; replaces the book in hands)
@@ -139,9 +137,9 @@ This is the panel no competitor can make: our own town, art and linked cases. At
 
 ```
 IMAGE 5 OF 5. THE CASE BOARD.
-Goal: the richest, most memorable panel of the set; classy, atmospheric, professional.
+Goal: the most memorable panel of the set; classy and professional, in the same calm, matte, daylight style as images 1–3.
 
-SCENE: the corkboard on the wall of the sheriff's office in Juniper Falls, photographed straight on, lit by a warm desk lamp from below left. The board is framed in dark wood; the wall around it is deep purple.
+SCENE: a real corkboard framed in dark wood, hanging on a deep purple wall, photographed straight on in soft even daylight like a real product photo. No lamp, no dramatic lighting, no vignette, no glow.
 ON THE BOARD:
 - In the centre, pinned: the attached black-and-white cut-paper town map of Juniper Falls, printed on cream paper.
 - Around it, pinned in a loose ring: the five attached black-and-white cut-paper pictures (the bookstore, the bakery, the diner, the inn, the library), each printed on cream paper like an evidence photo, each with a small typed cream card under it: "1 · THE BOOKSTORE", "2 · THE BAKERY", "3 · THE DINER", "4 · THE INN", "5 · THE LIBRARY".
