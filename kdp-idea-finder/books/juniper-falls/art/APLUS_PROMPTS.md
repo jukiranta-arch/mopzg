@@ -111,25 +111,29 @@ THE TEXT (left side, about 40%, on the purple desk, set like elegant book-jacket
 Spell every word exactly as written above. No arrows, no boxes around the steps, no badges.
 ```
 
-### Image 4: try a mini case
+### Image 4: the names and the answer check, inside the real book (v2; replaces the mini case)
+
+Attach `pages/spread-p030-p031-case1-list-answer.png`.
 
 ```
-IMAGE 4 OF 5. TRY A MINI CASE.
-TOP LEFT: headline in cream condensed serif capitals: "TRY A MINI CASE"
-LEFT HALF: a typed cream page of exactly nine names in three columns, NONE crossed out, in a typewriter face:
-Column 1: "Walter Price", "June Hollis", "Arthur Bell"
-Column 2: "Mabel Crane", "Henry Dale", "Edna Foster"
-Column 3: "Clyde Moss", "Peggy Lowe", "Frank Hale"
-A sharpened pencil lies beside the page.
-RIGHT HALF: three cream clue cards stacked slightly offset, each with a small gold "CLUE" label and the clue in a readable serif:
-"CLUE 1 — The killer's first name has five letters."
-"CLUE 2 — The killer's last name has four letters."
-"CLUE 3 — The killer's last name has a double letter."
-BOTTOM, centred, antique-gold serif: "Only one name fits all three. Can you find it?"
-Spell all nine names exactly as written. Nothing is circled or crossed out: the reader solves it.
+IMAGE 4 OF 5. THE NAMES AND THE CHECK.
+Same goal and same photographic style as image 3: a professional publisher's product photo, not a template.
+
+The attached image is another real two-page spread from the book (pages 30 and 31): on the left, the last page of Case One's names in clean, even rows; on the right, the "Your Answer" page with its "Check your answer" box and a small black-and-white cut-paper picture of a bookmark stamped 1.
+
+THE HERO (about 60% of the image, this time on the LEFT side): a realistic photograph of the same thin paperback (about 8 mm thick) lying open on the deep purple desk at exactly this spread, seen from slightly above at a gentle angle, the pages curving softly into the gutter. Reproduce both pages as faithfully as possible. On the left page, about a quarter of the names are neatly struck through in pencil by the reader. A pencil lies on the desk beside the book, and the brass room key with its purple teardrop tag "4" lies near the top corner. Soft natural daylight, matte paper, nothing glossy.
+
+THE TEXT (right side, about 40%, on the purple desk, the same elegant book-jacket typography as image 3):
+- Headline in cream condensed serif capitals: "CROSS OUT. THEN CHECK."
+- Then two short points, each with a bold antique-gold dash and a cream line:
+  "Names in clean, even rows, well clear of the spine."
+  "A quick check tells you if you're right, without showing the name."
+- At the bottom, smaller cream italic serif: "No QR codes. No websites. No spoilers."
+
+Spell every word exactly as written above. No arrows, no boxes, no badges.
 ```
 
-(Answer: Clyde Moss. Clue 1 leaves Mabel, Henry, Clyde, Peggy and Frank. Clue 2 leaves Dale, Moss, Lowe and Hale. Clue 3 leaves Moss.)
+(The mini case is dropped: the real pages in images 3 and 4 do its job better.)
 
 ### Image 5: the call to action
 
