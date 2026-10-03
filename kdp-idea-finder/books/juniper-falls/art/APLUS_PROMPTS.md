@@ -88,22 +88,27 @@ MIDDLE: six plain manila case files lying flat side by side on the purple desk, 
 BOTTOM, centred, cream serif: "Solve one. Check it. Close the file. Then open the next."
 ```
 
-### Image 3: how it works, with real pages (option 2: ChatGPT draws the attached pages)
+### Image 3: how it works, inside the real book (v2)
 
-Attach `pages/page008-case1-opening.png`, `pages/page009-case1-clues.png` and `pages/page011-case1-list.png` with this prompt.
+The flat-pages version looked like a cheap flyer. Attach `pages/spread-p008-p009-case1.png`.
 
 ```
-IMAGE 3 OF 5. HOW IT WORKS, SHOWN WITH REAL PAGES.
-The three attached images are real pages from the book: (A) the opening page of Case One, (B) the clue page, (C) a page of names. Show them as real printed pages, reproduced as faithfully as you can: same layout, same headings, same black-and-white cut-paper picture, same thin rules and grey clue boxes. Do not redesign them.
+IMAGE 3 OF 5. INSIDE THE BOOK.
+Goal: the best-looking A+ module you can make, showing a shopper exactly what they get inside. It should look like a professional publisher's product photo, the kind a big publisher would use, not a template or a flyer.
 
-TOP, centred: headline in cream condensed serif capitals: "HOW TO CRACK A CASE"
-MIDDLE: the three pages lying flat on the purple desk side by side, each slightly rotated (a few degrees), with soft natural shadows, photographed from straight above in daylight. Above each page, a simple numbered circle and a short title in cream capitals, with one small line of cream serif under it:
-1. Above page A: "READ THE CASE" / "Who died, where, and who was there."
-2. Above page B: "WORK THE CLUES" / "8 or 9 clues per case."
-3. Above page C: "CROSS OUT NAMES" / "Strike every name a clue rules out." On page C, about a third of the names are neatly struck through in pencil, and a pencil lies across the corner of the page.
-To the right of page C, a small cream card with a gold tick in a circle and the words "CHECK YOUR ANSWER" and, under it, "without seeing the name".
-BOTTOM, a cream paper strip with deep purple condensed capitals: "18,000 SUSPECTS · 5 CASES · 1 MASTERMIND"
-The headings on the pages must read exactly: page A "CASE ONE", "The Bookstore", "October, the Midnight Sale"; page B "The Clues"; page C "Chapter One", "Mystery & Crime". Keep the pages' small text tidy and realistic: no smudged or melted letters.
+The attached image is a real two-page spread from the book (pages 8 and 9): on the left, the opening page of Case One with its black-and-white cut-paper illustration of a bookstore and the start of the story; on the right, the first page of clues, facing it.
+
+THE HERO (about 60% of the image, right side): a realistic photograph of the paperback lying open on the deep purple desk at exactly this spread, seen from slightly above at a gentle angle. The pages curve softly into the gutter, as an open paperback does, with a soft shadow down the middle. Reproduce both pages as faithfully as possible: the layout, the headings "CASE ONE", "The Bookstore", "October, the Midnight Sale" and "The Clues", the illustration, the grey clue boxes. It is a thin 142-page paperback (about 8 mm thick), so show only a thin page block. A pencil rests across the bottom of the right page; the purple tasselled bookmark tag "1" lies on the desk beside the book. Soft natural daylight, matte paper, nothing glossy.
+
+THE TEXT (left side, about 40%, on the purple desk, set like elegant book-jacket typography, not icons or a diagram):
+- Headline in cream condensed serif capitals: "HOW TO CRACK A CASE"
+- Then three short steps, each a bold antique-gold numeral and a cream line:
+  "1  Read the case: who died, where, and who was there."
+  "2  Work the clues: 8 or 9 per case."
+  "3  Cross out every name they rule out, until one is left."
+- At the bottom, smaller cream italic serif: "Then check your answer without seeing the name."
+
+Spell every word exactly as written above. No arrows, no boxes around the steps, no badges.
 ```
 
 ### Image 4: try a mini case
