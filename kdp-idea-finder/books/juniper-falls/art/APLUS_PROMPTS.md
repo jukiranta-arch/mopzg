@@ -153,24 +153,22 @@ TEXT (top, above the board, or on a cream strip across the bottom of the board; 
 Spell every word exactly as written. Matte, natural, not glossy; the pictures are black-and-white cut paper, as attached.
 ```
 
-## Text under each image (KDP module headline + body)
+## Text under each image (KDP module headline + body), final
 
-1. **Nothing ever happens in Juniper Falls. This autumn, it happened five times.**
+Each image uses the "Image header with text" module. Upload the files in `aplus/` in this order.
 
-   Five of the town's best-loved people die in five of its best-loved places: the bookstore, the bakery, the diner, the inn and the library. Each time, the doors were locked and every visitor's name was written down. Each time, a numbered token was left behind. Five killers, one person behind them all. Sheriff Ruth Ambrose has the lists. She needs you to read them.
-
-2. **Five cases, not one endless list**
-
-   No month-long slog through 50,000 names. Each case is its own puzzle of 2,800 to 3,700 names with 8 or 9 clues. Solve it, check it, close the file, and the next case is waiting. Do one a weekend, or all five at once. Together they make one mystery.
-
-3. **How to crack a case**
-
-   Read the chapter, work the clues, and cross out every name a clue rules out until only one is left. A quick check after each case (the name's length and letter total) tells you if you're right without showing the name. No QR code, no website, and the full solutions stay hidden at the very back. Your five answers unlock the final case at the Town Meeting.
-
-4. **Try a mini case**
-
-   Every case in the book works like this, just bigger: thousands of names and 8 or 9 clues. Each case is tested so that exactly one name survives every clue. No second possible killer, no names the clues can't rule out.
-
-5. **A screen-free mystery to solve yourself**
-
-   A gift for the mystery lover who has read everything, the puzzler who has finished every ordinary puzzle book, or two people who want a screen-free evening together. Bring a pencil.
+1. `aplus-1-hook.png`
+   - **Headline:** Five murders. Five killers. One person behind them all.
+   - **Body:** Five of Juniper Falls' best-loved people die in five of its best-loved places: the bookstore, the bakery, the diner, the inn and the library. Each time, the doors were locked and every visitor's name was written down. Each time, a numbered token was left behind. Sheriff Ruth Ambrose has the lists. She needs you to read them.
+2. `aplus-2-five-cases.png`
+   - **Headline:** Five cases, not one endless list
+   - **Body:** No month-long slog through 50,000 names. Each case is its own puzzle of 2,800 to 3,700 names with 8 or 9 clues. Solve it, check it, close the file, and the next case is waiting. Do one a weekend, or all five at once.
+3. `aplus-3-inside.png`
+   - **Headline:** A real story, not just names
+   - **Body:** Every case opens with its chapter of the story and a cut-paper illustration of the scene: who died, where, and who was in the room. Then come the clues, each with a plain rule and a worked explanation, so you always know exactly what to cross out.
+4. `aplus-4-check.png`
+   - **Headline:** One answer, and a check that doesn't spoil it
+   - **Body:** Every case is tested so that exactly one name survives every clue: no second possible killer, no names the clues can't rule out. When you've found yours, a quick check (the name's length and letter total) tells you if you're right without showing the name. The full solutions stay hidden at the very back.
+5. `aplus-5-case-board.png`
+   - **Headline:** Five answers. One mastermind.
+   - **Body:** The five cases are linked. Your five answers unlock the final case, the Town Meeting, where the person who sent the killers is hiding among 1,400 townspeople. A screen-free mystery for one solver, or two sharing a pencil.
