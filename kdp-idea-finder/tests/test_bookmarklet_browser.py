@@ -378,7 +378,6 @@ class BookmarkletBrowserTest(unittest.TestCase):
         p = importer.parse_product(cap["product"])
         self.assertEqual((p["asin"], p["bsr"], p["pub_date"]), ("B0AAAAAAA3", 150321, "2026-08-20"))
         self.assertEqual(cap["product"]["description"], "One killer. 48 suspects.\nCan you solve it?\nClue one\nClue two")
-        self.assertIn("<b>One killer.</b>", cap["product"]["description_html"])
         self.assertTrue(cap["product"]["has_aplus"])
 
     def test_review_page_capture(self):

@@ -212,21 +212,20 @@
       });
     }
 
-    /* The book description, with its line breaks, and its HTML (to see the bold, headings and bullets the
-       seller used). The newer page wraps it in an expander; older pages use #productDescription. */
+    /* The book description, with its line breaks (capped so a 50-book list still fits in the Capture Inbox).
+       The newer page wraps it in an expander; older pages use #productDescription. */
     var descEl = doc.querySelector('#bookDescription_feature_div .a-expander-content') ||
       doc.querySelector('#bookDescription_feature_div') || doc.querySelector('#productDescription');
-    var description = '', descriptionHtml = '';
+    var description = '';
     if (descEl) {
       var dcopy = descEl.cloneNode(true);
       Array.prototype.forEach.call(dcopy.querySelectorAll('script, style, .a-expander-prompt, ' +
         '.a-expander-header'), function (x) { x.remove(); });
-      descriptionHtml = dcopy.innerHTML.replace(/\s+/g, ' ').trim().slice(0, 12000);
       Array.prototype.forEach.call(dcopy.querySelectorAll('br'), function (x) { x.replaceWith('\n'); });
       Array.prototype.forEach.call(dcopy.querySelectorAll('p, li, ul, ol, div, h1, h2, h3, h4, h5, h6'),
         function (x) { x.before('\n'); x.append('\n'); });
       description = (dcopy.textContent || '').split('\n').map(clean)
-        .filter(function (ln) { return ln; }).join('\n').slice(0, 6000);
+        .filter(function (ln) { return ln; }).join('\n').slice(0, 3000);
     }
     /* "From the Publisher" (A+ Content) images under the description. */
     var hasAplus = !!doc.querySelector('#aplus_feature_div .aplus-v2, #aplus .aplus-v2, #aplus_feature_div img');
@@ -247,7 +246,6 @@
       rating_text: rating ? clean(rating.getAttribute('title') || rating.textContent) : '',
       ranks_text: ranksText,
       description: description,
-      description_html: descriptionHtml,
       has_aplus: hasAplus,
       details: details
     };
