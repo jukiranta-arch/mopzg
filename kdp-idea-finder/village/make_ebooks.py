@@ -31,6 +31,7 @@ GREYS = [255, 224, 0]
 BLEED = 0.125
 
 
+SPOILER_PAGES = ("The Solutions", "The Mastermind")
 FRONT_MATTER = ("Juniper Falls", "How This Book Works", "Before You Start")
 CASE_WORDS = ("CASE ONE", "CASE TWO", "CASE THREE", "CASE FOUR", "CASE FIVE", "THE FINALE")
 
@@ -88,7 +89,13 @@ def make_pdf(out):
     buf = io.BytesIO()
     front_cover().save(buf, "JPEG", quality=88)
     cover.insert_image(cover.rect, stream=buf.getvalue())
-    doc.insert_pdf(src)
+    for i, page in enumerate(src):
+        first = page.get_text().lstrip().split("\n", 1)[0]
+        if first in SPOILER_PAGES:                         # a picture of the page: searching can't reach the answers
+            pic = doc.new_page(width=page.rect.width, height=page.rect.height)
+            pic.insert_image(pic.rect, stream=page.get_pixmap(dpi=200, colorspace=pymupdf.csGRAY).tobytes("png"))
+        else:
+            doc.insert_pdf(src, from_page=i, to_page=i)
     doc.set_metadata({"title": story.TITLE, "author": story.AUTHOR,
                       "subject": "Reader copy. " + story.SUBTITLE.format(thousands="18,000")})
     doc.set_toc([[1, "Cover", 1]] + [[1, t, p + 1] for t, p in contents(src)])
@@ -101,11 +108,31 @@ XHTML = """<?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
 <head><meta charset="UTF-8"/><title>{title}</title>
 <meta name="viewport" content="width={w}, height={h}"/>
-<style>html,body{{margin:0;padding:0;width:{w}px;height:{h}px}}img{{display:block;width:{w}px;height:{h}px}}</style>
+<style>html,body{{margin:0;padding:0;width:{w}px;height:{h}px;position:relative;overflow:hidden}}
+img{{display:block;position:absolute;left:0;top:0;width:{w}px;height:{h}px;z-index:1}}
+.t{{position:absolute;margin:0;padding:0;white-space:pre;line-height:1;color:transparent;z-index:0}}</style>
 </head>
-<body><img src="../images/{img}" alt="{alt}"/></body>
+<body>{text}<img src="../images/{img}" alt="{alt}"/></body>
 </html>
 """
+
+
+def text_layer(page, w, h):
+    """The page's real text, placed where it is printed, under the picture and transparent: readers see only the
+    picture, while search, text-to-speech and preview tools (Booksprout's preview needs it) get real text."""
+    from xml.sax.saxutils import escape
+    sx, sy = w / page.rect.width, h / page.rect.height
+    out = []
+    for block in page.get_text("dict")["blocks"]:
+        for line in block.get("lines", []):
+            text = "".join(span["text"] for span in line["spans"]).strip()
+            if not text:
+                continue
+            x0, y0, x1, y1 = line["bbox"]
+            size = max(4, (y1 - y0) * sy * 0.8)
+            out.append('<p class="t" style="left:%dpx;top:%dpx;font-size:%.1fpx">%s</p>'
+                       % (x0 * sx, y0 * sy, size, escape(text)))
+    return "\n".join(out)
 
 
 def make_epub(out):
@@ -114,9 +141,13 @@ def make_epub(out):
     toc = contents(src)
     w, h = EPUB_PX
     pages = [("cover", front_cover().resize((w, h), Image.LANCZOS).convert("RGB"), "jpg")]
+    texts = {"cover": '<p class="t" style="left:0;top:0;font-size:20px">%s by %s</p>' % (story.TITLE, story.AUTHOR)}
     for i, im in enumerate(page_images(), 1):
         im = im.resize((w, h), Image.LANCZOS)
         pages.append(("p%03d" % i, four_greys(im), "png"))
+        first = src[i - 1].get_text().lstrip().split("\n", 1)[0]
+        # no searchable text on the solution pages: searching a suspect's name must never land on the answer
+        texts["p%03d" % i] = "" if first in SPOILER_PAGES else text_layer(src[i - 1], w, h)
     book_id = "urn:uuid:" + str(uuid.uuid5(uuid.NAMESPACE_URL, "who-sent-the-killers-" + (story.ASIN or "")))
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -144,7 +175,7 @@ def make_epub(out):
             z.writestr("OEBPS/images/" + img, buf.getvalue(), compress_type=zipfile.ZIP_STORED)
             label = "Cover" if name == "cover" else "Page %d" % n
             z.writestr("OEBPS/pages/%s.xhtml" % name,
-                       XHTML.format(title=label, w=w, h=h, img=img, alt=label), compress_type=zipfile.ZIP_DEFLATED)
+                       XHTML.format(title=label, w=w, h=h, img=img, alt=label, text=texts[name]), compress_type=zipfile.ZIP_DEFLATED)
             props = ' properties="cover-image"' if name == "cover" else ""
             manifest.append('<item id="img-%s" href="images/%s" media-type="%s"%s/>' % (name, img, mt, props))
             manifest.append('<item id="%s" href="pages/%s.xhtml" media-type="application/xhtml+xml"/>' % (name, name))
