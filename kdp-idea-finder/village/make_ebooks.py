@@ -24,7 +24,10 @@ INTERIOR = os.path.join(BOOK, "interior.pdf")
 FRONT = os.path.join(BOOK, "art", "cover_front.png")
 
 PAGE_W, PAGE_H = 6.0, 9.0            # trim size, inches
-EPUB_PX = (1200, 1800)               # 200 pixels per inch: 10 pt list names stay crisp when zoomed
+EPUB_PX = (1000, 1500)               # 167 pixels per inch; 10 pt list names stay clear on an e-reader
+# Three greys: white, the clue boxes' grey and black, as 2-bit PNGs recompressed with oxipng. That keeps the EPUB
+# under 7 MB, the limit for review services' "send to e-reader by email".
+GREYS = [255, 224, 0]
 BLEED = 0.125
 
 
@@ -60,7 +63,15 @@ def front_cover():
     return im.crop((left, top, left + w, top + h))
 
 
-def page_images(dpi=200):
+def four_greys(im):
+    pal = Image.new("P", (1, 1))
+    pal.putpalette([v for g in GREYS for v in (g, g, g)])
+    q = im.convert("RGB").quantize(palette=pal, dither=Image.Dither.NONE)
+    q.putpalette([v for g in GREYS for v in (g, g, g)])
+    return q
+
+
+def page_images(dpi=300):
     import pymupdf
     doc = pymupdf.open(INTERIOR)
     for page in doc:
@@ -105,8 +116,7 @@ def make_epub(out):
     pages = [("cover", front_cover().resize((w, h), Image.LANCZOS).convert("RGB"), "jpg")]
     for i, im in enumerate(page_images(), 1):
         im = im.resize((w, h), Image.LANCZOS)
-        # 16 grey levels keep the text and the two-ink art exact and the file small
-        pages.append(("p%03d" % i, im.quantize(16), "png"))
+        pages.append(("p%03d" % i, four_greys(im), "png"))
     book_id = "urn:uuid:" + str(uuid.uuid5(uuid.NAMESPACE_URL, "who-sent-the-killers-" + (story.ASIN or "")))
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -120,10 +130,15 @@ def make_epub(out):
         for n, (name, im, ext) in enumerate(pages):
             buf = io.BytesIO()
             if ext == "jpg":
-                im.save(buf, "JPEG", quality=88)
+                im.save(buf, "JPEG", quality=80, optimize=True)
                 mt = "image/jpeg"
             else:
-                im.save(buf, "PNG", optimize=True)
+                im.save(buf, "PNG", optimize=True, bits=2)
+                try:
+                    import oxipng
+                    buf = io.BytesIO(oxipng.optimize_from_memory(buf.getvalue(), level=6))
+                except ImportError:
+                    pass
                 mt = "image/png"
             img = "%s.%s" % (name, ext)
             z.writestr("OEBPS/images/" + img, buf.getvalue(), compress_type=zipfile.ZIP_STORED)
