@@ -68,6 +68,10 @@
     return m ? m[1] : null;
   }
 
+  function saysNoResults(doc) {
+    return /No results for|did not match any products/i.test(doc.body ? doc.body.textContent : '');
+  }
+
   function isBlocked(doc) {
     var t = doc.body ? doc.body.textContent : '';
     return !!doc.querySelector('form[action*="validateCaptcha"]') ||
@@ -487,11 +491,24 @@
         await pause();
         var u = new URL(pageUrl, location.origin);
         u.searchParams.set('page', String(pg));
-        try { doc = await getDoc(u.toString()); } catch (e) { break; }
+        try {
+          doc = await getDoc(u.toString());
+        } catch (e) {
+          if (!pagesRead) { capture.partial = capture.blocked = true; capture.empty_reason = 'fetch failed: ' + e; }
+          break;
+        }
       }
       if (isBlocked(doc)) { capture.partial = capture.blocked = true; break; }
       var more = parseSearch(doc).filter(function (i) { return !seen[i.asin]; });
-      if (!more.length) { break; }
+      if (!more.length) {
+        /* An empty first page that doesn't say "No results" is Amazon quietly throttling: stop as for
+           a captcha instead of saving dozens of empty searches. */
+        if (!pagesRead && !saysNoResults(doc)) {
+          capture.partial = capture.blocked = true;
+          capture.empty_reason = clean(doc.title || '').slice(0, 120) || 'empty results page';
+        }
+        break;
+      }
       more.forEach(function (i) { seen[i.asin] = true; i.page = pg; capture.items.push(i); });
       pagesRead++;
     }

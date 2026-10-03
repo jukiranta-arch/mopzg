@@ -217,6 +217,10 @@ class Handler(BaseHTTPRequestHandler):
             if term in Handler.block_once:
                 Handler.block_once.discard(term)
                 body = CAPTCHA
+            elif term == "throttled":                  # Amazon's quiet throttle: a page with no results at all
+                body = "<!doctype html><html><head><title>Amazon.com</title></head><body><div id='search'></div></body></html>"
+            elif term == "nothing found":
+                body = "<!doctype html><html><body><span>No results for nothing found.</span></body></html>"
             else:
                 body = search_page(int(parse_qs(url.query).get("page", ["1"])[0]))
         elif path.startswith("/spa/dp/"):
@@ -309,6 +313,14 @@ class BookmarkletBrowserTest(unittest.TestCase):
         rep = analyze(ctx.conn, ctx.cfg, "grief journal", "amazon.com", ctx.lib)
         self.assertEqual(rep.metrics["field"], 4)
         self.assertEqual(rep.books[0].bsr, 6012)
+
+    def test_empty_search_page_counts_as_blocked(self):
+        cap = self.capture("/s?k=throttled&i=stripbooks")
+        self.assertTrue(cap["blocked"])                       # stops like a captcha, not 0 books saved as data
+        self.assertEqual(cap["empty_reason"], "Amazon.com")
+        cap = self.capture("/s?k=nothing+found&i=stripbooks")
+        self.assertFalse(cap.get("blocked"))                  # a real "No results" page is just empty
+        self.assertEqual(cap["items"], [])
 
     def test_autopilot_discovers_captures_and_resumes(self):
         Handler.block_once = {"gift for women"}
