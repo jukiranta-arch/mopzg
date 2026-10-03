@@ -1,6 +1,6 @@
 # QA report: Who Sent the Killers?
 
-Generated in 43 s (seed 1). Interior: 142 pages, 6 x 9 in; 0 blank (no notes pages).
+Generated in 74 s (seed 1). Interior: 142 pages, 6 x 9 in; 0 blank (no notes pages).
 
 ## Each case
 
@@ -17,7 +17,7 @@ Every case leaves exactly one name under each of 13 readings: the rules as print
 
 Mastermind: Clara (the killers' first letters: C, L, A, R, A).
 
-Last page: the review request (QR code added once story.ASIN is set).
+Last page: the review request, with a QR code to the review page.
 
 ## Pictures
 

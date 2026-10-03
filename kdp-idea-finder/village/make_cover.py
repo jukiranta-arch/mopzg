@@ -60,15 +60,28 @@ def spine_width(pages):
     return pages * PAPER
 
 
-def panel(path, w_in, h_in):
-    """The picture cropped evenly at the sides to the panel's shape (bleed included)."""
+def panel(path, w_in, h_in, centre_in):
+    """The picture as one panel, w_in x h_in (bleed included), with the picture's centre centre_in from the
+    panel's left edge: the centre of the trimmed cover, not of the panel. The bleed is on the outer edge only,
+    so centring on the whole panel would leave the artwork 1/16 in off-centre once the bleed is cut. Where the
+    picture doesn't reach the panel's edge, the strip is filled by mirroring the picture's own edge (it lies
+    in the bleed, which is cut off); where it overhangs the fold, it is cropped."""
     im = Image.open(path).convert("RGB")
-    want = im.height * w_in / h_in
-    cut = (im.width - want) / 2
-    if cut < 0:
-        raise SystemExit("%s is narrower than the %.3f x %.3f in panel" % (path, w_in, h_in))
-    left = round(cut)
-    return im.crop((left, 0, left + round(want), im.height))
+    dpi = im.height / h_in
+    width = round(w_in * dpi)
+    left = round(centre_in * dpi - im.width / 2)            # where the picture's left edge lands in the panel
+    out = Image.new("RGB", (width, im.height))
+    out.paste(im, (left, 0))
+    if left > 0:                                            # gap on the left: mirror the picture's left edge
+        strip = im.crop((0, 0, left, im.height)).transpose(Image.FLIP_LEFT_RIGHT)
+        out.paste(strip, (0, 0))
+    gap = width - (left + im.width)
+    if gap > 0:                                             # gap on the right: mirror its right edge
+        strip = im.crop((im.width - gap, 0, im.width, im.height)).transpose(Image.FLIP_LEFT_RIGHT)
+        out.paste(strip, (width - gap, 0))
+    if max(left, gap) > 0.06 * dpi:
+        raise SystemExit("%s is too narrow: %.3f in of the bleed would be mirrored" % (path, max(left, gap) / dpi))
+    return out
 
 
 def edge_profile(im, side, band=32, skip=8, window=0.12):
@@ -138,8 +151,9 @@ def build(out, pages, preview=None):
     spine = spine_width(pages)
     panel_w, height = BLEED + TRIM_W, BLEED + TRIM_H + BLEED
     full_w = panel_w + spine + panel_w
-    back = panel(os.path.join(ART, "cover_back.png"), panel_w, height)
-    front = panel(os.path.join(ART, "cover_front.png"), panel_w, height)
+    # Centre each picture on its trimmed panel: the back's bleed is on its left, the front's on its right.
+    back = panel(os.path.join(ART, "cover_back.png"), panel_w, height, BLEED + TRIM_W / 2)
+    front = panel(os.path.join(ART, "cover_front.png"), panel_w, height, TRIM_W / 2)
     dpi = min(back.height, front.height) / height
     spine_px = (max(8, round(spine * dpi)), round(height * dpi))
     spine_im = spine_picture(back, front, *spine_px)

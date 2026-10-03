@@ -239,15 +239,21 @@ class FullBook:
         for p in story.REVIEW:
             y = self.para(x0, x1, y, p) - 9
         if story.ASIN:
-            from reportlab.graphics import renderPDF
-            from reportlab.graphics.barcode.qr import QrCodeWidget
-            from reportlab.graphics.shapes import Drawing
-            url = "https://www.amazon.com/review/create-review?asin=%s" % story.ASIN
-            w = QrCodeWidget(url, barLevel="M")
-            bx0, by0, bx1, by1 = w.getBounds()
-            dr = Drawing(qr, qr, transform=[qr / (bx1 - bx0), 0, 0, qr / (by1 - by0), 0, 0])
-            dr.add(w)
-            renderPDF.draw(dr, c, cx - qr / 2, y - qr - 4)
+            # Drawn as plain squares: reportlab's QR widget would add an unembedded default font, which KDP rejects.
+            from reportlab.graphics.barcode import qrencoder
+            code = qrencoder.QRCode(None, qrencoder.QRErrorCorrectLevel.M)
+            code.addData("https://www.amazon.com/review/create-review?asin=%s" % story.ASIN)
+            code.make()
+            n = code.getModuleCount()
+            m = qr / n
+            left, top = cx - qr / 2, y - 4
+            path = c.beginPath()
+            for r in range(n):
+                for k in range(n):
+                    if code.isDark(r, k):
+                        path.rect(left + k * m, top - (r + 1) * m, m, m)
+            c.setFillGray(0)
+            c.drawPath(path, stroke=0, fill=1)
             y -= qr + 22
         c.setFont(BODY_I, 10)
         c.setFillGray(HEAD_GREY)

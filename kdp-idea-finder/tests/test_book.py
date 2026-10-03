@@ -208,9 +208,15 @@ class CoverTests(unittest.TestCase):
         import tempfile
         with tempfile.TemporaryDirectory() as d:
             path = os.path.join(d, "p.png")
-            Image.new("RGB", (200, 300), (40, 20, 30)).save(path)
-            cut = panel(path, 6.125, 9.25)
-            self.assertEqual(cut.size, (round(300 * 6.125 / 9.25), 300))  # cropped evenly to the panel shape
+            im = Image.new("RGB", (2000, 3000), (40, 20, 30))
+            im.putpixel((1000, 1500), (255, 255, 255))                    # the picture's centre
+            im.save(path)
+            dpi = 3000 / 9.25
+            front = panel(path, 6.125, 9.25, 3.0)                         # centred on the trim, not the bleed
+            self.assertEqual(front.size, (round(6.125 * dpi), 3000))
+            self.assertEqual(front.getpixel((round(3.0 * dpi), 1500)), (255, 255, 255))
+            back = panel(path, 6.125, 9.25, 0.125 + 3.0)
+            self.assertEqual(back.getpixel((round(3.125 * dpi), 1500)), (255, 255, 255))
         back = Image.new("RGB", (60, 100), (30, 10, 20))
         front = Image.new("RGB", (60, 100), (60, 30, 50))
         self.assertEqual(tuple(edge_profile(back, "right")[0].round()), (30, 10, 20))

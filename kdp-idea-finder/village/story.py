@@ -17,7 +17,7 @@ TITLE_LINES = ("Who Sent", "the Killers?")   # the title page sets the title lar
 TITLE_LABEL = "A " + TOWN + " Mystery"        # the small line above it
 AUTHOR = "Nora Clewes"  # the pen name: on the title page and the copyright line; a final build refuses to run without it
 ISBN = ""          # printed on the copyright page when set, e.g. "979-8-1234-5678-9"
-ASIN = ""          # the paperback's ASIN, known after publishing: puts a QR code to its review page on the last page
+ASIN = "B0HLVWXGDK"        # the paperback's ASIN, known after publishing: puts a QR code to its review page on the last page
 
 REVIEW_TITLE = "One Small Favor"
 REVIEW = [
